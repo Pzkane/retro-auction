@@ -1,0 +1,76 @@
+import VueRouter from 'vue-router'
+
+import Home from './views/Home.vue'
+import Offers from './views/Offers.vue'
+import Registration from './views/Registration.vue'
+import Dashboard from './views/Dashboard.vue'
+import AdminDashboard from './views/admin/ControlPanel.vue'
+import SUDashboard from './views/admin/su/Dashboard.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: Home
+  },
+  {
+    path: '/offers',
+    name: 'offers',
+    component: Offers
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+  },
+  
+  //auth forms
+  {
+    path: '/signup',
+    name: 'signup',
+    component: Registration,
+    meta: {
+      auth: false
+    }
+  },
+
+  //user routes
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard,
+    meta: {
+      auth: true
+    },
+  },
+
+  //admin routes
+  {
+    path: '/admin',
+    name: 'admin.dashboard',
+    component: AdminDashboard,
+    meta: {
+      auth: {roles: ['super_admin', 'admin'], redirect: {name: 'offers'}, forbiddenRedirect: '/403'}
+    },
+  },
+
+  //super admin
+  {
+    path: '/sadmin',
+    name: 'sadmin.dashboard',
+    component: SUDashboard,
+    meta: {
+      auth: {roles: 'super_admin', redirect: {name: 'offers'}, forbiddenRedirect: '/403'}
+    },
+  }
+]
+const router = new VueRouter({
+  history: true,
+  mode: 'history',
+  routes,
+})
+
+export default router
