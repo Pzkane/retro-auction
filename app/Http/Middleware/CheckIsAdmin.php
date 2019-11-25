@@ -16,7 +16,7 @@ class CheckIsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->role === 2) {
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
             return $next($request);
         } else {
             return response()->json(['error' => 'Unauthorized77'], 403);

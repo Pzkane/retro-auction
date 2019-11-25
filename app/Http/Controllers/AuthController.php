@@ -50,7 +50,7 @@ class AuthController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-
+        
         $user = Auth::user();
         return response([
             'data' => $user
@@ -68,7 +68,7 @@ class AuthController extends Controller
     }
 
     public function user (Request $request) {
-        $user = User::find(Auth::user()->email);
+        $user = User::find(Auth::user()->id);
         return response()->json([
             'status' => 'success',
             'data' => $user

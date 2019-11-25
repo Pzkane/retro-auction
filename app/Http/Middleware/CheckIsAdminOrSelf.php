@@ -18,7 +18,7 @@ class CheckIsAdminOrSelf
     {
         $requestedUserEmail = $request->route()->parameter('email');
 
-        if (Auth::user()->role === 2 || Auth::user()->email == $requestedUserEmail) {
+        if ((Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') || Auth::user()->email == $requestedUserEmail) {
             return $next($request);
         } else {
             return response()->json(['error' => 'Unauthorized66'], 403);

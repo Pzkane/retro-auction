@@ -16,6 +16,7 @@ class Authenticate extends Middleware
 
     protected function redirectTo($request)
     {
+        error_log('s');
         return route('home');
     }
 

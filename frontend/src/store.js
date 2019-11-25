@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loginButtonClicked: false,
-    isLogged: false
+    isLogged: false,
+    addOfferDialog: false
   },
   mutations: {
     fadeLogin: state => {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     changeAuthState: state => {
       state.isLogged = !state.isLogged
+    },
+    changeAppendOfferState: state => {
+      state.addOfferDialog = !state.addOfferDialog
     }
   },
   getters: {
@@ -22,6 +26,9 @@ export default new Vuex.Store({
     },
     getAuthState: state => {
       return state.isLogged
+    },
+    getAppendingOfferState: state => {
+      return state.addOfferDialog
     }
   },
   actions: {

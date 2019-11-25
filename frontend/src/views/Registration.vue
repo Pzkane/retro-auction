@@ -1,86 +1,86 @@
 <template>
-    <v-app>
-        <v-container class="mx-auto" fill-height>
-            <ConnectionError v-if="isError" width="30px" :errorCode="errorCode"/>
-            <v-card v-if="!isError" width="500px" class="mx-auto">
-                <v-card-title>Register new account</v-card-title>
-                <v-card-text>
-                    <v-form ref="form">
-                        <v-text-field
-                            v-model="name"
-                            prepend-icon="mdi-account-circle-outline"
-                            label="Name"
-                            :counter="24"
-                            :rules="[rules.textOnly, rules.length.name]"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="surname"
-                            prepend-icon="mdi-account-circle-outline"
-                            label="Surname"
-                            :counter="24"
-                            :rules="[rules.textOnly, rules.length.surname]"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="username"
-                            prepend-icon="mdi-account-circle"
-                            label="Username"
-                            :counter="16"
-                            :rules="[rules.required, rules.length.username]"
-                        ></v-text-field>
-                        <v-expand-transition>
-                            <p 
-                              v-show="errors.username"
-                              style="color: red;"
-                              class="subtitle-2 pl-5"
-                            ><v-icon color="red" size="17px" class="pr-1">mdi-alert</v-icon>{{ errors.username ? errors.username[0] : '' }}</p>
-                        </v-expand-transition>
-                        <v-text-field
-                            v-model="email"
-                            prepend-icon="mdi-email"
-                            label="Email"
-                            :rules="[rules.required, rules.email]"
-                        ></v-text-field>
-                        <v-expand-transition>
-                            <p 
-                              v-show="errors.email"
-                              style="color: red;"
-                              class="subtitle-2 pl-5"
-                            ><v-icon color="red"  size="17px" class="pr-1">mdi-alert</v-icon>{{ errors.email ? errors.email[0] : '' }}</p>
-                        </v-expand-transition>
-                        <v-text-field
-                            v-model="password"
-                            prepend-icon="mdi-lock"
-                            type="password"
-                            label="Password"
-                            :counter="16"
-                            :rules="[rules.required, rules.length.password]"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="password_confirmation"
-                            prepend-icon="mdi-lock"
-                            label="Confirm Password"
-                            type="password"
-                            :rules="[rules.required, scoped_rules.passwordConfirmation]"
-                        ></v-text-field>
-                        <v-radio-group v-model="gender" :label="'Gender'" :rules="[rules.requiredItem]" class="pl-4 pt-0 mt-0">
-                          <v-radio color="primary" :label="'Male'" :value="'male'"></v-radio>
-                          <v-radio color="primary" :label="'Female'" :value="'female'"></v-radio>
-                        </v-radio-group>
-                        <v-card-actions>
-                          <v-btn v-if="!isLoading" @click="submit()">Submit</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn v-if="!isLoading" @click="autofill()">FILL</v-btn>
-                        </v-card-actions>
-                        <v-card-text v-if="isLoading">
-                            <v-container class="mx-auto loading">
-                                <Loading/>
-                            </v-container>
-                        </v-card-text> 
-                    </v-form>
-                </v-card-text>
-            </v-card>
-        </v-container>
-    </v-app>
+  <v-app>
+      <v-container class="mx-auto" fill-height>
+          <ConnectionError v-if="isError" width="30px" :errorCode="errorCode"/>
+          <v-card v-if="!isError" width="500px" class="mx-auto">
+              <v-card-title>Register new account</v-card-title>
+              <v-card-text>
+                  <v-form ref="form">
+                      <v-text-field
+                          v-model="name"
+                          prepend-icon="mdi-account-circle-outline"
+                          label="Name"
+                          :counter="24"
+                          :rules="[rules.textOnly, rules.length.name]"
+                      ></v-text-field>
+                      <v-text-field
+                          v-model="surname"
+                          prepend-icon="mdi-account-circle-outline"
+                          label="Surname"
+                          :counter="24"
+                          :rules="[rules.textOnly, rules.length.surname]"
+                      ></v-text-field>
+                      <v-text-field
+                          v-model="username"
+                          prepend-icon="mdi-account-circle"
+                          label="Username"
+                          :counter="16"
+                          :rules="[rules.required, rules.length.username]"
+                      ></v-text-field>
+                      <v-expand-transition>
+                          <p 
+                            v-show="errors.username"
+                            style="color: red;"
+                            class="subtitle-2 pl-5"
+                          ><v-icon color="red" size="17px" class="pr-1">mdi-alert</v-icon>{{ errors.username ? errors.username[0] : '' }}</p>
+                      </v-expand-transition>
+                      <v-text-field
+                          v-model="email"
+                          prepend-icon="mdi-email"
+                          label="Email"
+                          :rules="[rules.required, rules.email]"
+                      ></v-text-field>
+                      <v-expand-transition>
+                          <p 
+                            v-show="errors.email"
+                            style="color: red;"
+                            class="subtitle-2 pl-5"
+                          ><v-icon color="red"  size="17px" class="pr-1">mdi-alert</v-icon>{{ errors.email ? errors.email[0] : '' }}</p>
+                      </v-expand-transition>
+                      <v-text-field
+                          v-model="password"
+                          prepend-icon="mdi-lock"
+                          type="password"
+                          label="Password"
+                          :counter="16"
+                          :rules="[rules.required, rules.length.password]"
+                      ></v-text-field>
+                      <v-text-field
+                          v-model="password_confirmation"
+                          prepend-icon="mdi-lock"
+                          label="Confirm Password"
+                          type="password"
+                          :rules="[rules.required, scoped_rules.passwordConfirmation]"
+                      ></v-text-field>
+                      <v-radio-group v-model="gender" :label="'Gender'" :rules="[rules.requiredItem]" class="pl-4 pt-0 mt-0">
+                        <v-radio color="primary" :label="'Male'" :value="'male'"></v-radio>
+                        <v-radio color="primary" :label="'Female'" :value="'female'"></v-radio>
+                      </v-radio-group>
+                      <v-card-actions>
+                        <v-btn v-if="!isLoading" @click="submit()">Submit</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn v-if="!isLoading" @click="autofill()">FILL</v-btn>
+                      </v-card-actions>
+                      <v-card-text v-if="isLoading">
+                          <v-container class="mx-auto loading">
+                              <Loading/>
+                          </v-container>
+                      </v-card-text> 
+                  </v-form>
+              </v-card-text>
+          </v-card>
+      </v-container>
+  </v-app>
 </template>
 
 <script>

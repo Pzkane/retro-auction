@@ -11,9 +11,25 @@
                 </v-col>
                 <v-col>
                     <v-card>
-                        <v-card-title darken-2>
-                            <h1 class="display-1">Offer list</h1>
-                        </v-card-title>
+                        <v-row>
+                            <v-card-title darken-2>
+                                <h1 class="display-1">Offer list</h1>
+                            </v-card-title>
+                            <v-spacer></v-spacer>
+                            <v-card-actions class="pr-6">
+                                <v-dialog v-model="addOfferDialog" max-width="1500px">
+                                    <template v-slot:activator="{on}">     
+                                        <v-btn 
+                                            v-on="on"
+                                        >Add Offer</v-btn>                                
+                                    </template>
+                                    <AddOffer
+                                        v-on:closeAddOfferDialog="addOfferDialog = false" 
+                                    />
+                                </v-dialog>
+                            </v-card-actions>
+                        </v-row>
+                        
                         <v-divider></v-divider>                        
                         <v-container pa-0 id="offers">
                         
@@ -77,15 +93,18 @@
 </template>
 
 <script>
+import AddOffer from '@/components/AddOffer.vue'
 import Loading from '@/components/Loading.vue'
 import ConnectionError from '@/components/ConnectionError.vue'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'offers',
     components: {
-        ConnectionError,
-        Loading
+        AddOffer,
+        Loading,
+        ConnectionError
     },
     data() {
         return {
@@ -98,6 +117,8 @@ export default {
             isError: false,
             isEmptySet: false,
 
+            addOfferDialog: false,
+
             errorCode: null
         }
     },
@@ -105,6 +126,9 @@ export default {
         this.getRequest('http://127.0.0.1:8000/api/offers')
     },
     methods: {
+        ...mapGetters([
+            'getAuthState',
+        ]),
         getRequest(path) {
             axios
                 .get(path)
@@ -152,6 +176,9 @@ export default {
             let pagePath = 'http://127.0.0.1:8000/api/offers?page=';
             pagePath += this.page_number;
             this.getRequest(pagePath);
+        },
+        closeAddOfferDialog() {
+            this.addOfferDialog = !this.addOfferDialog
         }
     },
 }
