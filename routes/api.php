@@ -29,6 +29,8 @@ Route::prefix('auth')->group( function () {
         Route::post('logout', 'AuthController@logout');
         Route::post('userUpdate', 'UserController@update');
         Route::delete('userDelete', 'UserController@delete');
+
+        // Route::post('addOffer', 'OfferController@store');
     });
 });
 
@@ -39,3 +41,4 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::get('/offers', 'OfferController@index');   
+Route::post('addOffer', 'OfferController@store');
