@@ -7,7 +7,7 @@ use JWTAuth;
 use App\User;
 use App\Offer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\Offer as OfferResources;
@@ -100,7 +100,22 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        //
+        $offer = Offer::find($id);
+        return $offer;
+    }
+    
+    public function media($id)
+    {
+        $mediaCollection = collect([]);
+        $rawMedia = DB::table('offers-media')->get()->where('offer_ID', $id);
+        foreach ($rawMedia as $data) {
+            $mediaCollection = $mediaCollection->concat(['file_name' => Storage::disk('public')->url('uploads/offers-media/'.$data->file_name)]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'file_path' => $mediaCollection->toArray()
+        ], 200);
     }
 
     /**

@@ -21,6 +21,7 @@
                                     <template v-slot:activator="{on}">     
                                         <v-btn 
                                             v-on="on"
+                                            v-if="getAuthState()"
                                         >Add Offer</v-btn>                                
                                     </template>
                                     <AddOffer
@@ -68,8 +69,24 @@
                                             </v-col>
                                         </v-row>
                                     </v-card>
-                                    <v-row justify-end mr-5>
-                                        <v-spacer></v-spacer><v-btn x-large style="border-radius: 0 0 5px 5px;margin-right: 11px" color="primary">More</v-btn>
+                                    <v-row class="justify-end" mr-5>
+                                        <v-dialog v-model="showOfferDialog" max-width="1500px">
+                                            <template v-slot:activator="{on}">     
+                                                <!-- <v-btn 
+                                                    v-on="on"
+                                                    v-if="getAuthState()"
+                                                >Add Offer</v-btn>      -->
+                                                <v-btn
+                                                    x-large
+                                                    style="border-radius: 0 0 5px 5px;margin-right: 11px"
+                                                    color="primary"
+                                                    v-on="on"
+                                                >More</v-btn>                           
+                                            </template>
+                                            <ShowOffer
+                                                :offer = item
+                                            />
+                                        </v-dialog>                                      
                                     </v-row>
                                 </v-container>
                             </v-container>    
@@ -94,6 +111,7 @@
 
 <script>
 import AddOffer from '@/components/AddOffer.vue'
+import ShowOffer from '@/components/ShowOffer.vue'
 import Loading from '@/components/Loading.vue'
 import ConnectionError from '@/components/ConnectionError.vue'
 import axios from 'axios'
@@ -103,12 +121,13 @@ export default {
     name: 'offers',
     components: {
         AddOffer,
+        ShowOffer,
         Loading,
         ConnectionError
     },
     data() {
         return {
-            offers: null,
+            offers: [],
             page_count: null,
             page_number: 1,
 
@@ -179,6 +198,9 @@ export default {
         },
         closeAddOfferDialog() {
             this.addOfferDialog = !this.addOfferDialog
+        },
+        showMore(itemID) {
+            return this.offers[itemID];
         }
     },
 }

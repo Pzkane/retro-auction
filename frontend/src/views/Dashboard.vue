@@ -202,7 +202,7 @@
                                     </v-col>
 
                                     <v-col lg="3">
-                                        <h3>TitlTitleTitleTitleTitleTitleTitleTitlee</h3>
+                                        <h3>Offer title</h3>
                                     </v-col>
 
                                     <v-col>

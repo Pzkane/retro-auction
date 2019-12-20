@@ -30,7 +30,7 @@ Route::prefix('auth')->group( function () {
         Route::post('userUpdate', 'UserController@update');
         Route::delete('userDelete', 'UserController@delete');
 
-        // Route::post('addOffer', 'OfferController@store');
+        Route::post('addOffer', 'OfferController@store');
     });
 });
 
@@ -41,4 +41,5 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 
 Route::get('/offers', 'OfferController@index');   
-Route::post('addOffer', 'OfferController@store');
+Route::get('/offer/{id}', 'OfferController@show');
+Route::get('/offer-media/{id}', 'OfferController@media');
