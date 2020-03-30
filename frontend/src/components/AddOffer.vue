@@ -95,7 +95,7 @@ export default {
 
             rules: external_rules,
             scoped_rules: {
-                filesRequired: v=> (this.files.length >=1) || 'You must attach a least 1 image',
+                filesRequired: v => (!!v && this.files.length >=1) || 'You must attach a least 1 image',
             }
         }
     },
@@ -134,10 +134,11 @@ export default {
                 axios
                     .post('http://127.0.0.1:8000/api/addOffer', offerData, config)
                     .then ((response) => {
+                        console.log(response)
                         alert('success post')
                     })
                     .catch ((err) => {
-                    console.log(err)
+                        console.log(err)
                     })
             }
         },
