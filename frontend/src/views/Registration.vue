@@ -149,6 +149,7 @@ export default {
           this.$router.push({name: 'offers', params: {successRegistrationRedirect: true}})
         },
         error: function (res) {
+          console.log(res)          
           if (res.response.status != 422){
             that.isError = true
             that.errorCode = res.response.status
