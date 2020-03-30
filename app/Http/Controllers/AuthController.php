@@ -10,16 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
-
     public function register (Request $request) {
         $v = Validator::make($request->all(), [
             'username' => 'unique:users',
@@ -48,9 +38,10 @@ class AuthController extends Controller
     public function login (Request $request) {
         try{
             $credentials = $request->only('email', 'password');
-            if (!($token = JWTAuth::attempt($credentials))) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 $credentials = $request->only('username', 'password');
-                if (!($token = JWTAuth::attempt($credentials))){
+                error_log(json_encode($credentials));
+                if (!$token = JWTAuth::attempt($credentials)){
                     return response()->json([
                         'error' => 'login_error'
                     ], 401);
@@ -59,7 +50,7 @@ class AuthController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-
+        
         $user = Auth::user();
         return response([
             'data' => $user
@@ -84,9 +75,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function refresh (Request $request) {
-        $token = $request->header('Authorization');
-        if ($token = $this->guard()->refresh()) {
+    public function refresh () {
+        if ($token = JWTAuth::refresh()) {
             return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
         }
 
