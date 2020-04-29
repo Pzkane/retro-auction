@@ -14,14 +14,14 @@ class CreateOffersTable extends Migration
     public function up()
     {
         Schema::create('offers', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-
             $table->bigIncrements('id');
-            $table->string('title');
+            $table->unsignedBigInteger('author_id');
+            $table->string('title', 64);
             $table->text('body');
             $table->timestamps();
+            $table->enum('status', ['active', 'archived']);
+
+            $table->foreign('author_id')->references('id')->on('users');
         });
     }
 
