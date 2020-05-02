@@ -1,84 +1,104 @@
 <template>
-    <v-form ref="ofForm">
-        <v-card style="overflow: hidden;" max-width="100%">
-            <v-card-title>
-                Add Offer
-                <v-spacer></v-spacer>
-                <v-btn icon v-on:click="closeDialog()">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-card-title>
-            <v-card-text>
-                <v-text-field
-                    :rules="[rules.required]"
-                    :counter="32"
-                    v-model="title"
-                    placeholder="Your Title ..."
-                    label="Title"
-                ></v-text-field>
-                <v-textarea
-                    :rules="[rules.required]"
-                    :counter="600"
-                    v-model="body"
-                    placeholder="Your Description ..."
-                    label="Description"
-                ></v-textarea>
-            </v-card-text>
-            <v-card-actions class="pb-0">
-                <v-container class="pa-0">
-                    <v-row class="pl-3 pr-5">
-                        <v-file-input
-                            :rules="[scoped_rules.filesRequired]"
-                            multiple
-                            width="50%"
-                            v-model="files"
-                        ></v-file-input>
-                        <v-container>
-                            <v-row class="align-center justify-center">
-                                <v-card
-                                    width="100%"
-                                    v-if="files"
-                                    class="block"
-                                    color="blue-grey lighten-5"
-                                >
-                                    <v-img class="d-inline-block ma-5" v-for="image in files" :key="image"
-                                            max-width="200px"
-                                            max-height="200px"
-                                            v-bind:src="makeUrl(image)"
-                                    ></v-img>
-                                    <!-- <v-card
-                                        :elevation="hover ? 12 : 2"
-                                        :class="{ 'on-hover': hover }"
-                                    >
-                                        <v-img class="d-inline-block ma-5" v-for="image in files" :key="image"
-                                            max-width="200px"
-                                            max-height="200px"
-                                            v-bind:src="makeUrl(image)"
-                                        ></v-img>
-                                    </v-card> -->
-                                </v-card>
-                            </v-row>
-                        </v-container>
-                    </v-row>
-                    
-                    <v-row class="pa-0">
-                        <!-- escape buttons -->
-                        <v-btn 
-                            style="border-radius: 0 0 0 5px;"
-                            text color="primary" d-inline-block width="50%" height="50px"
-                            @click="submit()"
-                        >Submit</v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn 
-                            style="border-radius: 0 0 5px 0;"
-                            text d-inline-block width="50%" height="50px"
-                            v-on:click="closeDialog()"
-                        >Cancel</v-btn>
-                    </v-row>
-                </v-container>
-            </v-card-actions>
-        </v-card>
-    </v-form>
+  <v-form ref="ofForm">
+    <v-card
+      style="overflow: hidden;"
+      max-width="100%"
+    >
+      <v-card-title>
+        Add Offer
+        <v-spacer />
+        <v-btn
+          icon
+          @click="closeDialog()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-card-text>
+        <v-text-field
+          v-model="title"
+          :rules="[rules.required]"
+          :counter="32"
+          placeholder="Your Title ..."
+          label="Title"
+        />
+        <v-textarea
+          v-model="body"
+          :rules="[rules.required]"
+          :counter="600"
+          placeholder="Your Description ..."
+          label="Description"
+        />
+      </v-card-text>
+      <v-card-actions class="pb-0">
+        <v-container class="pa-0">
+          <v-row class="pl-3 pr-5">
+            <v-file-input
+              v-model="files"
+              :rules="[scoped_rules.filesRequired]"
+              multiple
+              width="50%"
+            />
+            <v-container>
+              <v-row class="align-center justify-center">
+                <v-card
+                  v-if="files"
+                  width="100%"
+                  class="block"
+                  color="blue-grey lighten-5"
+                >
+                  <v-img
+                    v-for="image in files"
+                    :key="image"
+                    class="d-inline-block ma-5"
+                    max-width="200px"
+                    max-height="200px"
+                    :src="makeUrl(image)"
+                  />
+                  <!-- <v-card
+                        :elevation="hover ? 12 : 2"
+                        :class="{ 'on-hover': hover }"
+                      >
+                          <v-img class="d-inline-block ma-5" v-for="image in files" :key="image"
+                            max-width="200px"
+                            max-height="200px"
+                            v-bind:src="makeUrl(image)"
+                          ></v-img>
+                      </v-card> -->
+                </v-card>
+              </v-row>
+            </v-container>
+          </v-row>
+          
+          <v-row class="pa-0">
+            <!-- escape buttons -->
+            <v-btn 
+              style="border-radius: 0 0 0 5px;"
+              text
+              color="primary"
+              d-inline-block
+              width="50%"
+              height="50px"
+              @click="submit()"
+            >
+              Submit
+            </v-btn>
+            <v-spacer />
+            <v-btn 
+              style="border-radius: 0 0 5px 0;"
+              text
+              d-inline-block
+              width="50%"
+              height="50px"
+              @click="closeDialog()"
+            >
+              Cancel
+            </v-btn>
+          </v-row>
+        </v-container>
+      </v-card-actions>
+    </v-card>
+  </v-form>
 </template>
 
 <script>

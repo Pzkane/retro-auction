@@ -1,37 +1,49 @@
 <template>
-    <v-container fill-height>
-        <v-form ref="lForm">
-            <v-text-field @keypress.enter.native="login"
-                label="Username or Email"
-                prepend-icon="mdi-account"
-                v-model="loginData"
-                :rules="[rules.required]"
-            ></v-text-field>
-            <v-text-field @keypress.enter.native="login"
-                label="Password"
-                prepend-icon="mdi-lock"
-                v-model="password"
-                type="password"
-                :rules="[rules.required]"
-            ></v-text-field>
-            <v-expand-transition>
-                <p 
-                    v-show="isError"
-                    style="color: red;"
-                    class="subtitle-2 pl-4"
-                ><v-icon color="red" size="17px" class="pr-0 pb-1">mdi-alert</v-icon> Wrong username/email or password</p>
-            </v-expand-transition>
-            <v-card-actions>
-                <v-btn
-                    class="mx-auto"
-                    text
-                    @click="login"
-                    :disabled="isLoading"
-                    :loading="isLoading"
-                >Sign In</v-btn>
-            </v-card-actions>
-        </v-form>
-    </v-container>
+  <v-container fill-height>
+    <v-form ref="lForm">
+      <v-text-field
+        v-model="loginData"
+        label="Username or Email"
+        prepend-icon="mdi-account"
+        :rules="[rules.required]"
+        @keypress.enter.native="login"
+      />
+      <v-text-field
+        v-model="password"
+        label="Password"
+        prepend-icon="mdi-lock"
+        type="password"
+        :rules="[rules.required]"
+        @keypress.enter.native="login"
+      />
+      <v-expand-transition>
+        <p 
+          v-show="isError"
+          style="color: red;"
+          class="subtitle-2 pl-4"
+        >
+          <v-icon
+            color="red"
+            size="17px"
+            class="pr-0 pb-1"
+          >
+            mdi-alert
+          </v-icon> Wrong username/email or password
+        </p>
+      </v-expand-transition>
+      <v-card-actions>
+        <v-btn
+          class="mx-auto"
+          text
+          :disabled="isLoading"
+          :loading="isLoading"
+          @click="login"
+        >
+          Sign In
+        </v-btn>
+      </v-card-actions>
+    </v-form>
+  </v-container>
 </template>
 
 <script>

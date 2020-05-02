@@ -1,17 +1,46 @@
 <template>
   <v-app v-if="$auth.ready()">
     <v-container>
-      {{authAdmin}}
+      {{ authAdmin }}
     </v-container>
-    <v-tabs fixed-tabs v-model="activeTab">
-      <v-tab to="/">Home</v-tab>
-      <v-tab to="/offers">Offers</v-tab>
-      <v-tab to="/about">About</v-tab>
-      <v-tab v-if="!getAuthState()" to="/signup">Sign Up</v-tab>
-      <v-tab v-if="$auth.check()" to="/dashboard">Dashboard</v-tab>
-      <v-tab v-if="authAdmin" to="/admin">Control Panel</v-tab>
-      <v-tab v-if="$auth.user().role === 'super_admin'" to="/sadmin">System Managment</v-tab>
-      <v-divider :vertical="true"></v-divider>
+    <v-tabs
+      v-model="activeTab"
+      fixed-tabs
+    >
+      <v-tab to="/">
+        Home
+      </v-tab>
+      <v-tab to="/offers">
+        Offers
+      </v-tab>
+      <v-tab to="/about">
+        About
+      </v-tab>
+      <v-tab
+        v-if="!getAuthState()"
+        to="/signup"
+      >
+        Sign Up
+      </v-tab>
+      <v-tab
+        v-if="$auth.check()"
+        to="/dashboard"
+      >
+        Dashboard
+      </v-tab>
+      <v-tab
+        v-if="authAdmin"
+        to="/admin"
+      >
+        Control Panel
+      </v-tab>
+      <v-tab
+        v-if="$auth.user().role === 'super_admin'"
+        to="/sadmin"
+      >
+        System Managment
+      </v-tab>
+      <v-divider :vertical="true" />
       <v-menu
         v-if="!getAuthState()"
         :close-on-click="true"
@@ -19,7 +48,7 @@
         :offset-x="true"
         :offset-y="true"
       >
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-btn 
             style="height: 100%; width: 100%; border-radius: 0"
             max-width="10%"
@@ -33,7 +62,7 @@
 
         <v-list>
           <v-list-item>
-            <Login/>
+            <Login />
           </v-list-item>
         </v-list>
       </v-menu>
@@ -52,25 +81,25 @@
       </v-btn>
 
       <v-tab-item id="/">
-        <router-view v-if="activeTab === '/'"/>
+        <router-view v-if="activeTab === '/'" />
       </v-tab-item>
       <v-tab-item id="/offers">
-        <router-view v-if="activeTab === '/offers'"/>
+        <router-view v-if="activeTab === '/offers'" />
       </v-tab-item>
       <v-tab-item id="/about">
-        <router-view v-if="activeTab === '/about'"/>
+        <router-view v-if="activeTab === '/about'" />
       </v-tab-item>
       <v-tab-item id="/signup">
-        <router-view v-if="activeTab === '/signup'"/>
+        <router-view v-if="activeTab === '/signup'" />
       </v-tab-item>
       <v-tab-item id="/dashboard">
-        <router-view v-if="activeTab === '/dashboard'"/>
+        <router-view v-if="activeTab === '/dashboard'" />
       </v-tab-item>
       <v-tab-item id="/admin">
-        <router-view v-if="activeTab === '/admin'"/>
+        <router-view v-if="activeTab === '/admin'" />
       </v-tab-item>
       <v-tab-item id="/sadmin">
-        <router-view v-if="activeTab === '/sadmin'"/>
+        <router-view v-if="activeTab === '/sadmin'" />
       </v-tab-item>
     </v-tabs>
   </v-app>
@@ -81,7 +110,7 @@ import Login from '@/components/Login'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     Login
   },

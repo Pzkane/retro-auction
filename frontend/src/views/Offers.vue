@@ -1,112 +1,161 @@
 <template>
-    <v-app>
-        <v-container>
+  <v-app>
+    <v-container>
+      <v-row>
+        <v-col lg="3">
+          <v-card>
+            <v-card-title>
+              <h1 class="display-1">
+                Filter list
+              </h1>
+            </v-card-title>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card>
             <v-row>
-                <v-col lg="3">
-                    <v-card>
-                        <v-card-title>
-                            <h1 class="display-1">Filter list</h1>
-                        </v-card-title>
-                    </v-card>
-                </v-col>
-                <v-col>
-                    <v-card>
-                        <v-row>
-                            <v-card-title darken-2>
-                                <h1 class="display-1">Offer list</h1>
-                            </v-card-title>
-                            <v-spacer></v-spacer>
-                            <v-card-actions class="pr-6">
-                                <v-dialog v-model="addOfferDialog" max-width="1500px">
-                                    <template v-slot:activator="{on}">     
-                                        <v-btn 
-                                            v-on="on"
-                                            v-if="getAuthState()"
-                                        >Add Offer</v-btn>                                
-                                    </template>
-                                    <AddOffer
-                                        v-on:closeAddOfferDialog="addOfferDialog = false" 
-                                    />
-                                </v-dialog>
-                            </v-card-actions>
-                        </v-row>
+              <v-card-title darken-2>
+                <h1 class="display-1">
+                  Offer list
+                </h1>
+              </v-card-title>
+              <v-spacer />
+              <v-card-actions class="pr-6">
+                <v-dialog
+                  v-model="addOfferDialog"
+                  max-width="1500px"
+                >
+                  <template #activator="{on}">     
+                    <v-btn 
+                      v-if="getAuthState()"
+                      v-on="on"
+                    >
+                      Add Offer
+                    </v-btn>                                
+                  </template>
+                  <AddOffer
+                    @closeAddOfferDialog="addOfferDialog = false" 
+                  />
+                </v-dialog>
+              </v-card-actions>
+            </v-row>
                         
-                        <v-divider></v-divider>                        
-                        <v-container pa-0 id="offers">
-                        
-                            <v-card v-if="isError">
-                                <ConnectionError :errorCode="errorCode" />
-                            </v-card>
+            <v-divider />                        
+            <v-container
+              id="offers"
+              pa-0
+            >
+              <v-card v-if="isError">
+                <ConnectionError :error-code="errorCode" />
+              </v-card>
                             
-                            <v-container class="loading" id="loading" v-if="isLoading">
-                                <Loading/>
-                            </v-container>
+              <v-container
+                v-if="isLoading"
+                id="loading"
+                class="loading"
+              >
+                <Loading />
+              </v-container>
                             
-                            <v-container class="offers-wrapper" v-if="!isLoading">
-                                <v-row v-if="isEmptySet" style="margin-top: 25%;" align="center" justify="center">
-                                    <v-col lg="3">
-                                        <v-divider></v-divider>    
-                                    </v-col>
-                                    <v-col lg="3">
-                                        <p style="text-align: center;" align-content-center>Nothing to show</p>
-                                    </v-col>
-                                    <v-col lg="3">
-                                        <v-divider></v-divider>    
-                                    </v-col>
-                                </v-row>
-                                <v-container justify-space-around v-for="item in offers" :key="item.id">
-                                    <v-card style="border-radius: 5px 5px 0 5px;">
-                                        <v-row ml-5>
-                                            <v-card-title pl-5 class="headline">{{ item.title }}</v-card-title>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col lg="4">
-                                                <v-img class="image" :src="item.image" alt="No Image"></v-img>
-                                            </v-col>
+              <v-container
+                v-if="!isLoading"
+                class="offers-wrapper"
+              >
+                <v-row
+                  v-if="isEmptySet"
+                  style="margin-top: 25%;"
+                  align="center"
+                  justify="center"
+                >
+                  <v-col lg="3">
+                    <v-divider />    
+                  </v-col>
+                  <v-col lg="3">
+                    <p
+                      style="text-align: center;"
+                      align-content-center
+                    >
+                      Nothing to show
+                    </p>
+                  </v-col>
+                  <v-col lg="3">
+                    <v-divider />    
+                  </v-col>
+                </v-row>
+                <v-container
+                  v-for="item in offers"
+                  :key="item.id"
+                  justify-space-around
+                >
+                  <v-card style="border-radius: 5px 5px 0 5px;">
+                    <v-row ml-5>
+                      <v-card-title
+                        pl-5
+                        class="headline"
+                      >
+                        {{ item.title }}
+                      </v-card-title>
+                    </v-row>
+                    <v-row>
+                      <v-col lg="4">
+                        <v-img
+                          class="image"
+                          :src="item.image"
+                          alt="No Image"
+                        />
+                      </v-col>
 
-                                            <v-col>
-                                                <v-card-text>{{ item.body }}</v-card-text>
-                                            </v-col>
-                                        </v-row>
-                                    </v-card>
-                                    <v-row class="justify-end" mr-5>
-                                        <v-dialog v-model="showOfferDialog" max-width="1500px">
-                                            <template v-slot:activator="{on}">     
-                                                <!-- <v-btn 
+                      <v-col>
+                        <v-card-text>{{ item.body }}</v-card-text>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                  <v-row
+                    class="justify-end"
+                    mr-5
+                  >
+                    <v-dialog
+                      v-model="showOfferDialog"
+                      max-width="1500px"
+                    >
+                      <template #activator="{on}">     
+                        <!-- <v-btn 
                                                     v-on="on"
                                                     v-if="getAuthState()"
                                                 >Add Offer</v-btn>      -->
-                                                <v-btn
-                                                    x-large
-                                                    style="border-radius: 0 0 5px 5px;margin-right: 11px"
-                                                    color="primary"
-                                                    v-on="on"
-                                                >More</v-btn>                           
-                                            </template>
-                                            <ShowOffer
-                                                :offer = item
-                                            />
-                                        </v-dialog>                                      
-                                    </v-row>
-                                </v-container>
-                            </v-container>    
-                        </v-container>
-                        <v-divider></v-divider>
-                        <v-pagination 
-                            style="margin: 15px;"
-                            v-model="page_number"
-                            :length="page_count"
-                            :total-visible="7"
-                            :disabled="isPaginationDisabled"
-                            @input="offers_update"
-                            @next="offers_update"
-                            @previous="offers_update"
-                        ></v-pagination>
-                    </v-card>
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-app>
+                        <v-btn
+                          x-large
+                          style="border-radius: 0 0 5px 5px;margin-right: 11px"
+                          color="primary"
+                          v-on="on"
+                        >
+                          More
+                        </v-btn>                           
+                      </template>
+                      <ShowOffer
+                        :offer="item"
+                      />
+                    </v-dialog>                                      
+                  </v-row>
+                </v-container>
+              </v-container>    
+            </v-container>
+            <v-divider />
+            <v-pagination 
+              v-model="page_number"
+              style="margin: 15px;"
+              :length="page_count"
+              :total-visible="7"
+              :disabled="isPaginationDisabled"
+              @input="offers_update"
+              @next="offers_update"
+              @previous="offers_update"
+            />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -118,7 +167,7 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 
 export default {
-    name: 'offers',
+    name: 'Offers',
     components: {
         AddOffer,
         ShowOffer,

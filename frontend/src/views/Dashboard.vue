@@ -1,222 +1,295 @@
 <template>
-    <v-app>
-        <v-container>
-            <v-row>
-                <v-col lg="2">
-                    <v-card>
-                        <v-img
-                            class="mx-auto" 
-                            height="200px" 
-                            width="200px" 
-                            src="../assets/logo.png"
-                        ></v-img>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">{{$auth.user().username}}</h3>
-                                <div>
-                                    {{$auth.user().name}} {{$auth.user().surname}}
-                                </div>
-                            </div>
-                        </v-card-title>
-                        <v-card-actions>
-                            <v-dialog v-model="editDialog" max-width="800px">
-                                <template v-slot:activator="{on}">                                     
-                                    <v-btn 
-                                        text 
-                                        color="primary"
-                                        v-on="on" 
-                                    >Edit</v-btn>
-                                </template>
+  <v-app>
+    <v-container>
+      <v-row>
+        <v-col lg="2">
+          <v-card>
+            <v-img
+              class="mx-auto" 
+              height="200px" 
+              width="200px" 
+              src="../assets/logo.png"
+            />
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">
+                  {{ $auth.user().username }}
+                </h3>
+                <div>
+                  {{ $auth.user().name }} {{ $auth.user().surname }}
+                </div>
+              </div>
+            </v-card-title>
+            <v-card-actions>
+              <v-dialog
+                v-model="editDialog"
+                max-width="800px"
+              >
+                <template #activator="{on}">                                     
+                  <v-btn 
+                    text 
+                    color="primary"
+                    v-on="on" 
+                  >
+                    Edit
+                  </v-btn>
+                </template>
 
-                                <v-card>
-                                    <v-card-title>Edit profile</v-card-title>
-                                    <v-card-text>
-                                        <v-form ref="form">
-                                            <v-container>
-                                                <v-row class="align-center">
-                                                    <v-col lg="2">
-                                                        <v-subheader color="black" class="align-center title">Name</v-subheader>
-                                                    </v-col>
-                                                    <v-col lg="4">
-                                                        <v-text-field
-                                                            v-model="name"
-                                                            :counter="24"
-                                                            :rules="[rules.textOnly, rules.length.name]"
-                                                        ></v-text-field>
-                                                    </v-col>
-                                                    <v-col lg="2">
-                                                        <v-subheader color="black" class="title">Surname</v-subheader>
-                                                    </v-col>
-                                                    <v-col lg="4">
-                                                        <v-text-field
-                                                            v-model="surname"
-                                                            :counter="24"
-                                                            :rules="[rules.textOnly, rules.length.surname]"
-                                                        ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
+                <v-card>
+                  <v-card-title>Edit profile</v-card-title>
+                  <v-card-text>
+                    <v-form ref="form">
+                      <v-container>
+                        <v-row class="align-center">
+                          <v-col lg="2">
+                            <v-subheader
+                              color="black"
+                              class="align-center title"
+                            >
+                              Name
+                            </v-subheader>
+                          </v-col>
+                          <v-col lg="4">
+                            <v-text-field
+                              v-model="name"
+                              :counter="24"
+                              :rules="[rules.textOnly, rules.length.name]"
+                            />
+                          </v-col>
+                          <v-col lg="2">
+                            <v-subheader
+                              color="black"
+                              class="title"
+                            >
+                              Surname
+                            </v-subheader>
+                          </v-col>
+                          <v-col lg="4">
+                            <v-text-field
+                              v-model="surname"
+                              :counter="24"
+                              :rules="[rules.textOnly, rules.length.surname]"
+                            />
+                          </v-col>
+                        </v-row>
 
-                                                <v-row class="align-center">
-                                                    <v-col lg="2">
-                                                        <v-subheader color="black" class="title">Username</v-subheader>
-                                                    </v-col>
-                                                    <v-col lg="4">
-                                                        <v-text-field
-                                                            v-model="username"
-                                                            :counter="16"
-                                                            :rules="[rules.length.newUsername]"
-                                                        ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
+                        <v-row class="align-center">
+                          <v-col lg="2">
+                            <v-subheader
+                              color="black"
+                              class="title"
+                            >
+                              Username
+                            </v-subheader>
+                          </v-col>
+                          <v-col lg="4">
+                            <v-text-field
+                              v-model="username"
+                              :counter="16"
+                              :rules="[rules.length.newUsername]"
+                            />
+                          </v-col>
+                        </v-row>
 
-                                                <v-row>
-                                                    <v-expand-transition>
-                                                        <p 
-                                                            v-show="errors.username"
-                                                            style="color: red;"
-                                                            class="subtitle-2 pl-5"
-                                                        ><v-icon color="red" size="17px" class="pr-1">mdi-alert</v-icon>{{ errors.username ? errors.username[0] : '' }}</p>
-                                                    </v-expand-transition>
-                                                </v-row>
+                        <v-row>
+                          <v-expand-transition>
+                            <p 
+                              v-show="errors.username"
+                              style="color: red;"
+                              class="subtitle-2 pl-5"
+                            >
+                              <v-icon
+                                color="red"
+                                size="17px"
+                                class="pr-1"
+                              >
+                                mdi-alert
+                              </v-icon>{{ errors.username ? errors.username[0] : '' }}
+                            </p>
+                          </v-expand-transition>
+                        </v-row>
 
-                                                <v-row class="align-center">
-                                                     <v-col lg="2">
-                                                        <v-subheader color="black" class="title">Email</v-subheader>
-                                                    </v-col>
-                                                    <v-col lg="4">
-                                                        <v-text-field
-                                                            v-model="email"
-                                                            :rules="[rules.newEmail]"
-                                                        ></v-text-field>
-                                                    </v-col>
+                        <v-row class="align-center">
+                          <v-col lg="2">
+                            <v-subheader
+                              color="black"
+                              class="title"
+                            >
+                              Email
+                            </v-subheader>
+                          </v-col>
+                          <v-col lg="4">
+                            <v-text-field
+                              v-model="email"
+                              :rules="[rules.newEmail]"
+                            />
+                          </v-col>
 
-                                                    <v-col>
-                                                        <v-radio-group v-model="gender" :label="'Gender'" :rules="[rules.requiredItem]" class="pl-4 pt-0 mt-0">
-                                                            <v-radio color="primary" :label="'Male'" :value="'male'"></v-radio>
-                                                            <v-radio color="primary" :label="'Female'" :value="'female'"></v-radio>
-                                                        </v-radio-group>
-                                                    </v-col>
-                                                </v-row>
+                          <v-col>
+                            <v-radio-group
+                              v-model="gender"
+                              :label="'Gender'"
+                              :rules="[rules.requiredItem]"
+                              class="pl-4 pt-0 mt-0"
+                            >
+                              <v-radio
+                                color="primary"
+                                :label="'Male'"
+                                :value="'male'"
+                              />
+                              <v-radio
+                                color="primary"
+                                :label="'Female'"
+                                :value="'female'"
+                              />
+                            </v-radio-group>
+                          </v-col>
+                        </v-row>
 
-                                                <v-row>
-                                                    <v-expand-transition>
-                                                        <p 
-                                                            v-show="errors.email"
-                                                            style="color: red;"
-                                                            class="subtitle-2 pl-5"
-                                                        ><v-icon color="red"  size="17px" class="pr-1">mdi-alert</v-icon>{{ errors.email ? errors.email[0] : '' }}</p>
-                                                    </v-expand-transition>
-                                                </v-row>
+                        <v-row>
+                          <v-expand-transition>
+                            <p 
+                              v-show="errors.email"
+                              style="color: red;"
+                              class="subtitle-2 pl-5"
+                            >
+                              <v-icon
+                                color="red"
+                                size="17px"
+                                class="pr-1"
+                              >
+                                mdi-alert
+                              </v-icon>{{ errors.email ? errors.email[0] : '' }}
+                            </p>
+                          </v-expand-transition>
+                        </v-row>
 
-                                                <v-row class="justify-center">
-                                                    <v-btn @click="changePass = !changePass" text color="primary">Change Password</v-btn>
-                                                </v-row>
+                        <v-row class="justify-center">
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="changePass = !changePass"
+                          >
+                            Change Password
+                          </v-btn>
+                        </v-row>
 
-                                                <v-expand-transition>
-                                                    <v-container>
-                                                        <v-text-field
-                                                            v-show="changePass"
-                                                            v-model="password"
-                                                            prepend-icon="mdi-lock"
-                                                            type="password"
-                                                            label="New Password"
-                                                            :counter="16"
-                                                            :rules="[rules.length.newPassword]"
-                                                        ></v-text-field>
-                                                        <v-text-field
-                                                            v-show="changePass"
-                                                            v-model="password_confirmation"
-                                                            prepend-icon="mdi-lock"
-                                                            label="Confirm Password"
-                                                            type="password"
-                                                            :rules="[scoped_rules.passwordConfirmation]"
-                                                        ></v-text-field>
-                                                    </v-container>
-                                                </v-expand-transition>
+                        <v-expand-transition>
+                          <v-container>
+                            <v-text-field
+                              v-show="changePass"
+                              v-model="password"
+                              prepend-icon="mdi-lock"
+                              type="password"
+                              label="New Password"
+                              :counter="16"
+                              :rules="[rules.length.newPassword]"
+                            />
+                            <v-text-field
+                              v-show="changePass"
+                              v-model="password_confirmation"
+                              prepend-icon="mdi-lock"
+                              label="Confirm Password"
+                              type="password"
+                              :rules="[scoped_rules.passwordConfirmation]"
+                            />
+                          </v-container>
+                        </v-expand-transition>
                                                 
-                                                <v-card-actions>
-                                                    <v-btn 
-                                                        @click="submit()"
-                                                        :disabled="isLoading"
-                                                        :loading="isLoading"
-                                                    >Submit</v-btn>
-                                                </v-card-actions>
-  
-                                            </v-container>
-                                        </v-form>
-                                    </v-card-text>
-                                </v-card>
-                            </v-dialog>
-                            
-                            <v-dialog v-model="deleteDialog" max-width="800px">
-                                <template v-slot:activator="{on}">     
-                                    <v-btn 
-                                        text 
-                                        color="error"
-                                        v-on="on" 
-                                    >Delete</v-btn>                                
-                                </template>
-
-                                <v-card>
-                                    <v-card-title>Delete Account</v-card-title>
-                                    <v-card-text>
-                                        <p>Attention: You are deleting Your account. This cannot be undone. Would You like to proceed?</p> 
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-btn
-                                            @click="deleteAcc()"
-                                            color="error"
-                                        >Delete</v-btn>
-                                        <v-btn
-                                            @click="deleteDialog = !deleteDialog"
-                                            color="primary"
-                                        >Cancel</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
-                            
+                        <v-card-actions>
+                          <v-btn 
+                            :disabled="isLoading"
+                            :loading="isLoading"
+                            @click="submit()"
+                          >
+                            Submit
+                          </v-btn>
                         </v-card-actions>
-                    </v-card>
-                </v-col>
+                      </v-container>
+                    </v-form>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
+                            
+              <v-dialog
+                v-model="deleteDialog"
+                max-width="800px"
+              >
+                <template #activator="{on}">     
+                  <v-btn 
+                    text 
+                    color="error"
+                    v-on="on" 
+                  >
+                    Delete
+                  </v-btn>                                
+                </template>
 
-                <v-col>
-                    <v-card>
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0">Placed Offers</h3>
-                                <div class="subtitle mb-0">
-                                    Your placed offers
-                                </div>
-                            </div>
-                        </v-card-title>
-                        <v-divider></v-divider>
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-col lg="2">
-                                        <v-img 
-                                            src="../assets/logo.png"
-                                            height="100px"
-                                            width="100px"
-                                        ></v-img>
-                                    </v-col>
+                <v-card>
+                  <v-card-title>Delete Account</v-card-title>
+                  <v-card-text>
+                    <p>Attention: You are deleting Your account. This cannot be undone. Would You like to proceed?</p> 
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="error"
+                      @click="deleteAcc()"
+                    >
+                      Delete
+                    </v-btn>
+                    <v-btn
+                      color="primary"
+                      @click="deleteDialog = !deleteDialog"
+                    >
+                      Cancel
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-card-actions>
+          </v-card>
+        </v-col>
 
-                                    <v-col lg="3">
-                                        <h3>Offer title</h3>
-                                    </v-col>
+        <v-col>
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">
+                  Placed Offers
+                </h3>
+                <div class="subtitle mb-0">
+                  Your placed offers
+                </div>
+              </div>
+            </v-card-title>
+            <v-divider />
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col lg="2">
+                    <v-img 
+                      src="../assets/logo.png"
+                      height="100px"
+                      width="100px"
+                    />
+                  </v-col>
 
-                                    <v-col>
-                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nesciunt corrupti officia dolores architecto odio necessitatibus consequatur iste, magnam itaque expedita culpa accusantium rem molestiae asperiores voluptate omnis minus, eius vel?</p>
-                                    </v-col>
-                                </v-row>
-                                <v-divider></v-divider>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-app>
+                  <v-col lg="3">
+                    <h3>Offer title</h3>
+                  </v-col>
+
+                  <v-col>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nesciunt corrupti officia dolores architecto odio necessitatibus consequatur iste, magnam itaque expedita culpa accusantium rem molestiae asperiores voluptate omnis minus, eius vel?</p>
+                  </v-col>
+                </v-row>
+                <v-divider />
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script>

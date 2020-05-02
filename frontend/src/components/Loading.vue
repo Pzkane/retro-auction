@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container class="loading"></v-container>
+    <v-container class="loading" />
   </v-app>
 </template>
 

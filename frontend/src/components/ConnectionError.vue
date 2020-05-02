@@ -1,8 +1,9 @@
 <template>
   <div>
-    <p>Server is not responding ATM. <br/>
-        Try again later. <br/>
-        Error code: {{ errorCode }}
+    <p>
+      Server is not responding ATM. <br>
+      Try again later. <br>
+      Error code: {{ errorCode }}
     </p>
   </div>
 </template>

@@ -14,16 +14,20 @@ class Authenticate extends Middleware
      * @return string
      */
 
-    protected function redirectTo($request)
-    {
-        error_log('s');
-        return route('home');
-    }
+    // protected function redirectTo($request)
+    // {
+    //     error_log('s');
+    //     return route('home');
+    // }
 
     public function handle($request, Closure $next, ...$guards)
     {
+        error_log('This is some useful information.');
         if ($this->authenticate($request, $guards) === 'authentication_error') {
-            return response()->json(['error'=>'Unauthorized']);
+            return response()->json([
+                'error' => 'Unauthorized',
+                'msg' => $this->authenticate($request, $guards)
+            ]);
         }
 
         return $next($request);
