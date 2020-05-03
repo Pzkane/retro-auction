@@ -22,13 +22,13 @@ class Authenticate extends Middleware
 
     public function handle($request, Closure $next, ...$guards)
     {
-        error_log('This is some useful information.');
-        if ($this->authenticate($request, $guards) === 'authentication_error') {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'msg' => $this->authenticate($request, $guards)
-            ]);
-        }
+        // error_log('This is some useful information.');
+        // if ($this->authenticate($request, $guards) === 'authentication_error') {
+        //     return response()->json([
+        //         'error' => 'Unauthorized',
+        //         'msg' => $this->authenticate($request, $guards)
+        //     ]);
+        // }
 
         return $next($request);
     }

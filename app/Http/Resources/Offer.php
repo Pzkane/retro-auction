@@ -18,7 +18,7 @@ class Offer extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
-            'image' => $this->image
+            'preview_image' => $this->preview_image
         ];
     }
 }

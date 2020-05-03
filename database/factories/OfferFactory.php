@@ -11,6 +11,6 @@ $factory->define(App\Offer::class, function (Faker $faker) {
         'author_id' => User::all()->random()->ID,
         'title' => $faker->text(40),
         'body' => $faker->text(300),
-        'image' => $faker->imageUrl(640, 480)
+        'preview_image' => $faker->imageUrl(640, 480)
     ];
 });

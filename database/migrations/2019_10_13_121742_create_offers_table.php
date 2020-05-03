@@ -20,6 +20,7 @@ class CreateOffersTable extends Migration
             $table->text('body');
             $table->timestamps();
             $table->enum('status', ['active', 'archived']);
+            $table->text('preview_image')->nullable();
 
             $table->foreign('author_id')->references('id')->on('users');
         });

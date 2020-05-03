@@ -22,10 +22,12 @@ class OfferController extends Controller
     public function index()
     {
         $offers = Offer::paginate(5);
-        return OfferResources::collection($offers)->additional(['meta' => [
-            'version' => '1.0.0',
-            'API_base_url' => url('/')
-        ]]);
+        return OfferResources::collection($offers)->additional([
+            'meta' => [
+                'version' => '1.0.0',
+                'API_base_url' => url('/')
+            ]
+        ]);
     }
 
     /**
@@ -55,16 +57,17 @@ class OfferController extends Controller
         $offer->body = $request->body;
         $offer->save();
 
-        $primaryImage = self::storeImages($offer->id, $request->images);
-        $offer->image = $primaryImage;
+        $previewImage = self::storeImages($offer->id, $request->images, $request->preview_image_id);
+        $offer->preview_image = $previewImage;
         $offer->save();
 
         return response()->json(['status' => 'success'], 200);
     }
 
-    public function storeImages($offer, $filesObj)
+    public function storeImages($offerId, $filesObj, $preview_image_id)
     {
-        foreach ($filesObj as $file) {
+        $previewImage = null;
+        foreach ($filesObj as $fileId => $file) {
             $newLabel = null;
             $name_passed = false;
 
@@ -72,24 +75,28 @@ class OfferController extends Controller
                 $newLabel = md5(time()+rand()).'.'.$file->getClientOriginalExtension();
                 error_log('newLabel: '.$newLabel);
 
-                if (!DB::table('offers-media')->where('file_name', $newLabel)) {
+                if (!DB::table('offers_media')->where('file_name', $newLabel)) {
                     $name_passed = true;
                 }
-            } while ($name_passed = false);            
+            } while ($name_passed = false);   
 
             $path = $file->storeAs(
-                'public/uploads/offers-media', $newLabel
+                'public/uploads/offers_media', $newLabel
             );
 
-            DB::table('offers-media')->insert(
+            DB::table('offers_media')->insert(
                 [
-                    'offer_ID' => $offer,
-                    'file_name' => $newLabel,
-                    'file_path' => Storage::disk('public')->url('uploads/offers-media/'.$newLabel)
+                    'offer_id' => $offerId,
+                    'photo_path' => Storage::disk('public')->url('uploads/offers_media/'.$newLabel),
+                    'file_name' => $newLabel
                 ]
             );
+
+            if ($fileId == $preview_image_id) {
+                $previewImage = Storage::disk('public')->url('uploads/offers_media/'.$newLabel);
+            }
         }
-        return Storage::disk('public')->url('uploads/offers-media/'.$newLabel);
+        return $previewImage ? $previewImage : Storage::disk('public')->url('uploads/offers_media/'.$newLabel);
     }
 
     /**
@@ -107,14 +114,14 @@ class OfferController extends Controller
     public function media($id)
     {
         $mediaCollection = collect([]);
-        $rawMedia = DB::table('offers-media')->get()->where('offer_ID', $id);
+        $rawMedia = DB::table('offers_media')->get()->where('offer_id', $id);
         foreach ($rawMedia as $data) {
-            $mediaCollection = $mediaCollection->concat(['file_name' => Storage::disk('public')->url('uploads/offers-media/'.$data->file_name)]);
+            $mediaCollection = $mediaCollection->concat(['file_name' => Storage::disk('public')->url('uploads/offers_media/'.$data->file_name)]);
         }
 
         return response()->json([
             'status' => 'success',
-            'file_path' => $mediaCollection->toArray()
+            'photo_path' => $mediaCollection->toArray()
         ], 200);
     }
 

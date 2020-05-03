@@ -48,9 +48,9 @@ class AuthController extends Controller
     public function login (Request $request) {
         try{
             $credentials = $request->only('email', 'password');
-            if (!($token = JWTAuth::attempt($credentials))) {
+            if (!($token = auth()->attempt($credentials))) {
                 $credentials = $request->only('username', 'password');
-                if (!($token = JWTAuth::attempt($credentials))){
+                if (!($token = auth()->attempt($credentials))){
                     return response()->json([
                         'error' => 'login_error'
                     ], 401);
@@ -68,7 +68,7 @@ class AuthController extends Controller
     }
 
     public function logout () {
-        JWTAuth::invalidate();
+        auth()->invalidate();
 
         return response()->json([
             'status' => 'success',
@@ -85,12 +85,23 @@ class AuthController extends Controller
     }
 
     public function refresh (Request $request) {
-        $token = $request->header('Authorization');
-        if ($token = $this->guard()->refresh()) {
-            return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
+        try {
+            $user = auth()->userOrFail();
+            if ($user) {
+                $newToken = auth()->refresh();
+                return response()->json(['status' => 'success'], 200)->header('Authorization', $newToken);
+            }
+            return response()->json(['error' => 'user_error'], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'refresh_token_error'], 401);
         }
 
-        return response()->json(['error' => 'refresh_token_error'], 401);
+        // $token = $request->header('Authorization');
+        // if ($token = $this->guard()->refresh()) {
+        //     return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
+        // }
+
+        // return response()->json(['error' => 'refresh_token_error'], 401);
     }
 
     private function guard() {
