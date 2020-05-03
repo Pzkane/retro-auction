@@ -106,74 +106,75 @@ import external_rules from '@/plugins/rules/rules.js'
 import axios from 'axios'
 
 export default {
-    data() {
-        return {
-            title: null,
-            body: null,
-            files: [],
-            path: null, // debug var
+  data() {
+    return {
+      title: null,
+      body: null,
+      files: [],
+      path: null, // debug var
 
-            rules: external_rules,
-            scoped_rules: {
-                filesRequired: v => (!!v && this.files.length >=1) || 'You must attach a least 1 image',
-            }
-        }
+      rules: external_rules,
+      scoped_rules: {
+          filesRequired: v => (!!v && this.files.length >=1) || 'You must attach a least 1 image',
+      }
+    }
+  },
+  methods: {
+    checkFiles() {
+      console.log(this.files)
     },
-    methods: {
-        checkFiles() {
-            console.log(this.files)
-        },
-        makeUrl(file) {
-            return URL.createObjectURL(file)
-        },
-        submit() {
-            if (this.$refs.ofForm.validate()) {
-                let offerData = new FormData()
-                console.log(this.$auth.user().id)
-                offerData.append('user_id', this.$auth.user().id)
-                offerData.append('title', this.title)
-                offerData.append('body', this.body)
-                // offerData
-                for (let i = 0; i < this.files.length; i++) {
-                    offerData.append('images[]', this.files[i], this.files[i].name)                    
-                }
-                // this.files.forEach(function (image, index) {
-                //     offerData.append('image['+index+']', image[index], image[index].name)
-                // })
+    makeUrl(file) {
+      return URL.createObjectURL(file)
+    },
+    submit() {
+      if (this.$refs.ofForm.validate()) {
+        const offerData = new FormData()
+        console.log(this.$auth.user().id)
+        offerData.append('user_id', this.$auth.user().id)
+        offerData.append('title', this.title)
+        offerData.append('body', this.body)
+        offerData.append('preview_image_id', 0)
+        // offerData
+        for (let i = 0; i < this.files.length; i++) {
+          offerData.append('images[]', this.files[i], this.files[i].name)                    
+        }
+        // this.files.forEach(function (image, index) {
+        //     offerData.append('image['+index+']', image[index], image[index].name)
+        // })
 
-                // debug //
-                for (var key of offerData.entries()) {
-                    console.log(key[0] + ', ' + key[1])
-                }
-                const config = { 
-                    headers: { 
-                        'Authorization': 'Bearer '+this.$auth.token(),
-                        'Content-Type': 'multipart/form-data' 
-                    }
-                }
-                axios
-                    .post('http://127.0.0.1:8000/api/addOffer', offerData, config)
-                    .then ((response) => {
-                        console.log(response)
-                        alert('success post')
-                    })
-                    .catch ((err) => {
-                        console.log(err)
-                    })
-            }
-        },
-        closeDialog() {
-            this.title = null
-            this.body = null
-            this.files = []
-            this.path = null
-            this.formattedFiles = []
-            this.$emit('closeAddOfferDialog')
+        // debug //
+        for (var key of offerData.entries()) {
+          console.log(key[0] + ', ' + key[1])
         }
-        // check() {
-        //     this.path = URL.createObjectURL(this.file)
-        //     console.log(this.path)
-        // }
+        const config = { 
+          headers: { 
+            'Authorization': 'Bearer '+this.$auth.token(),
+            'Content-Type': 'multipart/form-data' 
+          }
+        }
+        axios
+          .post('http://127.0.0.1:8000/api/auth/addOffer', offerData, config)
+          .then ((response) => {
+            console.log(response)
+            alert('success post')
+          })
+          .catch ((err) => {
+            console.log(err)
+          })
+      }
     },
+    closeDialog() {
+        this.title = null
+        this.body = null
+        this.files = []
+        this.path = null
+        this.formattedFiles = []
+        this.$emit('closeAddOfferDialog')
+    }
+    // check() {
+    //     this.path = URL.createObjectURL(this.file)
+    //     console.log(this.path)
+    // }
+  },
 }
 </script>

@@ -51,58 +51,58 @@ import { mapMutations } from 'vuex'
 import external_rules from  '@/plugins/rules/rules.js'
 
 export default {
-    data() {
-        return {
-            loginData: null,
-            password: null,
-            info: 'null',
+  data() {
+    return {
+      loginData: null,
+      password: null,
+      info: 'null',
 
-            isLoading: false,
+      isLoading: false,
 
-            rules: external_rules,
+      rules: external_rules,
 
-            errors: {},
-            isError: false
-        }
-    },
-    methods: {
-        ...mapMutations([
-            'fadeLogin',
-            'changeAuthState'
-        ]),
-        login() {
-            if (this.$refs.lForm.validate()){
-                this.isError = false
-                this.isLoading = true
-                let that = this
-                this.$auth.login({
-                    data: {
-                        email: that.loginData,
-                        username: that.loginData,
-                        password: that.password
-                    },
-                    success: function() {
-                        this.isLoading = false
-                        this.fadeLogin()
-                        this.changeAuthState()
-                        const redirectTo = this.redirect ? this.redirect.from.name : this.$auth.user().role === 'super_admin' ? 'sadmin.dashboard' : this.$auth.user().role === 'admin' ? 'admin.dashboard' : 'dashboard'
-                        this.$router.push({name: redirectTo})
-                    },
-                    error : function() {
-                        this.isLoading = false
-                        this.isError = true
-                    },
-                    rememberMe: true,
-                    fetchUser: true,
-                })
-            }
-        }
+      errors: {},
+      isError: false
     }
+  },
+  methods: {
+    ...mapMutations([
+      'fadeLogin',
+      'changeAuthState'
+    ]),
+    login() {
+      if (this.$refs.lForm.validate()){
+        this.isError = false
+        this.isLoading = true
+        let that = this
+        this.$auth.login({
+          data: {
+            email: that.loginData,
+            username: that.loginData,
+            password: that.password
+          },
+          success: function() {
+            this.isLoading = false
+            this.fadeLogin()
+            this.changeAuthState()
+            const redirectTo = this.redirect ? this.redirect.from.name : this.$auth.user().role === 'super_admin' ? 'sadmin.dashboard' : this.$auth.user().role === 'admin' ? 'admin.dashboard' : 'dashboard'
+            this.$router.push({name: redirectTo})
+          },
+          error : function() {
+            this.isLoading = false
+            this.isError = true
+          },
+          rememberMe: true,
+          fetchUser: true,
+        })
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-    .form {
-        z-index: 1;
-    }
+  .form {
+    z-index: 1;
+  }
 </style>

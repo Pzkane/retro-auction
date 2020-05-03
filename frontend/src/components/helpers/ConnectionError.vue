@@ -10,9 +10,9 @@
 
 <script>
 export default {
-    props: {
-        errorCode: {type: Number, default: null}
-    }
+  props: {
+    errorCode: {type: Number, default: null}
+  }
 }
 </script>
 

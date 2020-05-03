@@ -14,10 +14,8 @@
         <v-col>
           <v-card>
             <v-row>
-              <v-card-title darken-2>
-                <h1 class="display-1">
-                  Offer list
-                </h1>
+              <v-card-title class="display-1">
+                Offer list
               </v-card-title>
               <v-spacer />
               <v-card-actions class="pr-6">
@@ -26,7 +24,8 @@
                   max-width="1500px"
                 >
                   <template #activator="{on}">     
-                    <v-btn 
+                    <v-btn
+                      depressed
                       v-if="getAuthState()"
                       v-on="on"
                     >
@@ -98,11 +97,12 @@
                     </v-row>
                     <v-row>
                       <v-col lg="4">
-                        <v-img
+                        <image-lightbox :src="item.preview_image" />
+                        <!-- <v-img
                           class="image"
-                          :src="item.image"
+                          :src="item.preview_image"
                           alt="No Image"
-                        />
+                        /> -->
                       </v-col>
 
                       <v-col>
@@ -120,9 +120,9 @@
                     >
                       <template #activator="{on}">     
                         <!-- <v-btn 
-                                                    v-on="on"
-                                                    v-if="getAuthState()"
-                                                >Add Offer</v-btn>      -->
+                            v-on="on"
+                            v-if="getAuthState()"
+                        >Add Offer</v-btn>      -->
                         <v-btn
                           x-large
                           style="border-radius: 0 0 5px 5px;margin-right: 11px"
@@ -161,144 +161,147 @@
 <script>
 import AddOffer from '@/components/AddOffer.vue'
 import ShowOffer from '@/components/ShowOffer.vue'
-import Loading from '@/components/Loading.vue'
-import ConnectionError from '@/components/ConnectionError.vue'
+import Loading from '@/components/helpers/Loading.vue'
+import ConnectionError from '@/components/helpers/ConnectionError.vue'
+import ImageLightbox from '@/components/helpers/ImageLightbox.vue'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 
 export default {
-    name: 'Offers',
-    components: {
-        AddOffer,
-        ShowOffer,
-        Loading,
-        ConnectionError
-    },
-    data() {
-        return {
-            offers: [],
-            page_count: null,
-            page_number: 1,
+  name: 'Offers',
+  components: {
+    AddOffer,
+    ShowOffer,
+    Loading,
+    ConnectionError,
+    ImageLightbox
+  },
+  data() {
+    return {
+      offers: [],
+      page_count: null,
+      page_number: 1,
 
-            isPaginationDisabled: false,
-            isLoading: true,
-            isError: false,
-            isEmptySet: false,
+      isPaginationDisabled: false,
+      isLoading: true,
+      isError: false,
+      isEmptySet: false,
 
-            addOfferDialog: false,
+      addOfferDialog: false,
+      showOfferDialog: false,
 
-            errorCode: null
-        }
+      errorCode: null
+    }
+  },
+  created() {
+    this.fetchOffers('http://127.0.0.1:8000/api/offers')
+  },
+  methods: {
+    ...mapGetters([
+      'getAuthState',
+    ]),
+    fetchOffers(path) {
+      axios
+        .get(path)
+        .then(res => {
+          const {data:{data}} = res
+          if (!data.length)
+            this.isEmptySet = true
+          else
+            this.isEmptySet = false
+          this.setOffers(data)
+          this.isLoading = false
+          const {data:{meta}} = res
+          this.isPaginationDisabled = false
+          this.setPageCount(meta.last_page)
+        })
+        .catch(err => {
+          this.errorCode = err.response.status
+          this.responseError()
+        })
     },
-    created() {
-        this.getRequest('http://127.0.0.1:8000/api/offers')
+    responseError() {
+      this.isLoading = false;
+      this.isError = true;
+      return true;
     },
-    methods: {
-        ...mapGetters([
-            'getAuthState',
-        ]),
-        getRequest(path) {
-            axios
-                .get(path)
-                .then(res => {
-                    const {data:{data}} = res
-                    if (!data.length)
-                        this.isEmptySet = true
-                    else
-                        this.isEmptySet = false
-                    this.setOffers(data)
-                    this.isLoading = false
-                    const {data:{meta}} = res
-                    this.isPaginationDisabled = false
-                    this.setPageCount(meta.last_page)
-                })
-                .catch(err => {
-                    this.errorCode = err.response.status
-                    this.responseError()
-                })
-        },
-        responseError() {
-            this.isLoading = false;
-            this.isError = true;
-            return true;
-        },
-        setOffers(data) {
-            this.offers = data;
-        },
-        setPageCount(data) {
-            this.page_count = data;
-        },
-        getPageNumber() {
-            return this.page_number;
-        },
-        getOffers() {
-            return this.offers;
-        },
-        getPageCount() {
-            return this.page_count;
-        },
-        offers_update() {
-            this.isPaginationDisabled = true;
-            this.isLoading = true;
-            this.isError = false;
-            let pagePath = 'http://127.0.0.1:8000/api/offers?page=';
-            pagePath += this.page_number;
-            this.getRequest(pagePath);
-        },
-        closeAddOfferDialog() {
-            this.addOfferDialog = !this.addOfferDialog
-        },
-        showMore(itemID) {
-            return this.offers[itemID];
-        }
+    setOffers(data) {
+      this.offers = data;
     },
+    setPageCount(data) {
+      this.page_count = data;
+    },
+    getPageNumber() {
+      return this.page_number;
+    },
+    getOffers() {
+      return this.offers;
+    },
+    getPageCount() {
+      return this.page_count;
+    },
+    offers_update() {
+      this.isPaginationDisabled = true;
+      this.isLoading = true;
+      this.isError = false;
+      const pagePath = 'http://127.0.0.1:8000/api/offers?page=';
+      pagePath += this.page_number;
+      this.fetchOffers(pagePath);
+    },
+    closeAddOfferDialog() {
+      this.addOfferDialog = !this.addOfferDialog
+    },
+    showMore(itemID) {
+      return this.offers[itemID];
+    }
+  },
 }
 </script>
 
 <style scoped>
-    #offers {
-        margin: 0 auto;
-        display: block;
-        height: 690px;
-        /* max-width: 50%; */
-        overflow: auto;
-    }
-    .loading {
-        margin: 0 auto;
-        padding-top: 25%;
-        padding-left: 49%;
-    }
-    .err {
-        padding-top: 12em;
-        line-height: 2em;
-    }
-    #offers h2 {
-        text-align: left;
-    }
-    img {
-        padding-left: 12px;
-        max-width: 300px;
-    }
-    .offers {
-        overflow: hidden;
-        /* border: solid 4px; */
-    }
-    .offers h2 {
-        position: relative;
-        /* border: solid 1px red; */
-    }
-    .offers p {
-        position: relative;
-        width: 50%;
-        float: left;
-        /* border: solid 1px red; */
-        margin-bottom: 20px;
-        text-align: justify;
-    }
-    .offers button {
-        margin-top: 20px;
-        margin-right: 50px;
-        padding: 20px;
-        float: right;
-    }
+  #offers {
+    margin: 0 auto;
+    display: block;
+    height: 690px;
+    /* max-width: 50%; */
+    overflow: auto;
+  }
+  .loading {
+    margin: 0 auto;
+    padding-top: 25%;
+    padding-left: 49%;
+  }
+  .err {
+    padding-top: 12em;
+    line-height: 2em;
+  }
+  #offers h2 {
+    text-align: left;
+  }
+  img {
+    padding-left: 12px;
+    max-width: 300px;
+  }
+  .offers {
+    overflow: hidden;
+    /* border: solid 4px; */
+  }
+  .offers h2 {
+    position: relative;
+    /* border: solid 1px red; */
+  }
+  .offers p {
+    position: relative;
+    width: 50%;
+    float: left;
+    /* border: solid 1px red; */
+    margin-bottom: 20px;
+    text-align: justify;
+  }
+  .offers button {
+    margin-top: 20px;
+    margin-right: 50px;
+    padding: 20px;
+    float: right;
+  }
 </style>

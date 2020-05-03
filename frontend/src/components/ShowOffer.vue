@@ -10,13 +10,11 @@
       <v-card-text>
         <v-container>
           <v-card>
-            <v-img 
+            <image-lightbox
               v-for="image in images"
               :key="image"
               :src="image"
-              max-width="200px"
-              max-height="200px"
-              class="d-inline-block ma-5"
+              class="image d-inline-block ma-5"
             />
           </v-card>
         </v-container>
@@ -29,32 +27,42 @@
 import axios from 'axios'
 
 export default {
-    props: {
-        offer: {type: Object, default: null}
-        // isOpened: false
-    },
-    data() {
-        return {
-            images: []
-        }
-    },
-    created() {
-        this.getImages()
-    },
-    methods: {
-        getImages() {
-            let req = 'http://127.0.0.1:8000/api/offer-media/'+this.offer.id
-            axios
-                .get (req)
-                .then ((result) => {
-                    result.data.file_path.forEach(element => {
-                        this.images.push(element)
-                    });
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-    },
+  components: {
+    ImageLightbox: () => import('../components/helpers/ImageLightbox')
+  },
+  props: {
+    offer: {type: Object, default: null}
+    // isOpened: false
+  },
+  data() {
+    return {
+      images: []
+    }
+  },
+  created() {
+    this.getImages()
+  },
+  methods: {
+    getImages() {
+      let req = 'http://127.0.0.1:8000/api/offer_media/'+this.offer.id
+      axios
+        .get (req)
+        .then ((result) => {
+          result.data.photo_path.forEach(element => {
+            this.images.push(element)
+          });
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  },
 }
 </script>
+
+<style scoped>
+  .image {
+    max-width: 200px;
+    max-height: 200px;
+  }
+</style>

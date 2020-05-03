@@ -298,106 +298,106 @@ import axios from 'axios'
 import external_rules from '@/plugins/rules/rules.js'
 
 export default {
-    components: {
-        // Offers
+  components: {
+    // Offers
+  },
+  data() {
+    return {
+      email: this.$auth.user().email,
+      username: this.$auth.user().username,
+      name: this.$auth.user().name,
+      surname: this.$auth.user().surname,
+      gender: this.$auth.user().gender,
+      password: null,
+      password_confirmation: null,
+      scoped_rules: {
+        passwordConfirmation: v => ((!v && !this.password) || (v && v == this.password) ) || 'Fields do not match',
+      },
+
+      rules: external_rules,
+
+      editDialog: false,
+      deleteDialog: false,
+      changePass: false,
+
+      userObject: {},
+
+      errors: {},
+      errorCode: null,
+
+      isLoading: false,
+      isError: false
+    }
+  },
+  created: {
+    fetchUser () {
+      this.getUserInfo()
+    }
+  },
+  methods: {
+    submit () {
+      if (this.$refs.form.validate()) {
+        this.update();
+      }
     },
-    data() {
-        return {
-            email: this.$auth.user().email,
-            username: this.$auth.user().username,
-            name: this.$auth.user().name,
-            surname: this.$auth.user().surname,
-            gender: this.$auth.user().gender,
-            password: null,
-            password_confirmation: null,
-            scoped_rules: {
-                passwordConfirmation: v => ((!v && !this.password) || (v && v == this.password) ) || 'Fields do not match',
-            },
+    update () {
+      this.errors = {}
+      this.isError = false
+      this.isLoading = true
+      this.userObject = {
+        id: this.$auth.user().id,
+        email: this.email,
+        username: this.username,
+        name: this.name,
+        surname: this.surname,
+        gender: this.gender,
+        password: this.password
+      }
 
-            rules: external_rules,
-
-            editDialog: false,
-            deleteDialog: false,
-            changePass: false,
-
-            userObject: {},
-
-            errors: {},
-            errorCode: null,
-
-            isLoading: false,
-            isError: false
-        }
-    },
-    created: {
-        fetchUser () {
-            this.getUserInfo()
-        }
-    },
-    methods: {
-        submit () {
-            if (this.$refs.form.validate()) {
-                this.update();
-            }
+      axios.post('http://127.0.0.1:8000/api/auth/userUpdate',
+        { 
+          id: this.$auth.user().id,
+          email: this.email,
+          username: this.username,
+          name: this.name,
+          surname: this.surname,
+          gender: this.gender,
+          password: this.password
         },
-        update () {
-            this.errors = {}
-            this.isError = false
-            this.isLoading = true
-            this.userObject = {
-                id: this.$auth.user().id,
-                email: this.email,
-                username: this.username,
-                name: this.name,
-                surname: this.surname,
-                gender: this.gender,
-                password: this.password
+          { 
+            headers: {
+              'Authorization': 'Bearer '+this.$auth.token(),
             }
-
-            axios.post('http://127.0.0.1:8000/api/auth/userUpdate',
-                { 
-                    id: this.$auth.user().id,
-                    email: this.email,
-                    username: this.username,
-                    name: this.name,
-                    surname: this.surname,
-                    gender: this.gender,
-                    password: this.password
-                },
-                { 
-                    headers: {
-                        'Authorization': 'Bearer '+this.$auth.token(),
-                    }
-            }).then(() => {
-                this.$auth.user(this.userObject)
-                this.editDialog = false
-                this.isLoading = false
-            }).catch( err => { 
-                if (err.response.status != 422){
-                    this.isError = true
-                    this.errorCode = err.response.status
-                }
-                this.isLoading = false
-                this.error = err.response.data.error
-                this.errors = err.response.data.errors || {}
-            });
-        },
-        deleteAcc () {
-            this.$auth.logout({
-                success: function () {
-                    axios
-                        .delete('http://127.0.0.1:8000/api/auth/userDelete', this.$auth.user().id)
-                        .catch( err => {
-                            console.log('error: ', err)
-                        })
-                    this.changeAuthState()
-                },
-                error: function () {
-                    console.log("Something went wrong with Your logout!")
-                },
+        }).then(() => {
+          this.$auth.user(this.userObject)
+          this.editDialog = false
+          this.isLoading = false
+        }).catch( err => { 
+          if (err.response.status != 422){
+            this.isError = true
+            this.errorCode = err.response.status
+          }
+          this.isLoading = false
+          this.error = err.response.data.error
+          this.errors = err.response.data.errors || {}
+        });
+    },
+    deleteAcc () {
+      this.$auth.logout({
+        success: function () {
+          axios
+            .delete('http://127.0.0.1:8000/api/auth/userDelete', this.$auth.user().id)
+            .catch( err => {
+              console.log('error: ', err)
             })
-        }
-    },
+          this.changeAuthState()
+        },
+        error: function () {
+          console.log("Something went wrong with Your logout!")
+        },
+      })
+    }
+  },
 }
 </script>
 

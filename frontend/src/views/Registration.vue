@@ -134,8 +134,8 @@
 </template>
 
 <script>
-import Loading from '@/components/Loading.vue'
-import ConnectionError from '@/components/ConnectionError.vue'
+import Loading from '@/components/helpers/Loading.vue'
+import ConnectionError from '@/components/helpers/ConnectionError.vue'
 
 import external_rules from '@/plugins/rules/rules.js'
 
