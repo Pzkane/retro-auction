@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\User;
 use App\Offer;
-use App\Http\Resources\Offer\Offer as OfferResources;
+use App\Http\Resources\Offers\Offer as OfferResources;
 use App\Traits\OfferPartTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;

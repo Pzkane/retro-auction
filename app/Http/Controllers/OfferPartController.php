@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Offer;
 use App\OfferPart;
-use App\Http\Resources\Offer\OfferPart as OfferPartResources;
+use App\Http\Resources\Offers\OfferPart as OfferPartResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
