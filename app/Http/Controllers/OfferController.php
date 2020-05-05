@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use DB;
-use JWTAuth;
 use App\User;
 use App\Offer;
+use App\Http\Resources\Offer\Offer as OfferResources;
+use App\Traits\OfferPartTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\Offer as OfferResources;
+use Illuminate\Support\Facades\Validator;
+use JWTAuth;
 
 class OfferController extends Controller
 {
+    use OfferPartTrait;
     /**
      * Display a listing of the resource.
      *
@@ -108,7 +110,8 @@ class OfferController extends Controller
     public function show($id)
     {
         $offer = Offer::find($id);
-        return $offer;
+        $offer['parts'] = $this->showOfferParts($id);
+        return new OfferResources($offer);
     }
     
     public function media($id)

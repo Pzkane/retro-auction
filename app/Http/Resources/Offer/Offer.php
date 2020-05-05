@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Offer;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,11 +14,17 @@ class Offer extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $arrayData = [
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
             'preview_image' => $this->preview_image
         ];
+
+        if ($this->parts) {
+            $arrayData['parts'] = $this->parts;
+        }
+
+        return $arrayData;
     }
 }
