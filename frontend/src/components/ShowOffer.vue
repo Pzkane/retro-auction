@@ -2,12 +2,43 @@
   <v-form>
     <v-card>
       <v-card-title>
-        {{ offer.title }}
+        {{ pOffer.title }}
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="closeDialog()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </v-card-title>
       <v-card-text>
-        {{ offer.body }}
-      </v-card-text>
-      <v-card-text>
+        <v-card
+          style="margin-bottom: 10px"
+          outlined
+        >
+          <v-card-text>
+            {{ pOffer.body }}
+          </v-card-text>
+        </v-card>
+        <v-card
+          outlined
+          v-if="parts.length"
+        >
+          <v-card-title
+            class="font-weight-light"
+          >Parts</v-card-title>
+          <v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="partsItems"
+              :items-per-page="5"
+              item-key="label"
+              group-by="category"
+              show-group-by
+              dense
+            ></v-data-table>
+          </v-card-text>
+        </v-card>
         <v-container>
           <v-card>
             <image-lightbox
@@ -31,20 +62,44 @@ export default {
     ImageLightbox: () => import('../components/helpers/ImageLightbox')
   },
   props: {
-    offer: {type: Object, default: null}
+    pCategories: {type: Array, default: null},
+    pOffer: {type: Object, default: null}
     // isOpened: false
   },
   data() {
     return {
-      images: []
+      images: [],
+      parts: [],
+
+      // table data
+      headers: [
+        {
+          text: 'Label',
+          align: 'start',
+          value: 'label'
+        },
+        {
+          text: 'Category',
+          value: 'category'
+        }
+      ],
+      partsItems: []
     }
   },
   created() {
     this.getImages()
+    this.getParts()
   },
   methods: {
-    getImages() {
-      let req = 'http://127.0.0.1:8000/api/offer_media/'+this.offer.id
+    closeDialog () {
+      this.$emit('closeShowDialog')
+    },
+    getCategoryName (categoryId) {
+      const category = this.pCategories.find(category => { return category.id === categoryId })
+      return category.label
+    },
+    getImages () {
+      const req = 'http://127.0.0.1:8000/api/offer_media/'+this.pOffer.id
       axios
         .get (req)
         .then ((result) => {
@@ -55,6 +110,27 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    async getParts () {
+      const req = 'http://127.0.0.1:8000/api/offer/'+this.pOffer.id
+      axios
+        .get (req)
+        .then ((result) => {
+          const {data:{data}} = result
+          this.parts = data.parts
+          this.getTableContents()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getTableContents () {
+      for (const part of this.parts) {
+        this.partsItems.push({
+          'label': part.part,
+          'category': this.getCategoryName(part.category)
+        })
+      }
     }
   },
 }

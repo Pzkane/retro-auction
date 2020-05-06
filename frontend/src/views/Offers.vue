@@ -33,6 +33,7 @@
                     </v-btn>                                
                   </template>
                   <AddOffer
+                    :pCategories="categories"
                     @closeAddOfferDialog="addOfferDialog = false" 
                   />
                 </v-dialog>
@@ -133,7 +134,9 @@
                         </v-btn>                           
                       </template>
                       <ShowOffer
-                        :offer="item"
+                        :pCategories="categories"
+                        :pOffer="item"
+                        @closeShowDialog="showOfferDialog = false"
                       />
                     </v-dialog>                                      
                   </v-row>
@@ -179,6 +182,7 @@ export default {
   data() {
     return {
       offers: [],
+      categories: [],
       page_count: null,
       page_number: 1,
 
@@ -195,12 +199,29 @@ export default {
   },
   created() {
     this.fetchOffers('http://127.0.0.1:8000/api/offers')
+    this.fetchCategories('http://127.0.0.1:8000/api/offer_categories')
   },
   methods: {
-    ...mapGetters([
+    ...mapGetters ([
       'getAuthState',
     ]),
-    fetchOffers(path) {
+    fetchCategories (path) {
+      axios
+        .get(path)
+        .then(res => {
+          const {data:{data}} = res
+          if (data && !data.length){
+            this.categories = [data]
+          } else {
+            this.categories = data
+          }
+        })
+        .catch(err => {
+          this.errorCode = err.response.status
+          this.responseError()
+        })
+    },
+    fetchOffers (path) {
       axios
         .get(path)
         .then(res => {
@@ -220,38 +241,38 @@ export default {
           this.responseError()
         })
     },
-    responseError() {
+    responseError () {
       this.isLoading = false;
       this.isError = true;
       return true;
     },
-    setOffers(data) {
+    setOffers (data) {
       this.offers = data;
     },
-    setPageCount(data) {
+    setPageCount (data) {
       this.page_count = data;
     },
-    getPageNumber() {
+    getPageNumber () {
       return this.page_number;
     },
-    getOffers() {
+    getOffers () {
       return this.offers;
     },
-    getPageCount() {
+    getPageCount () {
       return this.page_count;
     },
-    offers_update() {
+    offers_update () {
       this.isPaginationDisabled = true;
       this.isLoading = true;
       this.isError = false;
-      const pagePath = 'http://127.0.0.1:8000/api/offers?page=';
+      let pagePath = 'http://127.0.0.1:8000/api/offers?page=';
       pagePath += this.page_number;
       this.fetchOffers(pagePath);
     },
-    closeAddOfferDialog() {
+    closeAddOfferDialog () {
       this.addOfferDialog = !this.addOfferDialog
     },
-    showMore(itemID) {
+    showMore (itemID) {
       return this.offers[itemID];
     }
   },
