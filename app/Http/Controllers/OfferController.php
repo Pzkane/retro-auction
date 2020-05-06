@@ -6,7 +6,7 @@ use DB;
 use App\User;
 use App\Offer;
 use App\Http\Resources\Offers\Offer as OfferResources;
-use App\Traits\OfferPartTrait;
+use App\Traits\OffersTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,7 @@ use JWTAuth;
 
 class OfferController extends Controller
 {
-    use OfferPartTrait;
+    use OffersTraits;
     /**
      * Display a listing of the resource.
      *
@@ -58,6 +58,8 @@ class OfferController extends Controller
         $offer->title = $request->title;
         $offer->body = $request->body;
         $offer->save();
+
+        $this->storeOfferParts($request->parts, $offer->id);
 
         $previewImage = self::storeImages($offer->id, $request->images, $request->preview_image_id);
         $offer->preview_image = $previewImage;

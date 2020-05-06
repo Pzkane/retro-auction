@@ -41,3 +41,4 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::get('/offers', 'OfferController@index');   
 Route::get('/offer/{id}', 'OfferController@show');
 Route::get('/offer_media/{id}', 'OfferController@media');
+Route::get('/offer_categories', 'OfferCategoryController@index');

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Log;
+
 use App\Offer;
 use App\OfferPart;
 use App\Http\Resources\Offers\OfferPart as OfferPartResources;
@@ -36,9 +38,20 @@ class OfferPartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public static function store($arrayData, $offerId)
     {
-        //
+        $decodedArrayData = json_decode($arrayData);
+        $insertArray = array();
+
+        foreach ($decodedArrayData as $dataChunk) {
+            array_push($insertArray, array(
+                'part' => $dataChunk->label,
+                'category' => $dataChunk->category,
+                'offer_id' => $offerId
+            ));
+        }
+
+        OfferPart::insert($insertArray);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace App\Http\Resources\Offers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OfferPart extends JsonResource
+class OfferCategory extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,7 @@ class OfferPart extends JsonResource
     {
         return [
             'id' => $this->id,
-            'part' => $this->part,
-            'category' => $this->category
+            'label' => $this->label
         ];
     }
 }
