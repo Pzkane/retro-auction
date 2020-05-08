@@ -19,7 +19,7 @@ class CreateOffersMediaTable extends Migration
             $table->text('photo_path');
             $table->text('file_name');
 
-            $table->foreign('offer_id')->references('id')->on('offers');
+            $table->foreign('offer_id')->references('id')->on('offers')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

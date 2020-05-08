@@ -22,7 +22,7 @@ class CreateOffersTable extends Migration
             $table->enum('status', ['active', 'archived']);
             $table->text('preview_image')->nullable();
 
-            $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
