@@ -19,7 +19,7 @@ class CreateAuctionParticipantsTable extends Migration
             $table->enum('auction_type', ['commercial', 'charity']);
             $table->double('amount', 8, 2);
 
-            $table->foreign('user_id')->references('id')->on('object_type');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('auction_id', 'charity')->references('id')->on('charity_auction');
             $table->foreign('auction_id', 'commercial')->references('id')->on('commercial_auction');
         });

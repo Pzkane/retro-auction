@@ -42,3 +42,5 @@ Route::get('/offers', 'OfferController@index');
 Route::get('/offer/{id}', 'OfferController@show');
 Route::get('/offer_media/{id}', 'OfferController@media');
 Route::get('/offer_categories', 'OfferCategoryController@index');
+
+Route::get('/auction', 'AuctionController@index');

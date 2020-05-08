@@ -19,7 +19,7 @@ class CreateOffersPartsTable extends Migration
             $table->unsignedBigInteger('category');
             $table->unsignedBigInteger('offer_id');
 
-            $table->foreign('category')->references('id')->on('parts_category')->onDelete('no action')->onUpdate('cascade');
+            $table->foreign('category')->references('id')->on('parts_category')->onUpdate('cascade');
             $table->foreign('offer_id')->references('id')->on('offers')->onDelete('cascade')->onUpdate('cascade');
         });
     }

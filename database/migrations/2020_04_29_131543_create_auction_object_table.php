@@ -15,10 +15,11 @@ class CreateAuctionObjectTable extends Migration
     {
         Schema::create('auction_object', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('object_type');
+            $table->unsignedBigInteger('object_type_id');
             $table->string('name', 24);
+            $table->text('preview_image')->nullable();
 
-            $table->foreign('object_type')->references('id')->on('object_type');
+            $table->foreign('object_type_id')->references('id')->on('object_type');
         });
     }
 

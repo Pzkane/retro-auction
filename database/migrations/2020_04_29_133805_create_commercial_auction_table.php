@@ -16,13 +16,14 @@ class CreateCommercialAuctionTable extends Migration
         Schema::create('commercial_auction', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('object_id');
-            $table->double('start_bid', 8, 2);
-            $table->double('highest_bid', 8, 2);
-            $table->integer('days_to_finish');
+            $table->double('start_bid', 8, 2)->default(0);
+            $table->unsignedBigInteger('highest_bid_user_id')->nullable();
+            $table->integer('days_to_finish')->nullable();
             $table->timestamp('started_at')->useCurrent();
             $table->timestamp('finished_at')->nullable();
 
             $table->foreign('object_id')->references('id')->on('auction_object');
+            $table->foreign('highest_bid_user_id')->references('id')->on('users');
         });
     }
 
