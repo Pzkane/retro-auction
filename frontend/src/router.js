@@ -2,10 +2,11 @@ import VueRouter from 'vue-router'
 
 import Home from './views/Home.vue'
 import Offers from './views/Offers.vue'
+import Auction from './views/Auction.vue'
 import Registration from './views/Registration.vue'
 import Dashboard from './views/Dashboard.vue'
 import AdminDashboard from './views/admin/ControlPanel.vue'
-import SUDashboard from './views/admin/su/Dashboard.vue'
+import SADashboard from './views/admin/su/Dashboard.vue'
 
 const routes = [
   {
@@ -17,6 +18,11 @@ const routes = [
     path: '/offers',
     name: 'offers',
     component: Offers
+  },
+  {
+    path: '/auction',
+    name: 'auction',
+    component: Auction
   },
   {
     path: '/about',
@@ -61,7 +67,7 @@ const routes = [
   {
     path: '/sadmin',
     name: 'sadmin.dashboard',
-    component: SUDashboard,
+    component: SADashboard,
     meta: {
       auth: {roles: 'super_admin', redirect: {name: 'offers'}, forbiddenRedirect: '/403'}
     },

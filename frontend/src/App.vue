@@ -14,6 +14,9 @@
       <v-tab to="/offers">
         Offers
       </v-tab>
+      <v-tab to="/auction">
+        Auction
+      </v-tab>
       <v-tab to="/about">
         About
       </v-tab>
@@ -86,6 +89,9 @@
       </v-tab-item>
       <v-tab-item id="/offers">
         <router-view v-if="activeTab === '/offers'" />
+      </v-tab-item>
+      <v-tab-item id="/auction">
+        <router-view v-if="activeTab === '/auction'" />
       </v-tab-item>
       <v-tab-item id="/about">
         <router-view v-if="activeTab === '/about'" />
