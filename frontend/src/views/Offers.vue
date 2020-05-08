@@ -19,6 +19,13 @@
               </v-card-title>
               <v-spacer />
               <v-card-actions class="pr-6">
+                <v-btn
+                  icon
+                  class="fetchOffersBtn"
+                  @click="fetchOffers()"
+                >
+                  <v-icon>mdi-autorenew</v-icon>
+                </v-btn>
                 <v-dialog
                   v-model="addOfferDialog"
                   max-width="1500px"
@@ -198,14 +205,15 @@ export default {
     }
   },
   created() {
-    this.fetchOffers('http://127.0.0.1:8000/api/offers')
-    this.fetchCategories('http://127.0.0.1:8000/api/offer_categories')
+    this.fetchOffers()
+    this.fetchCategories()
   },
   methods: {
     ...mapGetters ([
       'getAuthState',
     ]),
-    fetchCategories (path) {
+    fetchCategories () {
+      const path = 'http://127.0.0.1:8000/api/offer_categories'
       axios
         .get(path)
         .then(res => {
@@ -221,7 +229,8 @@ export default {
           this.responseError()
         })
     },
-    fetchOffers (path) {
+    fetchOffers () {
+      const path = 'http://127.0.0.1:8000/api/offers'
       axios
         .get(path)
         .then(res => {
@@ -324,5 +333,8 @@ export default {
     margin-right: 50px;
     padding: 20px;
     float: right;
+  }
+  .fetchOffersBtn {
+    margin-right: 15px;
   }
 </style>
