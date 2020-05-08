@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>
         {{ pOffer.title }}
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           icon
           @click="closeDialog()"
@@ -16,6 +16,11 @@
           style="margin-bottom: 10px"
           outlined
         >
+          <v-card-title
+            class="font-weight-light"
+          >
+            Description
+          </v-card-title>
           <v-card-text>
             {{ pOffer.body }}
           </v-card-text>
@@ -26,7 +31,9 @@
         >
           <v-card-title
             class="font-weight-light"
-          >Parts</v-card-title>
+          >
+            Parts
+          </v-card-title>
           <v-card-text>
             <v-data-table
               :headers="headers"
@@ -36,7 +43,7 @@
               group-by="category"
               show-group-by
               dense
-            ></v-data-table>
+            />
           </v-card-text>
         </v-card>
         <v-container>

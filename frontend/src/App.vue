@@ -1,7 +1,8 @@
 <template>
   <v-app v-if="$auth.ready()">
     <v-container>
-      {{ authAdmin }}
+      <!-- debug -->
+      {{ authAdmin }} 
     </v-container>
     <v-tabs
       v-model="activeTab"

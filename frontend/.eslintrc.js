@@ -12,7 +12,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'vue/component-tags-order': 'off',
-    'vue/attributes-order': 'off'
+    'vue/attributes-order': 'off',
+    'vue/attribute-hyphenation': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'

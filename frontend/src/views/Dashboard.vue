@@ -36,7 +36,16 @@
                 </template>
 
                 <v-card>
-                  <v-card-title>Edit profile</v-card-title>
+                  <v-card-title>
+                    Edit profile
+                    <v-spacer />
+                    <v-btn
+                      icon
+                      @click="editDialog = false"
+                    >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-card-title>
                   <v-card-text>
                     <v-form ref="form">
                       <v-container>
@@ -327,11 +336,6 @@ export default {
 
       isLoading: false,
       isError: false
-    }
-  },
-  created: {
-    fetchUser () {
-      this.getUserInfo()
     }
   },
   methods: {
