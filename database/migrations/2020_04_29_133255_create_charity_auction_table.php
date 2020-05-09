@@ -15,14 +15,10 @@ class CreateCharityAuctionTable extends Migration
     {
         Schema::create('charity_auction', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('object_id');
-            $table->unsignedBigInteger('highest_bid_user_id')->nullable();
+            $table->unsignedBigInteger('auction_id');
             $table->double('goal', 8, 2)->default(0);
-            $table->timestamp('started_at')->useCurrent();
-            $table->timestamp('finished_at')->nullable();
 
-            $table->foreign('object_id')->references('id')->on('auction_object');
-            $table->foreign('highest_bid_user_id')->references('id')->on('users');
+            $table->foreign('auction_id')->references('id')->on('auctions')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

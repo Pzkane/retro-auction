@@ -14,14 +14,15 @@ class CreateAuctionParticipantsTable extends Migration
     public function up()
     {
         Schema::create('auction_participants', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('auction_id');
-            $table->enum('auction_type', ['commercial', 'charity']);
             $table->double('amount', 8, 2);
 
+            $table->unique(['user_id', 'auction_id']);
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('auction_id', 'charity')->references('id')->on('charity_auction');
-            $table->foreign('auction_id', 'commercial')->references('id')->on('commercial_auction');
+            $table->foreign('auction_id')->references('id')->on('auctions')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
