@@ -2,21 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Auction;
+use App\AuctionObject;
+use App\AuctionParticipants;
 use App\Traits\AuctionTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class AuctionController extends Controller
 {
     use AuctionTraits;
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getActiveAuctions()
     {
-        return $this->indexAll();
+        $raw_auctions = new Auction;
+        $activeAuctions = json_decode($raw_auctions->all());
+
+        array_filter($activeAuctions, function($auction) {
+            return $auction->status == 'active';
+        });
+
+        foreach ($activeAuctions as $auction) {
+            $objectIds[] = $auction->object_id;
+        }
+
+        $auction_objects = json_decode(json_encode($this->getAuctionObjects(AuctionObject::all(), $objectIds)), true);
+
+        foreach ($activeAuctions as $auction) {
+            foreach ($auction_objects as $object) {
+                if ($object['id'] == $auction->object_id) {
+                    $auction->auction_object = $object;
+                }
+            }
+            $auction->participants = $this->getAuctionParticipants(AuctionParticipants::all(), $auction->id);
+            $auction->auction_data = $this->getAuctionTypeData($auction->id, $auction->type);
+        }
+
+        return $activeAuctions;
     }
 
     /**

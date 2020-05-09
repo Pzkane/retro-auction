@@ -4,7 +4,7 @@ namespace App\Http\Resources\Auction;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CharityAuction extends JsonResource
+class Auction extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,11 @@ class CharityAuction extends JsonResource
     {
         return [
             'id' => $this->id,
-            'goal' => $this->goal
+            'object_id' => $this->object_id,
+            'started_at' => $this->started_at,
+            'finished_at' => $this->finished_at,
+            'status' => $this->status,
+            'type' => $this->type
         ];
     }
 }

@@ -16,12 +16,9 @@ class CommercialAuction extends JsonResource
     {
         return [
             'id' => $this->id,
-            'object_id' => $this->object_id,
-            'start_bid' => $this->start_bid | 0,
-            'highest_bid' => $this->highest_bid | 0,
-            'days_to_finish' => $this->days_to_finish | 0,
-            'started_at' => $this->started_at,
-            'finished_at' => $this->finished_at,
+            'start_bid' => $this->start_bid,
+            'highest_bid_user_id' => $this->highest_bid_user_id,
+            'days_to_finish' => $this->days_to_finish
         ];
     }
 }

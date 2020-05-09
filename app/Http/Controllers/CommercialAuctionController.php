@@ -18,6 +18,10 @@ class CommercialAuctionController extends Controller
         return CommercialAuctionResources::collection(CommercialAuction::all());
     }
 
+    public function getDetailsByAuctionId($auctionId) {
+        return CommercialAuctionResources::collection(CommercialAuction::where('auction_id', $auctionId)->get());
+    }
+
     /**
      * Show the form for creating a new resource.
      *

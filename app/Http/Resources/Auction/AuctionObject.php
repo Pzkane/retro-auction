@@ -4,7 +4,7 @@ namespace App\Http\Resources\Auction;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CharityAuction extends JsonResource
+class AuctionObject extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,6 @@ class CharityAuction extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'goal' => $this->goal
-        ];
+        return parent::toArray($request);
     }
 }

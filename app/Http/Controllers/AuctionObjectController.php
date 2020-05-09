@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\CharityAuction;
-use App\Http\Resources\Auction\CharityAuction as CharityAuctionResources;
+use App\AuctionObject;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
-class CharityAuctionController extends Controller
+class AuctionObjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +14,7 @@ class CharityAuctionController extends Controller
      */
     public function index()
     {
-        return CharityAuctionResources::collection(CharityAuction::all());
-    }
-
-    public function getDetailsByAuctionId($auctionId) {
-        return CharityAuctionResources::collection(CharityAuction::where('auction_id', $auctionId)->get());
+        //
     }
 
     /**
@@ -47,10 +41,10 @@ class CharityAuctionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\CharityAuction  $charityAuction
+     * @param  \App\AuctionObject  $auctionObject
      * @return \Illuminate\Http\Response
      */
-    public function show(CharityAuction $charityAuction)
+    public function show(AuctionObject $auctionObject)
     {
         //
     }
@@ -58,10 +52,10 @@ class CharityAuctionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CharityAuction  $charityAuction
+     * @param  \App\AuctionObject  $auctionObject
      * @return \Illuminate\Http\Response
      */
-    public function edit(CharityAuction $charityAuction)
+    public function edit(AuctionObject $auctionObject)
     {
         //
     }
@@ -70,10 +64,10 @@ class CharityAuctionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CharityAuction  $charityAuction
+     * @param  \App\AuctionObject  $auctionObject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CharityAuction $charityAuction)
+    public function update(Request $request, AuctionObject $auctionObject)
     {
         //
     }
@@ -81,10 +75,10 @@ class CharityAuctionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CharityAuction  $charityAuction
+     * @param  \App\AuctionObject  $auctionObject
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CharityAuction $charityAuction)
+    public function destroy(AuctionObject $auctionObject)
     {
         //
     }
