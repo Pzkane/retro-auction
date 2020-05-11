@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Auction;
 use App\AuctionObject;
 use App\AuctionParticipants;
+use App\Http\Resources\Auction\AuctionFullDataSet as AuctionFullDataSetResources;
 use App\Traits\AuctionTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -19,22 +20,26 @@ class AuctionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getActiveAuctions()
+    public function index($status = 'active')
     {
         $raw_auctions = new Auction;
-        $activeAuctions = json_decode($raw_auctions->all());
+        $decoded_auctions = json_decode($raw_auctions->all());
 
-        array_filter($activeAuctions, function($auction) {
-            return $auction->status == 'active';
+        $filteredAuction = array_filter($decoded_auctions, function($auction) use ($status) {
+            return $auction->status == $status;
         });
 
-        foreach ($activeAuctions as $auction) {
+        if (sizeof($filteredAuction) == 0) {
+            return [];
+        }
+
+        foreach ($filteredAuction as $auction) {
             $objectIds[] = $auction->object_id;
         }
 
         $auction_objects = json_decode(json_encode($this->getAuctionObjects(AuctionObject::all(), $objectIds)), true);
 
-        foreach ($activeAuctions as $auction) {
+        foreach ($filteredAuction as $auction) {
             foreach ($auction_objects as $object) {
                 if ($object['id'] == $auction->object_id) {
                     $auction->auction_object = $object;
@@ -44,7 +49,7 @@ class AuctionController extends Controller
             $auction->auction_data = $this->getAuctionTypeData($auction->id, $auction->type);
         }
 
-        return $activeAuctions;
+        return new AuctionFullDataSetResources($filteredAuction);
     }
 
     /**
