@@ -5,8 +5,10 @@ namespace App\Traits;
 // use App\Http\Controllers\AuctionParticipantsController;
 use App\Http\Controllers\CharityAuctionController;
 use App\Http\Controllers\CommercialAuctionController;
+use App\Http\Controllers\UserController;
 use App\Http\Resources\Auction\AuctionParticipants as AuctionParticipantsResources;
 use App\Http\Resources\Auction\AuctionObject as AuctionObjectResources;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 
@@ -27,7 +29,22 @@ trait AuctionTraits
     }
 
     public function getAuctionParticipants($auctionParticipants_Model, $auctionId) {
-        return AuctionParticipantsResources::collection($auctionParticipants_Model->where('auction_id', $auctionId));
+        $participantsInfo = $auctionParticipants_Model->where('auction_id', $auctionId);
+
+        $userIds = [];
+        foreach ($participantsInfo as $participant_data_chunk) {
+            $userIds[] = $participant_data_chunk->user_id;
+        }
+        $usersInfo = (new UserController)->findByIDs($userIds);
+
+        if (!is_array($participantsInfo)) {
+            $participantsInfo = (array) $participantsInfo;
+        }
+        if (!is_array($usersInfo)) {
+            $usersInfo = (array) $usersInfo;
+        }
+
+        return AuctionParticipantsResources::collection(array_merge($participantsInfo, $usersInfo));
     }
 
     public function getAuctionTypeData ($auctionId, $auctionType) {

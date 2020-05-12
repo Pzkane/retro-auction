@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use JWTAuth;
 use App\User;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Resources\Users\UserBasic as UserBasicResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -64,10 +66,13 @@ class UserController extends Controller
     }
 
     public function delete (Request $request) {
-        error_log($request);
         $user = Auth::user();
         $user->delete();
 
         return response()->json(['status' => 'success'], 200);
+    }
+
+    public function findByIDs ($userIds) {
+        return UserBasicResources::collection(User::whereIn('id', $userIds)->get());
     }
 }

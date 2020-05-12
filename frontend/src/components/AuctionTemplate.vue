@@ -8,6 +8,13 @@
     
     <v-card-text>
       <slot></slot>
+      <v-container>
+        <v-row
+          v-for="participant in pAuction.participants" :key="participant.id"
+        >
+          {{ participant.id }}
+        </v-row>
+      </v-container>
     </v-card-text>
   </v-card>
 </template>
