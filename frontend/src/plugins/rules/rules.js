@@ -19,6 +19,6 @@ const external_rules = {
     textOnly: v => (!v || /^[a-zA-Z_-]+$/.test(v)) || 'Field can contain letters only',
     email: v => /.+@.+\..+/.test(v) || 'Email must be valid',
     newEmail: v => (!v ||  /.+@.+\..+/.test(v) ) || 'Email must be valid'
-}
+};
 
 export default external_rules;
