@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Log;
 trait AuctionTraits
 {
     public function indexActive() {
-        // $auctions = new AuctionParticipantsController;
-
         return [
             'charity' => (new CharityAuctionController)->getActive(),
             'commercial' => (new CommercialAuctionController)->getActive()
@@ -37,14 +35,21 @@ trait AuctionTraits
         }
         $usersInfo = (new UserController)->findByIDs($userIds);
 
-        if (!is_array($participantsInfo)) {
-            $participantsInfo = (array) $participantsInfo;
+        try {
+            $index = 0;
+            foreach ($participantsInfo as $key => $participant) {
+                $participant->username = $usersInfo[$index]->username;
+                $participant->email = $usersInfo[$index]->email;
+                $participant->avatar_path = $usersInfo[$index]->avatar_path;
+                $index++;
+            }
+        } catch (\Throwable $err) {
+            $participantsInfo->username = $usersInfo[0]->username;
+            $participantsInfo->email = $usersInfo[0]->email;
+            $participantsInfo->avatar_path = $usersInfo[0]->avatar_path;
         }
-        if (!is_array($usersInfo)) {
-            $usersInfo = (array) $usersInfo;
-        }
-
-        return AuctionParticipantsResources::collection(array_merge($participantsInfo, $usersInfo));
+        
+        return AuctionParticipantsResources::collection($participantsInfo);
     }
 
     public function getAuctionTypeData ($auctionId, $auctionType) {

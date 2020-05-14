@@ -18,6 +18,7 @@ class AuctionParticipants extends JsonResource
             'id' => $this->user_id,
             'username' => $this->username,
             'email' => $this->email,
+            'avatar_path' => $this->avatar_path,
             'amount' => $this->amount,
         ];
     }
