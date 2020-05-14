@@ -4,12 +4,18 @@
       <v-col
         md="6"
       >
-        <CharityAuction v-if="activeCharityAuction" :pAuction="activeCharityAuction" />
+        <CharityAuction
+          v-if="activeCharityAuction"
+          :pAuction="activeCharityAuction"
+        />
       </v-col>
       <v-col
         md="6"
       >
-        <CommercialAuction v-if="activeCommercialAuction" :pAuction="activeCommercialAuction" />
+        <CommercialAuction
+          v-if="activeCommercialAuction"
+          :pAuction="activeCommercialAuction"
+        />
       </v-col>
       <v-col
         md="6"

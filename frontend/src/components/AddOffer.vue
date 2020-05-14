@@ -210,6 +210,7 @@
       <v-btn
         class="dismiss-btn"
         depressed
+        block
         @click="closeDialog(true)"
       >
         Ok

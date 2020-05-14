@@ -8,11 +8,11 @@
 
 <script>
 export default {
+  components: {
+    AuctionTemplate: () => import('./AuctionTemplate')
+  },
   props: {
     pAuction: {type: Object, default: null}
-  },
-  components: {
-    AuctionTemplate: () => import('../components/AuctionTemplate')
   }
 }
 </script>

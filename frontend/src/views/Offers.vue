@@ -106,11 +106,6 @@
                     <v-row>
                       <v-col lg="4">
                         <image-lightbox :src="item.preview_image" />
-                        <!-- <v-img
-                          class="image"
-                          :src="item.preview_image"
-                          alt="No Image"
-                        /> -->
                       </v-col>
 
                       <v-col>
@@ -127,10 +122,6 @@
                       max-width="1500px"
                     >
                       <template #activator="{on}">     
-                        <!-- <v-btn 
-                            v-on="on"
-                            v-if="getAuthState()"
-                        >Add Offer</v-btn>      -->
                         <v-btn
                           x-large
                           style="border-radius: 0 0 5px 5px;margin-right: 11px"

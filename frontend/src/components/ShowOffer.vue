@@ -66,7 +66,7 @@ import axios from 'axios'
 
 export default {
   components: {
-    ImageLightbox: () => import('../components/helpers/ImageLightbox')
+    ImageLightbox: () => import('./helpers/ImageLightbox')
   },
   props: {
     pCategories: {type: Array, default: null},

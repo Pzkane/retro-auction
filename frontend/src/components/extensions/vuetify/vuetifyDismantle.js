@@ -3,7 +3,7 @@ import Vuetify from 'vuetify'
 let output;
 
 const subvertVue = {
-    use (Installer, option) {
+    use (Installer, options) {
         output = {
             ...options
         }

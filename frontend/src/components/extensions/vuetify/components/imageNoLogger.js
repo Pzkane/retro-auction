@@ -1,9 +1,8 @@
-import { components } from '../vuetifyDismantle'
-const VImg = components.VImg
+import { VImg } from 'vuetify/lib'
 
 export default {
     name: 'v-img-nologger',
-    extends: Vue,
+    extends: VImg,
     methods: {
         onError () {
             this.$emit('error')
