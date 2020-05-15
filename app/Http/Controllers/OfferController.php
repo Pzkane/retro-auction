@@ -50,13 +50,12 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-        // error_log('file: '.Storage::disk('public')->url('uploads/offers-media/2016.png'));
-        // $offer->image = Storage::disk('public')->url('uploads/offers-media/2016.png');
-
         $offer = new Offer;
         $offer->author_id = $request->user_id;
         $offer->title = $request->title;
         $offer->body = $request->body;
+        $offer->contact_phone = $request->contact_phone;
+        $offer->contact_email = $request->contact_email;
         $offer->save();
 
         $this->storeOfferParts($request->parts, $offer->id);

@@ -42,7 +42,13 @@ class AuctionParticipantsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $participant = new AuctionParticipants;
+        $participant->auction_id = $request->auction_id;
+        $participant->user_id = $request->user_id;
+        $participant->amount = $request->amount;
+        $participant->save();
+
+        return response()->json(['status' => 'success'], 200);
     }
 
     /**

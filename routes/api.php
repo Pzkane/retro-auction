@@ -29,6 +29,8 @@ Route::prefix('auth')->group( function () {
         Route::delete('userDelete', 'UserController@delete');
 
         Route::post('addOffer', 'OfferController@store');
+
+        Route::post('addParticipant', 'AuctionParticipantsController@store');
     });
 });
 

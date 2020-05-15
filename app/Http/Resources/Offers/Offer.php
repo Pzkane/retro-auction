@@ -18,6 +18,8 @@ class Offer extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'body' => $this->body,
+            'contact_phone' => $this->contact_phone,
+            'contact_email' => $this->contact_email,
             'preview_image' => $this->preview_image
         ];
 
