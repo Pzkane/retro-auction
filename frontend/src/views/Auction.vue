@@ -7,6 +7,7 @@
         <CharityAuction
           v-if="activeCharityAuction"
           :pAuction="activeCharityAuction"
+          @updateAuction="fetchActiveAuctions()"
         />
       </v-col>
       <v-col

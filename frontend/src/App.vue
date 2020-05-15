@@ -17,9 +17,6 @@
       <v-tab to="/auction">
         Auction
       </v-tab>
-      <v-tab to="/about">
-        About
-      </v-tab>
       <v-tab
         v-if="!getAuthState()"
         to="/signup"
@@ -92,9 +89,6 @@
       </v-tab-item>
       <v-tab-item id="/auction">
         <router-view v-if="activeTab === '/auction'" />
-      </v-tab-item>
-      <v-tab-item id="/about">
-        <router-view v-if="activeTab === '/about'" />
       </v-tab-item>
       <v-tab-item id="/signup">
         <router-view v-if="activeTab === '/signup'" />

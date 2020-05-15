@@ -56,6 +56,26 @@
             />
           </v-card>
         </v-container>
+
+        <v-container
+          class="contacts"
+        >
+          <h3>
+            Contacts
+          </h3>
+          <v-row>
+            <v-col>
+              <h3 class="subtitle-1">
+                Phone: <span class="constacts-data">{{ pOffer.contact_phone }}</span>
+              </h3>
+            </v-col>
+            <v-col>
+              <h3 class="subtitle-1">
+                Email: <span class="constacts-data">{{ pOffer.contact_email }}</span>
+              </h3>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card-text>
     </v-card>
   </v-form>
@@ -144,6 +164,13 @@ export default {
 </script>
 
 <style scoped>
+  .contacts {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+  }
+  .constacts-data {
+    font-weight: bold;
+  }
   .image {
     max-width: 200px;
     max-height: 200px;

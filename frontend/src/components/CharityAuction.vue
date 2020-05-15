@@ -1,6 +1,7 @@
 <template>
   <AuctionTemplate
     :pAuction="pAuction"
+    @updateAuction="fetchUpdatedAuctions()"
   >
     <v-container>
       <v-row>
@@ -33,6 +34,11 @@ export default {
       return (this.totalAmount / this.pAuction.auction_data[0].goal) * 100
     }
   },
+  methods: {
+    fetchUpdatedAuctions () {
+      this.$emit('updateAuction')
+    }
+  }
 }
 </script>
 

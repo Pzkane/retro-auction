@@ -112,6 +112,25 @@
               </v-card>
             </v-col>
           </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="contactPhone"
+                :rules="[scoped_rules.contactPhone]"
+                :counter="40"
+                label="Contact Phone"
+                outlined
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                :value="contactEmail"
+                disabled
+                label="Contact Email"
+                outlined
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions class="pb-0">
           <v-container class="pa-0">
@@ -136,8 +155,8 @@
                         color="blue-grey lighten-5"
                       >
                         <v-img
-                          v-for="image in files"
-                          :key="image"
+                          v-for="(image, index) in files"
+                          :key="index"
                           class="d-inline-block ma-5"
                           max-width="200px"
                           max-height="200px"
@@ -233,9 +252,12 @@ export default {
       body: null,
       files: [],
       path: null, // debug var
+      contactEmail: null,
+      contactPhone: null,
 
       rules: external_rules,
       scoped_rules: {
+        contactPhone: v => (!!v && v.length > 6 && v.length < 40 && /^[0-9]+$/.test(v)) || 'Provide a valid phone number without any symbols',
         filesRequired: v => (!!v && this.files.length >=1) || 'You need to attach at least 1 image'
       },
 
@@ -268,6 +290,9 @@ export default {
       }
     }
   },
+  created () {
+    this.contactEmail = this.$auth.user().email
+  },
   mounted () {
     if (this.pCategories) {
       this.categories = this.pCategories
@@ -287,6 +312,8 @@ export default {
     closeDialog (afterSubmit = false) {
       this.title = null
       this.body = null
+      this.contactEmail = null
+      this.contactPhone = null
       this.files = []
       this.path = null
       this.formattedFiles = []
@@ -332,6 +359,8 @@ export default {
         offerData.append('user_id', this.$auth.user().id)
         offerData.append('title', this.title)
         offerData.append('body', this.body)
+        offerData.append('contact_phone', this.contactPhone)
+        offerData.append('contact_email', this.contactEmail)
         offerData.append('preview_image_id', 0)
         offerData.append('parts', JSON.stringify(this.partObjects))
         // offerData
@@ -351,7 +380,7 @@ export default {
         }
         axios
           .post('http://127.0.0.1:8000/api/auth/addOffer', offerData, config)
-          .then ((res) => {
+          .then (res => {
             console.log(res)
             switch (res.status) {
               case 200:

@@ -153,7 +153,7 @@ export default {
     }
   },
   created() {
-    this.fetchOffers()
+    this.fetchOffers('http://127.0.0.1:8000/api/offers')
     this.fetchCategories()
   },
   methods: {
@@ -189,8 +189,7 @@ export default {
           this.responseError()
         })
     },
-    fetchOffers () {
-      const path = 'http://127.0.0.1:8000/api/offers'
+    fetchOffers (path) {
       axios
         .get(path)
         .then(res => {
