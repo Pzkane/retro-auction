@@ -18,7 +18,7 @@ class CreateCommercialAuctionTable extends Migration
             $table->unsignedBigInteger('auction_id');
             $table->double('start_bid', 8, 2)->default(0);
             $table->unsignedBigInteger('highest_bid_user_id')->nullable();
-            $table->integer('days_to_finish')->nullable();
+            $table->dateTime('end_date');
 
             $table->foreign('auction_id')->references('id')->on('auctions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('highest_bid_user_id')->references('id')->on('users');
