@@ -94,50 +94,10 @@
                   :key="item.id"
                   justify-space-around
                 >
-                  <v-card style="border-radius: 5px 5px 0 5px;">
-                    <v-row ml-5>
-                      <v-card-title
-                        pl-5
-                        class="headline"
-                      >
-                        {{ item.title }}
-                      </v-card-title>
-                    </v-row>
-                    <v-row>
-                      <v-col lg="4">
-                        <image-lightbox :src="item.preview_image" />
-                      </v-col>
-
-                      <v-col>
-                        <v-card-text>{{ item.body }}</v-card-text>
-                      </v-col>
-                    </v-row>
-                  </v-card>
-                  <v-row
-                    class="justify-end"
-                    mr-5
-                  >
-                    <v-dialog
-                      v-model="showOfferDialog"
-                      max-width="1500px"
-                    >
-                      <template #activator="{on}">     
-                        <v-btn
-                          x-large
-                          style="border-radius: 0 0 5px 5px;margin-right: 11px"
-                          color="primary"
-                          v-on="on"
-                        >
-                          More
-                        </v-btn>                           
-                      </template>
-                      <ShowOffer
-                        :pCategories="categories"
-                        :pOffer="item"
-                        @closeShowDialog="showOfferDialog = false"
-                      />
-                    </v-dialog>                                      
-                  </v-row>
+                  <OffersDisplay 
+                    :pOffer="item"
+                    :pCategories="categories"
+                  />
                 </v-container>
               </v-container>    
             </v-container>
@@ -161,10 +121,9 @@
 
 <script>
 import AddOffer from '@/components/AddOffer.vue'
-import ShowOffer from '@/components/ShowOffer.vue'
+import OffersDisplay from '@/components/OffersDisplay.vue'
 import Loading from '@/components/helpers/Loading.vue'
 import ConnectionError from '@/components/helpers/ConnectionError.vue'
-import ImageLightbox from '@/components/helpers/ImageLightbox.vue'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 
@@ -172,10 +131,9 @@ export default {
   name: 'Offers',
   components: {
     AddOffer,
-    ShowOffer,
+    OffersDisplay,
     Loading,
-    ConnectionError,
-    ImageLightbox
+    ConnectionError
   },
   data() {
     return {
@@ -190,7 +148,6 @@ export default {
       isEmptySet: false,
 
       addOfferDialog: false,
-      showOfferDialog: false,
 
       errorCode: null
     }
@@ -203,6 +160,18 @@ export default {
     ...mapGetters ([
       'getAuthState',
     ]),
+    closeShowDialog (offerId) {     
+      const buffer = this.offers
+      buffer.map(offer => {
+        if (offer.id === offerId) {
+          console.log(offer.showOfferDialog);
+          
+          offer.showOfferDialog = false
+          console.log(offer.showOfferDialog);
+        }
+      })
+      this.offers = buffer
+    },
     fetchCategories () {
       const path = 'http://127.0.0.1:8000/api/offer_categories'
       axios
@@ -248,6 +217,9 @@ export default {
     },
     setOffers (data) {
       this.offers = data;
+      this.offers.map(offer => {
+        offer.showOfferDialog = false
+      })
     },
     setPageCount (data) {
       this.page_count = data;
