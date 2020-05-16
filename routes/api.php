@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('users/{id}', 'UserController@show')->middleware('isAdminOrSelf');
 });
 
-Route::get('/offers', 'OfferController@index');   
+Route::get('/offers/{filters?}', 'OfferController@index');   
 Route::get('/offer/{id}', 'OfferController@show');
 Route::get('/offer_media/{id}', 'OfferController@media');
 Route::get('/offer_categories', 'OfferCategoryController@index');

@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
+use Illuminate\Support\Facades\Log;
 
 class OfferController extends Controller
 {
@@ -21,9 +22,61 @@ class OfferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $offers = Offer::paginate(5);
+        $offersQuery = Offer::query();
+
+        // offer sorting by creation date
+        if (!is_null($request->date)) {
+            switch ($request->date) {
+                case 'accending':
+                    $offersQuery->orderBy('created_at','asc');
+                    break;
+                
+                case 'descending':
+                    $offersQuery->orderBy('created_at','desc');
+                    break;
+            }
+        }
+
+        // conditions from route query parameters
+        if(!is_null($request->title)) {
+            $offersQuery->where('title', 'like', '%'.$request->title.'%');
+        }
+
+        if(!is_null($request->description)) {
+            $offersQuery->where('body', 'like', '%'.$request->description.'%');
+        }
+
+        $offers = Offer::all();
+        if(!is_null($request->parts)) {
+            $offerIds = DB::table('offers_parts')
+                ->where('part', 'like', '%'.$request->parts.'%')
+                ->groupBy('offer_id')
+                ->pluck('offer_id')
+                ->toArray();
+            Log::info($offerIds);
+
+            $offersQuery->whereIn('id', $offerIds);
+        }
+
+        $filterOfferIds = [];
+        if(!is_null($request->category)) {
+            $offerIds = DB::table('offers_parts')
+                ->whereIn('category', (array) $request->category)
+                ->groupBy('offer_id')
+                ->pluck('offer_id');
+            Log::info($offerIds);
+            $offersQuery->whereIn('id', $offerIds);
+        }
+
+        $offers = $offersQuery;
+
+        $offers = $offers->paginate(5);
+        foreach ($offers as $offer) {
+            $offer->author_info = $this->getOfferAuthor($offer->author_id);
+        }
+
         return OfferResources::collection($offers)->additional([
             'meta' => [
                 'version' => '1.0.0',
@@ -55,7 +108,6 @@ class OfferController extends Controller
         $offer->title = $request->title;
         $offer->body = $request->body;
         $offer->contact_phone = $request->contact_phone;
-        $offer->contact_email = $request->contact_email;
         $offer->save();
 
         $this->storeOfferParts($request->parts, $offer->id);

@@ -72,6 +72,10 @@ class UserController extends Controller
         return response()->json(['status' => 'success'], 200);
     }
 
+    public static function findById ($userId) {
+        return new UserBasicResources(User::find($userId));
+    }
+
     public function findByIDs ($userIds) {
         return UserBasicResources::collection(User::whereIn('id', $userIds)->get());
     }

@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Http\Controllers\OfferPartController;
+use App\Http\Controllers\UserController;
 
 /**
  * 
@@ -16,5 +17,9 @@ trait OffersTraits
 
     public function storeOfferParts($arrayData, $offerId) {
         return OfferPartController::store($arrayData, $offerId);
+    }
+
+    public function getOfferAuthor($userId) {
+        return UserController::findById($userId);
     }
 }

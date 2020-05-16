@@ -37,7 +37,7 @@ trait AuctionTraits
 
         try {
             $index = 0;
-            foreach ($participantsInfo as $key => $participant) {
+            foreach ($participantsInfo as $participant) {
                 $participant->username = $usersInfo[$index]->username;
                 $participant->email = $usersInfo[$index]->email;
                 $participant->avatar_path = $usersInfo[$index]->avatar_path;

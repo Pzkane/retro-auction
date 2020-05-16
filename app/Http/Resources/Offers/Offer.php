@@ -20,7 +20,10 @@ class Offer extends JsonResource
             'body' => $this->body,
             'contact_phone' => $this->contact_phone,
             'contact_email' => $this->contact_email,
-            'preview_image' => $this->preview_image
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'preview_image' => $this->preview_image,
+            'author_info' => $this->author_info
         ];
 
         if ($this->parts) {
