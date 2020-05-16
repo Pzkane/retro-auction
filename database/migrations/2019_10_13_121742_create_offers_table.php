@@ -19,7 +19,6 @@ class CreateOffersTable extends Migration
             $table->string('title', 64);
             $table->text('body');
             $table->string('contact_phone', 40)->nullable();
-            $table->string('contact_email', 255)->nullable();
             $table->timestamps();
             $table->enum('status', ['active', 'archived']);
             $table->text('preview_image')->nullable();
