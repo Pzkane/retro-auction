@@ -1,9 +1,5 @@
 <template>
   <v-app v-if="$auth.ready()">
-    <v-container>
-      <!-- debug -->
-      {{ authAdmin }} 
-    </v-container>
     <v-tabs
       v-model="activeTab"
       fixed-tabs
@@ -82,24 +78,31 @@
       </v-btn>
 
       <v-tab-item id="/">
+        <v-divider />
         <router-view v-if="activeTab === '/'" />
       </v-tab-item>
       <v-tab-item id="/offers">
+        <v-divider />
         <router-view v-if="activeTab === '/offers'" />
       </v-tab-item>
       <v-tab-item id="/auction">
+        <v-divider />
         <router-view v-if="activeTab === '/auction'" />
       </v-tab-item>
       <v-tab-item id="/signup">
+        <v-divider />
         <router-view v-if="activeTab === '/signup'" />
       </v-tab-item>
       <v-tab-item id="/dashboard">
+        <v-divider />
         <router-view v-if="activeTab === '/dashboard'" />
       </v-tab-item>
       <v-tab-item id="/admin">
+        <v-divider />
         <router-view v-if="activeTab === '/admin'" />
       </v-tab-item>
       <v-tab-item id="/sadmin">
+        <v-divider />
         <router-view v-if="activeTab === '/sadmin'" />
       </v-tab-item>
     </v-tabs>

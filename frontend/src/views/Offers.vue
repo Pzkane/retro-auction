@@ -2,17 +2,20 @@
   <v-app>
     <v-container>
       <v-row>
-        <v-col lg="3">
-          <v-card>
-            <v-card-title>
-              <h1 class="display-1">
-                Filter list
-              </h1>
-            </v-card-title>
-          </v-card>
+        <v-col 
+          cols="3"
+        >
+          <OffersFilters
+            :pCategories="categories"
+            @updateFilters="offers_update()"
+          />
         </v-col>
-        <v-col>
-          <v-card>
+        <v-col
+          cols="9"
+        >
+          <v-card
+            outlined
+          >
             <v-row>
               <v-card-title class="display-1">
                 Offer list
@@ -22,7 +25,7 @@
                 <v-btn
                   icon
                   class="fetchOffersBtn"
-                  @click="fetchOffers()"
+                  @click="offers_update()"
                 >
                   <v-icon>mdi-autorenew</v-icon>
                 </v-btn>
@@ -122,6 +125,7 @@
 <script>
 import AddOffer from '@/components/AddOffer.vue'
 import OffersDisplay from '@/components/OffersDisplay.vue'
+import OffersFilters from '@/components/OffersFilters.vue'
 import Loading from '@/components/helpers/Loading.vue'
 import ConnectionError from '@/components/helpers/ConnectionError.vue'
 import axios from 'axios'
@@ -132,6 +136,7 @@ export default {
   components: {
     AddOffer,
     OffersDisplay,
+    OffersFilters,
     Loading,
     ConnectionError
   },
@@ -141,6 +146,7 @@ export default {
       categories: [],
       page_count: null,
       page_number: 1,
+      offersFilters: {},
 
       isPaginationDisabled: false,
       isLoading: true,
@@ -233,11 +239,16 @@ export default {
       return this.page_count;
     },
     offers_update () {
+      this.offersFilters = this.$store.getters['offersFilters']
+      console.log(JSON.stringify(this.offersFilters));
+      
       this.isPaginationDisabled = true;
       this.isLoading = true;
       this.isError = false;
-      let pagePath = 'http://127.0.0.1:8000/api/offers?page=';
-      pagePath += this.page_number;
+      const pagePath = 
+        `http://127.0.0.1:8000/api/offers?page=${this.page_number}&title=${this.offersFilters.title || ''}&description=${this.offersFilters.description || ''}&parts=${this.offersFilters.parts || ''}&category=${this.offersFilters.category || ''}&date=${this.offersFilters.date || ''}`
+      console.log(pagePath);
+      
       this.fetchOffers(pagePath);
     },
     closeAddOfferDialog () {

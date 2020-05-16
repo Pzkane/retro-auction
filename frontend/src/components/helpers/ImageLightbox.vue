@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    :style="`max-height: ${pMaxHeight}; overflow: hidden;`"
+  >
     <v-dialog v-model="lightboxDialog">
       <template #activator="{ on }">
         <v-img
@@ -21,7 +23,8 @@
 export default {
   name: 'ImageLightbox',
   props: {
-    src: {type: String, default: null}
+    src: {type: String, default: null},
+    pMaxHeight: {type: String, default: ''}
   },
   data () {
     return {

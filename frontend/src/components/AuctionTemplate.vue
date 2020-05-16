@@ -1,15 +1,26 @@
 <template>
-  <v-card>
+  <v-card
+    outlined
+  >
     <v-card-title>
       <ImageLightbox
         class="lightbox"
         :src="imgSrc()"
       />
-      {{ pAuction.auction_object.name }}
+      <h2
+        class="auction-object-title font-weight-light"
+      >
+        {{ pAuction.auction_object.name }}
+      </h2>
     </v-card-title>
     
     <v-card-text>
       <slot />
+      <v-container
+        v-if="!isUserIsLogged"
+      >
+        <h3>You need to Log In to be able to participate</h3>
+      </v-container>
       <v-container>
         <div
           v-for="participant in pAuction.participants"
@@ -42,7 +53,7 @@
                 class="participant-col"
               >
                 <v-chip>
-                  {{ participant.amount }}$
+                  {{ participant.amount }} EUR
                 </v-chip>
               </v-col>
             </v-row>
@@ -51,7 +62,7 @@
       </v-container>
     </v-card-text>
     <v-card-actions
-      v-if="pUsePayPal"
+      v-if="checkPayPal"
     >
       <v-container
         v-if="canUserParticipate"
@@ -61,12 +72,14 @@
           label="Amount (EUR)"
           outlined
           clearable
+          :rules="[scoped_rules.charityAmount]"
         />
         <v-btn
           @click="showPayPalDialog = true"
           block
           depressed
           color="#ffc439"
+          :disabled="!correctAmount"
         >
           Participate
         </v-btn>
@@ -79,7 +92,7 @@
             <v-container>
               <PayPal
                 class="dialog"
-                :pAmount="amount"
+                :pAmount="Number(amount)"
                 :pProduct="auctionProduct"
               />
             </v-container>
@@ -112,7 +125,11 @@ export default {
       },
       total_amount: 0,
       showPayPalDialog: false,
-      auctionProduct: {}
+      auctionProduct: {},
+
+      scoped_rules: {
+        charityAmount: v => (!!v && v > 0 && v <= (this.pAuction.auction_data[0].goal - this.total_amount)) || 'Invalid amount'
+      },
     }
   },
   computed: {
@@ -122,11 +139,32 @@ export default {
       }
       return true
     },
-    correctAmount: function () {
-      if (this.amount > 0) {
+    checkPayPal: function () {
+      if (Object.keys(this.$auth.user()).length && this.pUsePayPal) {
         return true
       }
       return false
+    },
+    correctAmount: function () {
+      if (this.total_amount >= this.pAuction.auction_data[0].goal) {
+        return false
+      }
+      if (this.amount > 0 && this.amount <= (this.pAuction.auction_data[0].goal - this.total_amount)) {
+        return true
+      }
+      return false
+    },
+    isUserIsLogged: function () {
+      if (Object.keys(this.$auth.user()).length !== 0) {
+        return true
+      }
+      return false
+    }
+  },
+  watch: {
+    pAuction: function () {
+      this.getTotalAmount()
+      this.setTotalAmount()
     }
   },
   created () {
@@ -144,6 +182,7 @@ export default {
       this.$emit('updateAuction')
     },
     getTotalAmount () {
+      this.total_amount = 0
       this.pAuction.participants.map(participant => {
         this.total_amount += participant.amount
       })
@@ -172,6 +211,9 @@ export default {
 </script>
 
 <style scoped>
+  .auction-object-title {
+    margin-top: 10px;
+  }
   .lightbox {
     width: 100%;
   }

@@ -10,7 +10,15 @@ export default new Vuex.Store({
     addOfferDialog: false,
 
     charityTotal: 0,
-    commercialTotal: 0
+    commercialTotal: 0,
+
+    offersFilters: {
+      title: null,
+      description: null,
+      parts: null,
+      category: null,
+      date: null
+    }
   },
   mutations: {
     fadeLogin: state => {
@@ -27,6 +35,9 @@ export default new Vuex.Store({
     },
     setCommercialTotal (state, total) {
       state.commercialTotal = total
+    },
+    setOffersFilters (state, filters) {
+      state.offersFilters = filters
     }
   },
   getters: {
@@ -40,7 +51,8 @@ export default new Vuex.Store({
       return state.addOfferDialog
     },
     charityTotal: state => state.charityTotal,
-    commercialTotal: state => state.commercialTotal
+    commercialTotal: state => state.commercialTotal,
+    offersFilters: state => state.offersFilters
   },
   actions: {
 

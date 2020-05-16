@@ -16,6 +16,7 @@
         <CommercialAuction
           v-if="activeCommercialAuction"
           :pAuction="activeCommercialAuction"
+          @updateAuction="fetchActiveAuctions()"
         />
       </v-col>
       <v-col

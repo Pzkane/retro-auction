@@ -7,11 +7,16 @@
       <v-row>
         <v-progress-linear
           height="25"
+          color="amber"
           :value="totalProgress"
         >
-          Progress
+          <span
+            class="font-weight-light progress-caption"
+          >Progress</span>
           <v-spacer />
-          {{ totalAmount }} / {{ pAuction.auction_data[0].goal || 0 }}$
+          <span
+            class="font-weight-light progress-caption"
+          >{{ totalAmount }} / {{ pAuction.auction_data[0].goal || 0 }} EUR</span>
         </v-progress-linear>
       </v-row>
     </v-container>
@@ -42,6 +47,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .progress-caption {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 </style>

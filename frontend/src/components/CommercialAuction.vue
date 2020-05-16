@@ -6,8 +6,25 @@
     <v-container
       class="bid-container"
     >
-      <h2>Starting bid: {{ pAuction.auction_data[0].start_bid }} EUR</h2>
-      <v-row>
+      <div
+        class="crucial-info-container"
+      >
+        <h2
+          class="font-weight-light"
+        >
+          Starting bid: {{ pAuction.auction_data[0].start_bid }} EUR
+        </h2>
+        <v-spacer />
+        <h3
+          class="font-weight-light"
+        >
+          Ends on: <span class="font-weight-bold">{{ new Date(pAuction.auction_data[0].end_date).toLocaleDateString() }}</span>
+        </h3>
+      </div>
+
+      <v-row
+        v-if="checkUserParticipation"
+      >
         <v-col
           class="bid-col"
         >
@@ -37,9 +54,11 @@
               </v-btn>
             </template>
 
-            <v-card>
+            <v-card
+              v-if="!isPaid"
+            >
               <v-card-title>
-                Attention
+                Attention!
               </v-card-title>
               <v-card-text>
                 By placing a bid of {{ bid }} EUR
@@ -64,6 +83,26 @@
                 </v-btn>
               </v-card-actions>
             </v-card>
+
+            <v-card
+              v-if="isPaid"
+            >
+              <v-card-title>
+                {{ response.status }}
+              </v-card-title>
+              <v-card-text>
+                {{ response.message }}
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  block
+                  depressed
+                  @click="closeDialog()"
+                >
+                  Ok
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </v-dialog>
         </v-col>
       </v-row>
@@ -73,6 +112,7 @@
 
 <script>
 import axios from 'axios'
+import insertAuctionParticipant from '../plugins/insertAuctionParticipant'
 
 export default {
   components: {
@@ -87,12 +127,48 @@ export default {
       scoped_rules: {
         commericalAmount: v => (!!v && v >= this.pAuction.auction_data[0].start_bid) || 'Invalid amount'
       },
-      showConfirmationDialog: false
+      showConfirmationDialog: false,
+
+      response: {
+        status: null,
+        message: ''
+      },
+      isPaid: false
+    }
+  },
+  computed: {
+    checkUserParticipation: function (params) {
+      if (this.isUserIsLogged && !this.pAuction.participants.find(participant => 
+        participant.id === this.$auth.user().id
+      )) {
+        return true
+      }
+      return false
+    },
+    isUserIsLogged: function () {
+      if (Object.keys(this.$auth.user()).length !== 0) {
+        return true
+      }
+      return false
     }
   },
   methods: {
-    submitBid () {
-
+    closeDialog () {
+      this.showConfirmationDialog = false
+      this.$emit('updateAuction')
+    },
+    async submitBid () {
+      const insertStatus = await insertAuctionParticipant(
+        this.$auth.token(),
+        this.$auth.user().id,
+        this.pAuction.id,
+        this.bid,
+        this.response,
+        this.isPaid
+      )
+      this.response.status = insertStatus.response.status
+      this.response.message = insertStatus.response.message
+      this.isPaid = insertStatus.isPaid
     }
   }
 }
@@ -107,5 +183,8 @@ export default {
   }
   .bid-field {
     margin-top: 30px;
+  }
+  .crucial-info-container {
+    display: flex;
   }
 </style>

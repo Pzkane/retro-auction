@@ -2,7 +2,13 @@
   <v-form>
     <v-card>
       <v-card-title>
-        {{ pOffer.title }}
+        <div>
+          <h3>{{ pOffer.title }}</h3>
+          
+          <h4 class="subtitle-1">
+            added on {{ new Date(pOffer.created_at).toLocaleDateString() }}
+          </h4>
+        </div>
         <v-spacer />
         <v-btn
           icon
@@ -66,13 +72,47 @@
           <v-row>
             <v-col>
               <h3 class="subtitle-1">
-                Phone: <span class="constacts-data">{{ pOffer.contact_phone }}</span>
+                Added By:
               </h3>
+              <v-chip
+                large
+              >
+                <v-row
+                  class="author-row"
+                >
+                  <v-col
+                    class="author-col"
+                  >
+                    <v-img
+                      class="profile-pic"
+                      :src="pOffer.author_info.avatar_path"
+                      width="32"
+                      height="32"
+                    />
+                  </v-col>
+                  <v-col
+                    class="author-col"
+                  >
+                    {{ pOffer.author_info.username }}
+                  </v-col>
+                </v-row>
+              </v-chip>
             </v-col>
             <v-col>
               <h3 class="subtitle-1">
-                Email: <span class="constacts-data">{{ pOffer.contact_email }}</span>
+                Phone:
               </h3>
+              <v-chip>
+                <span class="constacts-data">{{ pOffer.contact_phone }}</span>
+              </v-chip>
+            </v-col>
+            <v-col>
+              <h3 class="subtitle-1">
+                Email:
+              </h3>
+              <v-chip>
+                <span class="constacts-data">{{ pOffer.author_info.email }}</span>
+              </v-chip>
             </v-col>
           </v-row>
         </v-container>
@@ -164,9 +204,13 @@ export default {
 </script>
 
 <style scoped>
+  .author-col {
+    align-self: center;
+  }
   .contacts {
     border: 1px solid lightgrey;
     border-radius: 5px;
+    padding-bottom: 0;
   }
   .constacts-data {
     font-weight: bold;
@@ -174,5 +218,8 @@ export default {
   .image {
     max-width: 200px;
     max-height: 200px;
+  }
+  .profile-pic {
+    border-radius: 50%;
   }
 </style>

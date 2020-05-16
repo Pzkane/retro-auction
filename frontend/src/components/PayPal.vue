@@ -5,6 +5,7 @@
         class="description"
       >
         <h1>Auction participation amount</h1>
+        <h3>for</h3>
         <h2>{{ product.description }}</h2>
 
         <div
@@ -16,10 +17,11 @@
     </div>
 
     <div v-if="isPaid">
-      <h1>{{ response.status }}</h1>
+      <h1>{{ response.status }}!</h1>
       <h1>{{ response.message }}</h1>
       <v-btn
         block
+        depressed
         @click="closePayPal()"
       >
         Ok
@@ -49,6 +51,7 @@
 
 <script>
 import axios from 'axios'
+import insertAuctionParticipant from '../plugins/insertAuctionParticipant'
 
 export default {
   props: {
@@ -73,8 +76,6 @@ export default {
   created () {
     this.product.price = this.pAmount
     this.product.description = this.pProduct.description
-    console.log(this.pProduct.auctionId);
-    
   },
   mounted () {
     const script = document.createElement("script")
@@ -123,44 +124,18 @@ export default {
           this.isLoaded = true
         })
     },
-    insertAuctionParticipant (price) {
-      const config = { 
-        headers: { 
-          'Authorization': 'Bearer '+this.$auth.token(),
-          'Content-Type': 'multipart/form-data' 
-        }
-      }
-      const participantData = new FormData()
-      console.log(this.$auth.user().id)
-      participantData.append('auction_id', this.pProduct.auctionId)
-      participantData.append('user_id', this.$auth.user().id)
-      participantData.append('amount', price)
-
-      axios
-        .post(
-          'http://127.0.0.1:8000/api/auth/addParticipant',
-          participantData,
-          config
-        )
-        .then(res => {
-          switch (res.status) {
-            case 200:
-              this.response.status = 'Success'
-              this.response.message = `Successfull participation in the auction!`
-              break
-
-            case 500:
-              this.response.status = 'Error'
-              this.response.message = 'Server is not responging. Error code: 500'
-              break
-          
-            default:
-              this.response.status = 'Hmm...'
-              this.response.message = 'Something went wrong...'
-              break
-          }
-          this.isPaid = true;
-        })
+    async insertAuctionParticipant (price) {
+      const insertStatus = await insertAuctionParticipant(
+        this.$auth.token(),
+        this.$auth.user().id,
+        this.pProduct.auctionId,
+        price,
+        this.response,
+        this.isPaid
+      )
+      this.response.status = insertStatus.response.status
+      this.response.message = insertStatus.response.message
+      this.isPaid = insertStatus.isPaid
     }
   }
 }

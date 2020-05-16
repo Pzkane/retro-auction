@@ -11,7 +11,10 @@
       </v-row>
       <v-row>
         <v-col lg="4">
-          <image-lightbox :src="pOffer.preview_image" />
+          <image-lightbox
+            :pMaxHeight="'250px'"
+            :src="pOffer.preview_image"
+          />
         </v-col>
 
         <v-col>
@@ -68,6 +71,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

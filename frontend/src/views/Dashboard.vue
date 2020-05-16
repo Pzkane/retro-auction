@@ -8,7 +8,7 @@
               class="mx-auto" 
               height="200px" 
               width="200px" 
-              src="../assets/logo.png"
+              :src="$auth.user().avatar_path"
             />
             <v-card-title primary-title>
               <div>
