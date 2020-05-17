@@ -28,6 +28,7 @@ Route::prefix('auth')->group( function () {
         Route::post('userUpdate', 'UserController@update');
         Route::delete('userDelete', 'UserController@delete');
 
+        Route::post('offers', 'OfferController@getUserOffers');   
         Route::post('addOffer', 'OfferController@store');
 
         Route::post('addParticipant', 'AuctionParticipantsController@store');

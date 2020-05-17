@@ -85,6 +85,23 @@ class OfferController extends Controller
         ]);
     }
 
+    public function getUserOffers (Request $request) {
+        $offers = Offer::where('author_id', '=', $request->author_id)->get();
+        if (sizeof($offers) > 1) {
+            foreach ($offers as $offer) {
+                $offer->author_info = $this->getOfferAuthor($request->author_id);
+            }
+        } else {
+            $offers[0]->author_info = $this->getOfferAuthor($request->author_id);
+        }
+
+        try {
+            return OfferResources::collection($offers);
+        } catch (\Throwable $th) {
+            return new OfferResources($offers);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -23,8 +23,15 @@ class Offer extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'preview_image' => $this->preview_image,
-            'author_info' => $this->author_info
         ];
+
+        if ($this->author_info) {
+            $arrayData['author_info'] = $this->author_info;
+        }
+
+        if ($this->author_id) {
+            $arrayData['author_id'] = $this->author_id;
+        }
 
         if ($this->parts) {
             $arrayData['parts'] = $this->parts;
