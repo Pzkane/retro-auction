@@ -131,7 +131,6 @@ export default {
   props: {
     pCategories: {type: Array, default: null},
     pOffer: {type: Object, default: null}
-    // isOpened: false
   },
   data() {
     return {

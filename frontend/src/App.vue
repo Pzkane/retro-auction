@@ -64,18 +64,29 @@
         </v-list>
       </v-menu>
 
-      <v-btn 
+      <v-tooltip
+        bottom
         v-if="getAuthState()"
-        style="height: 100%; width: 100%; border-radius: 0"
-        max-width="10%"
-        fill-height
-        text
-        :loading="isLoading"
-        :disabled="isLoading"
-        @click="logout"
       >
-        Log Out
-      </v-btn>
+        <template
+          v-slot:activator="{ on }"
+        >
+          <v-btn 
+            style="height: 100%; width: 100%; border-radius: 0"
+            max-width="10%"
+            fill-height
+            text
+            :loading="isLoading"
+            :disabled="isLoading"
+            @click="logout"
+            v-on="on"
+          >
+            Log Out
+          </v-btn>
+        </template>
+
+        <span>{{ $auth.user().username }}</span>
+      </v-tooltip>
 
       <v-tab-item id="/">
         <v-divider />

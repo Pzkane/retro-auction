@@ -317,6 +317,7 @@ export default {
       this.files = []
       this.path = null
       this.formattedFiles = []
+      this.areCategoriesFilled = false
       this.partObjects = [
         {
           id: 0,

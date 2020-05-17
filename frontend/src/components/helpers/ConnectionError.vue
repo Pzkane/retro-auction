@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      Server is not responding ATM. <br>
+      Server is not responding at the moment. <br>
       Try again later. <br>
       Error code: {{ errorCode }}
     </p>

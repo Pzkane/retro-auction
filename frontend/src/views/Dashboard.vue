@@ -262,37 +262,79 @@
         <v-col>
           <v-card>
             <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">
-                  Placed Offers
-                </h3>
-                <div class="subtitle mb-0">
-                  Your placed offers
-                </div>
-              </div>
+              <v-container
+                class="offers-title"
+              >
+                <v-row
+                >
+                  <h3 class="headline mb-0">
+                    Placed Offers
+                  </h3>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    icon
+                    @click="fetchOffers(userOffersPath)"
+                  >
+                    <v-icon>mdi-autorenew</v-icon>
+                  </v-btn>
+                </v-row>
+              </v-container>
             </v-card-title>
             <v-divider />
             <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col lg="2">
-                    <v-img 
-                      src="../assets/logo.png"
-                      height="100px"
-                      width="100px"
-                    />
-                  </v-col>
+              <v-tabs
+                fixed-tabs
+                v-model="offerTabs"
+                class="offers-tabs"
+              >
+                <v-tab>
+                  Your offers
+                </v-tab>
+                <v-tab>
+                  Bookmarked offers
+                </v-tab>
 
-                  <v-col lg="3">
-                    <h3>Offer title</h3>
-                  </v-col>
-
-                  <v-col>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nesciunt corrupti officia dolores architecto odio necessitatibus consequatur iste, magnam itaque expedita culpa accusantium rem molestiae asperiores voluptate omnis minus, eius vel?</p>
-                  </v-col>
-                </v-row>
-                <v-divider />
-              </v-container>
+                <v-tabs-items
+                  class="user-offers"
+                  v-model="offerTabs"
+                >
+                  <v-tab-item>
+                    <v-card
+                      v-if="offers"
+                    >
+                      <ConnectionError
+                        v-if="errorCode"
+                        :errorCode="errorCode"
+                      />
+                      <div
+                        v-for="offer in offers" :key="offer.id"
+                      >
+                        <OffersDisplay
+                          :pOffer="offer"
+                          :pCategories="categories"
+                          :pIsTiled="true"
+                        />
+                      </div>
+                    </v-card>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-card
+                      v-if="offers"
+                    >
+                      <ConnectionError v-if="errorCode" :errorCode="errorCode" />
+                      <div
+                        v-for="offer in offers" :key="offer.id"
+                      >
+                        <OffersDisplay
+                          :pOffer="offer"
+                          :pCategories="categories"
+                          :pIsTiled="true"
+                        />
+                      </div>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs-items>
+              </v-tabs>
             </v-card-text>
           </v-card>
         </v-col>
@@ -308,7 +350,8 @@ import external_rules from '@/plugins/rules/rules.js'
 
 export default {
   components: {
-    // Offers
+    ConnectionError: () => import('../components/helpers/ConnectionError'),
+    OffersDisplay: () => import('../components/OffersDisplay')
   },
   data() {
     return {
@@ -335,8 +378,20 @@ export default {
       errorCode: null,
 
       isLoading: false,
-      isError: false
+      isError: false,
+
+      offerTabs: null,
+
+      offers: [],
+      categories: [],
+      isEmptySet: false,
+
+      userOffersPath: 'http://127.0.0.1:8000/api/auth/offers'
     }
+  },
+  created() {
+    this.fetchOffers(this.userOffersPath)
+    this.fetchCategories()
   },
   methods: {
     submit () {
@@ -400,11 +455,60 @@ export default {
           console.log("Something went wrong with Your logout!")
         },
       })
-    }
-  },
+    },
+    fetchCategories () {
+      const path = 'http://127.0.0.1:8000/api/offer_categories'
+      axios
+        .get(path)
+        .then(res => {
+          const {data:{data}} = res
+          if (data && !data.length){
+            this.categories = [data]
+          } else {
+            this.categories = data
+          }
+        })
+        .catch(err => {
+          this.errorCode = err.response.status
+        })
+    },
+    fetchOffers (path) {
+      const offerData = new FormData()
+      offerData.append('author_id', this.$auth.user().id)
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+          'Content-Type': 'multipart/form-data' 
+        }
+      }
+      axios
+        .post(path, offerData, config)
+        .then(res => {
+          const {data:{data}} = res
+          if (!data.length)
+            this.isEmptySet = true
+          else
+            this.isEmptySet = false
+          this.offers = data
+        })
+        .catch(err => {
+          this.errorCode = err.response.status
+        })
+    },
+  }
 }
 </script>
 
 <style scoped>
-    
+  .offers-tabs {
+    min-width: 100%;
+  }
+  .offers-title {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+  .user-offers {
+    max-height: 250px;
+    overflow: auto;
+  }
 </style>

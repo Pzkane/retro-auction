@@ -17,7 +17,7 @@
             outlined
           >
             <v-row>
-              <v-card-title class="display-1">
+              <v-card-title class="offers-title display-1">
                 Offer list
               </v-card-title>
               <v-spacer />
@@ -306,6 +306,9 @@ export default {
     margin-right: 50px;
     padding: 20px;
     float: right;
+  }
+  .offers-title {
+    margin-left: 10px;
   }
   .fetchOffersBtn {
     margin-right: 15px;
