@@ -12,11 +12,11 @@
               width="32"
               height="32"
               :src="pOffer.preview_image"
-            ></v-img>
+            />
           </div>
           {{ pOffer.title }}
 
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-dialog
             v-model="showOfferDialog"
             max-width="1500px"

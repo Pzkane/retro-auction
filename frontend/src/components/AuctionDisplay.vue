@@ -9,29 +9,36 @@
 
     <v-divider
       vertical
-    ></v-divider>
+    />
 
     <h2
       class="title"
-    >{{ pAuction.auction_object.name }}</h2>
+    >
+      {{ pAuction.auction_object.name }}
+    </h2>
 
     <v-divider
       vertical
-    ></v-divider>
+    />
 
     <v-container>
       <v-row
         justify="center"
-      >Started At: {{ new Date(pAuction.started_at).toLocaleDateString() }}</v-row>
+      >
+        Started At: {{ new Date(pAuction.started_at).toLocaleDateString() }}
+      </v-row>
       <v-row
         justify="center"
-      >Finished At: {{ new Date(pAuction.finished_at).toLocaleDateString() }}</v-row>
+      >
+        Finished At: {{ new Date(pAuction.finished_at).toLocaleDateString() }}
+      </v-row>
     </v-container>
 
     <v-divider
       vertical
-    ></v-divider>
+    />
 
+    <!-- charity block -->
     <v-container
       v-if="isCharity"
     >
@@ -48,6 +55,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <!-- /charity block -->
 
     <!-- commercial block -->
     <v-container
@@ -89,11 +97,12 @@
               color="#9CCC65"
             >
               {{ winner.amount }} EUR
-            </v-chip
-          ></v-row>
+            </v-chip>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
+    <!-- /commercial block -->
   </v-container>
 </template>
 
@@ -145,6 +154,7 @@ export default {
     margin-left: 20px;
   }
   .contains {
+    max-height: 130px;
     align-items: center;
     display: inline-flex;
   }
@@ -163,5 +173,6 @@ export default {
   .title {
     margin-left: 20px;
     margin-right: 20px;
+    width: 100%;
   }
 </style>

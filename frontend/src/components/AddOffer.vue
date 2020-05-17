@@ -312,7 +312,6 @@ export default {
     closeDialog (afterSubmit = false) {
       this.title = null
       this.body = null
-      this.contactEmail = null
       this.contactPhone = null
       this.files = []
       this.path = null

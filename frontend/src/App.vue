@@ -69,7 +69,7 @@
         v-if="getAuthState()"
       >
         <template
-          v-slot:activator="{ on }"
+          #activator="{ on }"
         >
           <v-btn 
             style="height: 100%; width: 100%; border-radius: 0"

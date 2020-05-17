@@ -44,7 +44,7 @@
                   </template>
                   <AddOffer
                     :pCategories="categories"
-                    @closeAddOfferDialog="addOfferDialog = false" 
+                    @closeAddOfferDialog="closeAddOfferDialog()" 
                   />
                 </v-dialog>
               </v-card-actions>
@@ -252,7 +252,8 @@ export default {
       this.fetchOffers(pagePath);
     },
     closeAddOfferDialog () {
-      this.addOfferDialog = !this.addOfferDialog
+      this.offers_update()
+      this.addOfferDialog = false
     },
     showMore (itemID) {
       return this.offers[itemID];

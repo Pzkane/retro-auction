@@ -7,20 +7,25 @@
         @click="isHistoryExpanded = !isHistoryExpanded"
       >
         <h2>{{ auctionType }} Auctions</h2>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-icon
           v-if="!isHistoryExpanded"
-        >mdi-chevron-down</v-icon>
+        >
+          mdi-chevron-down
+        </v-icon>
         <v-icon
           v-else
-        >mdi-chevron-up</v-icon>
+        >
+          mdi-chevron-up
+        </v-icon>
       </v-card-title>
 
       <v-card-text
         v-if="isHistoryExpanded"
       >
         <v-card
-          v-for="auction in pAuctionArray" :key="auction.id"
+          v-for="auction in pAuctionArray"
+          :key="auction.id"
           outlined
           class="object-card"
         >

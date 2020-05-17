@@ -31,7 +31,7 @@
         fullscreen
       >
         <template
-          v-slot:activator="{ on }"
+          #activator="{ on }"
         >
           <v-btn
             class="history-btn"

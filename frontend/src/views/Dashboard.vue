@@ -265,12 +265,11 @@
               <v-container
                 class="offers-title"
               >
-                <v-row
-                >
+                <v-row>
                   <h3 class="headline mb-0">
                     Placed Offers
                   </h3>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-btn
                     icon
                     @click="fetchOffers(userOffersPath)"
@@ -307,7 +306,8 @@
                         :errorCode="errorCode"
                       />
                       <div
-                        v-for="offer in offers" :key="offer.id"
+                        v-for="offer in offers"
+                        :key="offer.id"
                       >
                         <OffersDisplay
                           :pOffer="offer"
@@ -321,9 +321,13 @@
                     <v-card
                       v-if="offers"
                     >
-                      <ConnectionError v-if="errorCode" :errorCode="errorCode" />
+                      <ConnectionError
+                        v-if="errorCode"
+                        :errorCode="errorCode"
+                      />
                       <div
-                        v-for="offer in offers" :key="offer.id"
+                        v-for="offer in offers"
+                        :key="offer.id"
                       >
                         <OffersDisplay
                           :pOffer="offer"
@@ -485,7 +489,7 @@ export default {
         .post(path, offerData, config)
         .then(res => {
           const {data:{data}} = res
-          if (!data.length)
+          if (!data)
             this.isEmptySet = true
           else
             this.isEmptySet = false
