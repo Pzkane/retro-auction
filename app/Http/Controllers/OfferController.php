@@ -37,6 +37,8 @@ class OfferController extends Controller
                     $offersQuery->orderBy('created_at','desc');
                     break;
             }
+        } else {
+            $offersQuery->orderBy('created_at','desc');
         }
 
         // conditions from route query parameters
@@ -87,6 +89,10 @@ class OfferController extends Controller
 
     public function getUserOffers (Request $request) {
         $offers = Offer::where('author_id', '=', $request->author_id)->get();
+        if (sizeof($offers) < 1) {
+            return [];
+        }
+
         if (sizeof($offers) > 1) {
             foreach ($offers as $offer) {
                 $offer->author_info = $this->getOfferAuthor($request->author_id);
