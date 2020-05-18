@@ -104,8 +104,6 @@
 </template>
 
 <script>
-import PayPal from 'vue-paypal-checkout'
-
 export default {
   components: {
     ImageLightbox: () => import('./helpers/ImageLightbox'),
