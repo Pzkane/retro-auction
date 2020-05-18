@@ -12,10 +12,21 @@
     </h1>
     <v-divider />
     <h3 
-      class="subtitling subtitle-1 font-weight-medium"
+      class="subtitling caption font-weight-medium"
     >
       Place for the car enthusiasts
     </h3>
+
+    <v-container
+      class="slogan-container"
+    >
+      <div
+        class="display-3"
+        style="border-bottom: 1px solid;"
+      >
+        Fast and Reliable.
+      </div>
+    </v-container>
   </v-container>
 </template>
 
@@ -27,6 +38,13 @@ export default {
 </script>
 
 <style scoped>
+  .slogan-container {
+    width: 100vw;
+    height: 50vh;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+  }
   .subtitling {
     text-align: center;
   }
