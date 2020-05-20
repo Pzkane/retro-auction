@@ -100,6 +100,7 @@
                   <OffersDisplay 
                     :pOffer="item"
                     :pCategories="categories"
+                    @updateOffers="offers_update()"
                   />
                 </v-container>
               </v-container>    
@@ -156,6 +157,11 @@ export default {
       addOfferDialog: false,
 
       errorCode: null
+    }
+  },
+  computed: {
+    favoriteOffers: function () {
+      return this.$store.getters['favoriteOffers']
     }
   },
   created() {
@@ -224,6 +230,17 @@ export default {
       this.offers = data;
       this.offers.map(offer => {
         offer.showOfferDialog = false
+        if (offer.author_id !== this.$auth.user().id) {
+          offer.canBeFavorited = true
+        } else {
+          offer.canBeFavorited = false
+        }
+
+        if (this.favoriteOffers.find(record => record.offer_id === offer.id && record.user_id === this.$auth.user().id)) {
+          offer.isFavorite = true
+        } else {
+          offer.isFavorite = false
+        }
       })
     },
     setPageCount (data) {

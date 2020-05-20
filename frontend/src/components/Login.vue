@@ -49,6 +49,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import external_rules from  '@/plugins/rules/rules.js'
+import fetchFavoriteOffers from '@/plugins/fetchFavoriteOffers.js'
 
 export default {
   data() {
@@ -87,6 +88,7 @@ export default {
             this.changeAuthState()
             const redirectTo = this.redirect ? this.redirect.from.name : this.$auth.user().role === 'super_admin' ? 'sadmin.dashboard' : this.$auth.user().role === 'admin' ? 'admin.dashboard' : 'dashboard'
             this.$router.push({name: redirectTo})
+            this.fetchFavoriteOffers()
           },
           error : function() {
             this.isLoading = false
@@ -95,6 +97,12 @@ export default {
           rememberMe: true,
           fetchUser: true,
         })
+      }
+    },
+    async fetchFavoriteOffers () {
+      const result = await fetchFavoriteOffers(this.$auth.user().id)
+      if (result) {
+        this.$store.commit('setFavoriteOffers', result)
       }
     }
   }

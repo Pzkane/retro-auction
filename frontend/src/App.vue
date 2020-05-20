@@ -121,8 +121,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Login from '@/components/Login'
 import { mapGetters, mapMutations } from 'vuex'
+import fetchFavoriteOffers from './plugins/fetchFavoriteOffers'
 
 export default {
   name: 'App',
@@ -150,6 +152,7 @@ export default {
         if (this.$auth.token()) {
           this.fadeLogin()
           this.changeAuthState()
+          this.fetchFavoriteOffers()
         }
     });
   },
@@ -174,7 +177,13 @@ export default {
           console.log("Something went wrong with Your logout!")
         },
       })
-    }
+    },
+    async fetchFavoriteOffers () {
+      const result = await fetchFavoriteOffers (this.$auth.user().id)
+      if (result) {
+        this.$store.commit('setFavoriteOffers', result)
+      }
+    },
   },
 }
 </script>

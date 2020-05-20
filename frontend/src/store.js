@@ -18,7 +18,9 @@ export default new Vuex.Store({
       parts: null,
       category: null,
       date: null
-    }
+    },
+
+    favoriteOffers: null
   },
   mutations: {
     fadeLogin: state => {
@@ -38,6 +40,9 @@ export default new Vuex.Store({
     },
     setOffersFilters (state, filters) {
       state.offersFilters = filters
+    },
+    setFavoriteOffers (state, offers) {
+      state.favoriteOffers = offers
     }
   },
   getters: {
@@ -52,7 +57,8 @@ export default new Vuex.Store({
     },
     charityTotal: state => state.charityTotal,
     commercialTotal: state => state.commercialTotal,
-    offersFilters: state => state.offersFilters
+    offersFilters: state => state.offersFilters,
+    favoriteOffers: state => state.favoriteOffers
   },
   actions: {
 

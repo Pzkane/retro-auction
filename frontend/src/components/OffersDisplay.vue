@@ -43,12 +43,34 @@
       v-if="!pIsTiled"
     >
       <v-card style="border-radius: 5px 5px 0 5px;">
-        <v-row ml-5>
+        <v-row
+          ml-5
+          class="title"
+        >
           <v-card-title
             pl-5
             class="headline"
           >
-            {{ pOffer.title }}
+            <div>
+              {{ pOffer.title }}
+            </div>
+            <v-spacer />
+            <v-btn
+              v-if="pOffer.canBeFavorited"
+              icon
+              @click="favoriteOffer()"
+            >
+              <v-icon
+                v-if="pOffer.isFavorite"
+              >
+                mdi-heart
+              </v-icon>
+              <v-icon
+                v-else
+              >
+                mdi-heart-outline
+              </v-icon>
+            </v-btn>
           </v-card-title>
         </v-row>
         <v-row>
@@ -94,8 +116,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import ImageLightbox from '@/components/helpers/ImageLightbox.vue'
 import ShowOffer from '@/components/ShowOffer.vue'
+import fetchFavoriteOffers from '@/plugins/fetchFavoriteOffers.js'
 
 export default {
   components: {
@@ -111,11 +135,45 @@ export default {
     return {
       showOfferDialog: false
     }
+  },
+  methods: {
+    favoriteOffer () {
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+          'Content-Type': 'multipart/form-data' 
+        }
+      }
+
+      const favoritedOfferData = new FormData()
+      favoritedOfferData.append('offer_id', this.pOffer.id)
+      favoritedOfferData.append('user_id', this.$auth.user().id)
+      if (!this.pOffer.isFavorite) {
+        favoritedOfferData.append('action', 'set')
+      } else {
+        favoritedOfferData.append('action', 'delete')
+      }
+      axios
+        .post('http://127.0.0.1:8000/api/auth/offers/setFavorite', favoritedOfferData, config)
+        .then(async () => {
+          const result = await fetchFavoriteOffers(this.$auth.user().id)
+          if (result) {
+            this.$store.commit('setFavoriteOffers', result)
+          }
+          this.$emit('updateOffers')
+        })
+        .catch(err => {
+          console.log(err)          
+        })
+    }
   }
 }
 </script>
 
 <style scoped>
+  .title {
+    display: contents;
+  }
   .profile-pic {
     margin-right: 30px;
   }

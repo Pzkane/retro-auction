@@ -11,7 +11,12 @@
               :src="$auth.user().avatar_path"
               @click="$refs.avatarInput.click()"
             />
-            <input v-on:change="handleUpalod()" type="file" ref="avatarInput" style="display: none;">
+            <input
+              @change="handleUpload()"
+              type="file"
+              ref="avatarInput"
+              style="display: none;"
+            >
             <v-btn
               v-if="showAvatarUpdateButton"
               @click="uploadAvatar()"
@@ -282,7 +287,7 @@
                   <v-spacer />
                   <v-btn
                     icon
-                    @click="fetchOffers(userOffersPath)"
+                    @click="fetchProfileOffers(userOffersPath)"
                   >
                     <v-icon>mdi-autorenew</v-icon>
                   </v-btn>
@@ -336,7 +341,7 @@
                         :errorCode="errorCode"
                       />
                       <div
-                        v-for="offer in offers"
+                        v-for="offer in bookmarkedOffers"
                         :key="offer.id"
                       >
                         <OffersDisplay
@@ -403,11 +408,19 @@ export default {
       userOffersPath: 'http://127.0.0.1:8000/api/auth/offer/get',
 
       avatarFile: null,
-      showAvatarUpdateButton: false
+      showAvatarUpdateButton: false,
+
+      bookmarkedOffers: null
+    }
+  },
+  computed: {
+    favoriteOffers: function () {
+      return this.$store.getters['favoriteOffers']
     }
   },
   created() {
-    this.fetchOffers(this.userOffersPath)
+    this.fetchProfileOffers(this.userOffersPath)
+    this.fetchOffers()
     this.fetchCategories()
   },
   methods: {
@@ -489,7 +502,26 @@ export default {
           this.errorCode = err.response.status
         })
     },
-    fetchOffers (path) {
+    fetchOffers () {
+      axios
+        .get('http://127.0.0.1:8000/api/offers/getAll')
+        .then(res => {
+          const {data:{data}} = res
+          let newBookmarks = []
+          this.favoriteOffers.map(favoriteOffer => {
+            data.map(offer => {
+              if (favoriteOffer.offer_id === offer.id && favoriteOffer.user_id === this.$auth.user().id) {
+                newBookmarks.push(offer)
+              }
+            })
+          })
+          this.bookmarkedOffers = newBookmarks
+        })
+        .catch(err => {
+          this.errorCode = err.response
+        })
+    },
+    fetchProfileOffers (path) {
       const offerData = new FormData()
       offerData.append('author_id', this.$auth.user().id)
       const config = { 
@@ -509,15 +541,13 @@ export default {
           this.offers = data
         })
         .catch(err => {
-          this.errorCode = err.response.status
+          this.errorCode = err.response
         })
     },
-    handleUpalod () {
+    handleUpload () {
       if (this.$refs.avatarInput) {
         this.avatarFile = this.$refs.avatarInput.files[0]
-        console.log(this.avatarFile);
         if (this.avatarFile) {
-          
           this.showAvatarUpdateButton = true
         }
       }
