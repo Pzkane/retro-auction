@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Resources\Users\UserBasic as UserBasicResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 
@@ -62,6 +63,17 @@ class UserController extends Controller
 
         $user->save();
 
+        return response()->json(['status' => 'success'], 200);
+    }
+
+    public function updateAvatar (Request $request) {
+        $user = Auth::user();
+        $newLabel = md5(time()+rand()).'.'.$request->avatar->getClientOriginalExtension();
+        $request->avatar->storeAs(
+            'public/uploads/users', $newLabel
+        );
+        $user->avatar_path = Storage::disk('public')->url('uploads/users/'.$newLabel);
+        $user->save();
         return response()->json(['status' => 'success'], 200);
     }
 

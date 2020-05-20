@@ -26,6 +26,7 @@ Route::prefix('auth')->group( function () {
         Route::get('user', 'AuthController@user');
         Route::post('logout', 'AuthController@logout');
         Route::post('userUpdate', 'UserController@update');
+        Route::post('userUpdateAvatar', 'UserController@updateAvatar');
         Route::delete('userDelete', 'UserController@delete');
 
         Route::prefix('offer')->group(function () {

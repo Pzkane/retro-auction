@@ -109,16 +109,6 @@ class OfferController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -151,7 +141,6 @@ class OfferController extends Controller
 
             do {
                 $newLabel = md5(time()+rand()).'.'.$file->getClientOriginalExtension();
-                error_log('newLabel: '.$newLabel);
 
                 if (!DB::table('offers_media')->where('file_name', $newLabel)) {
                     $name_passed = true;
