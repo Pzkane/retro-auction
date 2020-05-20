@@ -87,6 +87,33 @@ class OfferController extends Controller
         ]);
     }
 
+    public function getAll () {
+        $offers = Offer::all();
+        foreach ($offers as $offer) {
+            $offer->author_info = $this->getOfferAuthor($offer->author_id);
+        }
+        return OfferResources::collection($offers);
+    }
+
+    public function getFavoriteOffers (Request $request) {
+        return DB::table('favorite_offers')->where('user_id', $request->user_id)->get();
+    }
+
+    public function changeFavorite (Request $request) {
+        if ($request->action == 'set') {
+            DB::table('favorite_offers')->insert(
+                ['user_id' => $request->user_id, 'offer_id' => $request->offer_id]
+            );
+        }
+
+        if ($request->action == 'delete') {
+            DB::table('favorite_offers')
+            ->where('user_id', $request->user_id)
+            ->where('offer_id', $request->offer_id)
+            ->delete();
+        }
+    }
+
     public function getUserOffers (Request $request) {
         $offers = Offer::where('author_id', '=', $request->author_id)->get();
         if (sizeof($offers) < 1) {
