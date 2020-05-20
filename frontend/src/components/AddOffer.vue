@@ -379,7 +379,7 @@ export default {
           }
         }
         axios
-          .post('http://127.0.0.1:8000/api/auth/addOffer', offerData, config)
+          .post('http://127.0.0.1:8000/api/auth/offer/add', offerData, config)
           .then (res => {
             console.log(res)
             switch (res.status) {

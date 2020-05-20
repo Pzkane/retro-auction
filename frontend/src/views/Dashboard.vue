@@ -390,7 +390,7 @@ export default {
       categories: [],
       isEmptySet: false,
 
-      userOffersPath: 'http://127.0.0.1:8000/api/auth/offers'
+      userOffersPath: 'http://127.0.0.1:8000/api/auth/offer/get'
     }
   },
   created() {

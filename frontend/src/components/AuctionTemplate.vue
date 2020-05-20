@@ -23,14 +23,16 @@
       </v-container>
       <v-container>
         <div
-          v-for="participant in pAuction.participants"
+          v-for="participant in sortedParticipants"
           :key="participant.id"
         >
           <v-divider />
           <v-container
             class="participant-row"
           >
-            <v-row>
+            <v-row
+              :class="{ 'hightlight-row' : participant.id === $auth.user().id }"
+            >
               <v-col
                 cols="2"
               >
@@ -117,10 +119,6 @@ export default {
   data () {
     return {
       amount: 100.00,
-      paypal: {
-        sandbox: 'AfmV7MYZEqRm0p_NtJREd41YtDYyRm5LVkxeXnnQW1kRs9YK2hCG3ItNUzecp173afMRFOZoJWq9jhMu',
-        production: '<production client id>'
-      },
       total_amount: 0,
       showPayPalDialog: false,
       auctionProduct: {},
@@ -128,6 +126,8 @@ export default {
       scoped_rules: {
         charityAmount: v => (!!v && v > 0 && v <= (this.pAuction.auction_data[0].goal - this.total_amount)) || 'Invalid amount'
       },
+
+      sortedParticipants: null
     }
   },
   computed: {
@@ -173,6 +173,8 @@ export default {
       auctionId: this.pAuction.id,
       description: this.pAuction.auction_object.name
     }
+
+    this.sortParticipants()
   },
   methods: {
     closePayPalDialog () {
@@ -203,6 +205,9 @@ export default {
           break
       }
       this.$store.commit(operation, this.total_amount)
+    },
+    sortParticipants: function () {
+      this.sortedParticipants = this.pAuction.participants.sort((a, b) => (b.amount - a.amount))
     }
   }
 }
@@ -211,6 +216,9 @@ export default {
 <style scoped>
   .auction-object-title {
     margin-top: 10px;
+  }
+  .hightlight-row {
+    background-color: lightgrey;
   }
   .lightbox {
     width: 100%;

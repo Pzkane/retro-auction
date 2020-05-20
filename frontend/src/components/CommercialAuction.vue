@@ -31,7 +31,7 @@
           <v-text-field
             v-model="bid"
             class="bid-field"
-            :value="pAuction.auction_data[0].start_bid"
+            :value="highestBid"
             :rules="[scoped_rules.commericalAmount]"
             label="Amount (EUR)"
             outlined
@@ -106,6 +106,30 @@
           </v-dialog>
         </v-col>
       </v-row>
+
+      <v-row
+        class="bid-row"
+        v-if="pAuction.auction_data[0].highest_bid_user_id"
+      >
+        <v-col>
+          Highest bid:
+        </v-col>
+        <v-col>
+          <v-chip
+            v-if="bidLeader"
+            large
+          >
+            <v-img
+              class="profile-pic"
+              :src="bidLeader.avatar_path"
+              width="32"
+              height="32"
+            ></v-img>
+            {{ bidLeader.username }}
+            {{ getHighestBidAmount() }} EUR
+          </v-chip>
+        </v-col>
+      </v-row>
     </v-container>
   </AuctionTemplate>
 </template>
@@ -123,9 +147,9 @@ export default {
   },
   data () {
     return {
-      bid: this.pAuction.auction_data[0].start_bid,
+      bid: 0,
       scoped_rules: {
-        commericalAmount: v => (!!v && v >= this.pAuction.auction_data[0].start_bid) || 'Invalid amount'
+        commericalAmount: v => (!!v && v > (this.pAuction.auction_data[0].highest_bid_user_id ? this.highestBid : this.highestBid - 1 )) || 'Invalid amount'
       },
       showConfirmationDialog: false,
 
@@ -133,11 +157,26 @@ export default {
         status: null,
         message: ''
       },
-      isPaid: false
+      isPaid: false,
+
+      bidLeader: {},
+      highestBid: 0
     }
+  },
+  created () {
+    this.highestBid = this.pAuction.auction_data[0].start_bid
+    this.bid = this.highestBid
+    this.getHighestBidUser(this.pAuction.auction_data[0].highest_bid_user_id)
   },
   computed: {
     checkUserParticipation: function (params) {
+      const now = new Date().toLocaleDateString()
+      const endDate = new Date(this.pAuction.auction_data[0].end_date).toLocaleDateString()
+      
+      if (now > endDate) {
+        return false
+      }
+
       if (this.isUserIsLogged && !this.pAuction.participants.find(participant => 
         participant.id === this.$auth.user().id
       )) {
@@ -157,6 +196,18 @@ export default {
       this.showConfirmationDialog = false
       this.$emit('updateAuction')
     },
+    getHighestBidAmount () {
+      return this.bidLeader.amount
+    },
+    getHighestBidUser (userId) {
+      this.bidLeader = this.pAuction.participants.find(participant =>
+        participant.id === userId
+      )
+      if (this.bidLeader) {
+        this.highestBid = this.bidLeader.amount
+        this.bid = this.highestBid + 1
+      }
+    },
     async submitBid () {
       const insertStatus = await insertAuctionParticipant(
         this.$auth.token(),
@@ -166,9 +217,34 @@ export default {
         this.response,
         this.isPaid
       )
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+          'Content-Type': 'multipart/form-data' 
+        }
+      }
+
+      const auctionBidData = new FormData()
+      auctionBidData.append('auction_id', this.pAuction.id)
+      auctionBidData.append('user_id', this.$auth.user().id)
+      auctionBidData.append('amount', this.bid)
+
+      axios
+        .post('http://127.0.0.1:8000/api/auth/auction/checkBid', auctionBidData, config)
+        .then (res => {
+          console.log(res)
+        })
+        .catch ((err) => {
+          console.log(err)
+        })
       this.response.status = insertStatus.response.status
       this.response.message = insertStatus.response.message
       this.isPaid = insertStatus.isPaid
+    }
+  },
+  watch: {
+    pAuction: function () {
+      this.getHighestBidUser(this.pAuction.auction_data[0].highest_bid_user_id)
     }
   }
 }
@@ -184,7 +260,15 @@ export default {
   .bid-field {
     margin-top: 30px;
   }
+  .bid-row {
+    align-items: center;
+    text-align: center;
+  }
   .crucial-info-container {
     display: flex;
+  }
+  .profile-pic {
+    border-radius: 50%;
+    margin-right: 10px;
   }
 </style>

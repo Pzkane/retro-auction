@@ -15,7 +15,7 @@ const insertAuctionParticipant = async (token, userId, auctionId, price, respons
     
         axios
             .post(
-            'http://127.0.0.1:8000/api/auth/addParticipant',
+            'http://127.0.0.1:8000/api/auth/auction/addParticipant',
             participantData,
             config
             )
