@@ -9,7 +9,17 @@
               height="200px" 
               width="200px" 
               :src="$auth.user().avatar_path"
+              @click="$refs.avatarInput.click()"
             />
+            <input v-on:change="handleUpalod()" type="file" ref="avatarInput" style="display: none;">
+            <v-btn
+              v-if="showAvatarUpdateButton"
+              @click="uploadAvatar()"
+              block
+              depressed
+            >
+              Upload
+            </v-btn>
             <v-card-title primary-title>
               <div>
                 <h3 class="headline mb-0">
@@ -390,7 +400,10 @@ export default {
       categories: [],
       isEmptySet: false,
 
-      userOffersPath: 'http://127.0.0.1:8000/api/auth/offer/get'
+      userOffersPath: 'http://127.0.0.1:8000/api/auth/offer/get',
+
+      avatarFile: null,
+      showAvatarUpdateButton: false
     }
   },
   created() {
@@ -497,6 +510,37 @@ export default {
         })
         .catch(err => {
           this.errorCode = err.response.status
+        })
+    },
+    handleUpalod () {
+      if (this.$refs.avatarInput) {
+        this.avatarFile = this.$refs.avatarInput.files[0]
+        console.log(this.avatarFile);
+        if (this.avatarFile) {
+          
+          this.showAvatarUpdateButton = true
+        }
+      }
+    },
+    uploadAvatar () {
+      this.showAvatarUpdateButton = false
+      const avatarInfo = new FormData
+      avatarInfo.append('user_id', this.$auth.user().id)
+      avatarInfo.append('avatar', this.avatarFile)
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+          'Content-Type': 'multipart/form-data' 
+        }
+      }
+      axios
+        .post('http://127.0.0.1:8000/api/auth/userUpdateAvatar', avatarInfo, config)
+        .then(res => {
+          console.log(res)
+          this.$auth.fetch()
+        })
+        .catch(err => {
+          console.log(err)
         })
     },
   }
