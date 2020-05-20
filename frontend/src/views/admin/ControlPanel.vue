@@ -1,127 +1,93 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-row>
-        <h2 class="headline">
-          Logged as: {{ $auth.user().username }}
-        </h2>
-        <v-spacer />
-        <h2 class="headline">
-          Role: {{ $auth.user().role }}
-        </h2>
-      </v-row>
-      <v-row>
-        <v-col lg="2">
-          <v-card>
-            <v-img
-              class="mx-auto" 
-              height="200px" 
-              width="200px" 
-              src="../../assets/logo.png"
-            />
-            <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">
-                  {{ $auth.user().username }}
-                </h3>
-                <div>
-                  {{ $auth.user().name }} {{ $auth.user().surname }}
-                </div>
-              </div>
-            </v-card-title>
-            <v-card-actions>
-              <v-btn
-                text
-                color="primary"
-                @click="getUserInfo()"
+  <v-container>
+    <v-row>
+      <h2 class="headline">
+        Logged as: {{ $auth.user().username }}, {{ $auth.user().email }}
+      </h2>
+      <v-spacer />
+      <h2 class="headline">
+        Role: {{ getTranslatedRole() }}
+      </h2>
+    </v-row>
+    <v-row>
+      <v-col
+        cols="3"
+      >
+        <v-card
+          outlined
+        >
+          <v-card-title>
+            Menu
+          </v-card-title>
+          <v-list>
+            <v-list-item-group
+              mandatory
+              v-model="menuSection"
+            >
+              <v-list-item
+                v-for="(item, index) in menuItems"
+                :key="index"
               >
-                text
-              </v-btn>
-              <v-btn
-                text
-                color="primary"
-              >
-                text
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
+                <v-list-item-icon>
+                  <v-icon>
+                    {{ item.icon }}
+                  </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ item.label }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-col>
 
-        <v-col>
-          <v-card>
-            <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">
-                  Placed Offers
-                </h3>
-                <div class="subtitle mb-0">
-                  Your placed offers
-                </div>
-              </div>
-            </v-card-title>
-            <v-divider />
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col lg="2">
-                    <v-img 
-                      src="../../assets/logo.png"
-                      height="100px"
-                      width="100px"
-                    />
-                  </v-col>
-
-                  <v-col lg="3">
-                    <h3>TitlTitleTitleTitleTitleTitleTitleTitlee</h3>
-                  </v-col>
-
-                  <v-col>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nesciunt corrupti officia dolores architecto odio necessitatibus consequatur iste, magnam itaque expedita culpa accusantium rem molestiae asperiores voluptate omnis minus, eius vel?</p>
-                  </v-col>
-                </v-row>
-                <v-divider />
-              </v-container>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+      <v-col
+        v-if="menuSection === 0"
+      >
+        <Auctions />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-// import Offers from "./Offers.vue"
-// import Axios from 'axios'
-
 export default {
-    components: {
-        // Offers
-    },
-    data() {
-        return {
-            username: null,
-            name: null,
-            surname: null
-        }
-    },
-    created: {
-        fetchUser () {
-            this.getUserInfo()
-        }
-    },
-    methods: {
-        getUserInfo() {
-            this.$auth.fetch({
-                params: {},
-                success: function () {
-                    
-                },
-                error: function () {
-                    
-                }
-            })
+  components: {
+    Auctions: () => import('../../components/admin/Auctions')
+  },
+  data () {
+    return {
+      menuItems: [
+        {
+          label: 'Auctions',
+          icon: 'mdi-currency-usd'
         },
-    },
+        {
+          label: 'Offers',
+          icon: 'mdi-view-list'
+        },
+        {
+          label: 'Users',
+          icon: 'mdi-account-supervisor'
+        }
+      ],
+      menuSection: null
+    }
+  },
+  methods: {
+    getTranslatedRole () {
+      switch (this.$auth.user().role) {
+        case 'admin':
+          return 'Administrator'
+      
+        case 'super_admin':
+          return 'Super User'
+      }
+    }
+  }
 }
 </script>
 

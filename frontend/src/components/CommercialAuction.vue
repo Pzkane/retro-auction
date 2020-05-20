@@ -124,7 +124,7 @@
               :src="bidLeader.avatar_path"
               width="32"
               height="32"
-            ></v-img>
+            />
             {{ bidLeader.username }}
             {{ getHighestBidAmount() }} EUR
           </v-chip>
@@ -163,11 +163,6 @@ export default {
       highestBid: 0
     }
   },
-  created () {
-    this.highestBid = this.pAuction.auction_data[0].start_bid
-    this.bid = this.highestBid
-    this.getHighestBidUser(this.pAuction.auction_data[0].highest_bid_user_id)
-  },
   computed: {
     checkUserParticipation: function (params) {
       const now = new Date().toLocaleDateString()
@@ -190,6 +185,16 @@ export default {
       }
       return false
     }
+  },
+  watch: {
+    pAuction: function () {
+      this.getHighestBidUser(this.pAuction.auction_data[0].highest_bid_user_id)
+    }
+  },
+  created () {
+    this.highestBid = this.pAuction.auction_data[0].start_bid
+    this.bid = this.highestBid
+    this.getHighestBidUser(this.pAuction.auction_data[0].highest_bid_user_id)
   },
   methods: {
     closeDialog () {
@@ -240,11 +245,6 @@ export default {
       this.response.status = insertStatus.response.status
       this.response.message = insertStatus.response.message
       this.isPaid = insertStatus.isPaid
-    }
-  },
-  watch: {
-    pAuction: function () {
-      this.getHighestBidUser(this.pAuction.auction_data[0].highest_bid_user_id)
     }
   }
 }

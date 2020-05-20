@@ -79,6 +79,7 @@
 
 <script>
 import axios from 'axios'
+import fetchAuctions from '../plugins/fetchAuctions'
 
 export default {
   components: {
@@ -101,57 +102,15 @@ export default {
     this.fetchAuctions()
   },
   methods: {
-    fetchActiveAuctions() {
-      axios
-        .get('http://127.0.0.1:8000/api/auctions')
-        .then(res => {          
-          const {data:{data}} = res
-          let activeAuctions;
-          if (!data) {
-            return
-          } else if (data.length) {
-            activeAuctions = data
-          } else {
-            activeAuctions = [data]
-          }
-
-          this.activeCharityAuction = activeAuctions.find(auction => {
-            return auction.type === 'charity'
-          })
-
-          this.activeCommercialAuction = activeAuctions.find(auction => {
-            return auction.type === 'commercial'
-          })
-        })
-        .catch(err => {
-          console.log(`Error fetching active auctions: ${err}`)          
-        })
+    async fetchActiveAuctions() {
+      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions')
+      this.activeCharityAuction = response.charityAuctions
+      this.activeCommercialAuction = response.commercialAuctions
     },
-    fetchDismissedAuctions() {
-      axios
-        .get('http://127.0.0.1:8000/api/auctions/dismissed')
-        .then(res => {
-          const {data:{data}} = res
-          let dismissedAuctions;
-          if (!data) {
-            return
-          } else if (data.length) {
-            dismissedAuctions = data
-          } else {
-            dismissedAuctions = [data]
-          }
-
-          this.charityAuctions = dismissedAuctions.filter(auction => {
-            return auction.type === 'charity'
-          })
-          
-          this.commercialAuctions = dismissedAuctions.filter(auction => {
-            return auction.type === 'commercial'
-          })
-        })
-        .catch(err => {
-          console.log(`Error fetching dismissed auctions: ${err}`)          
-        })
+    async fetchDismissedAuctions() {
+      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions/dismissed', 'dismissed')
+      this.charityAuctions = response.charityAuctions
+      this.commercialAuctions = response.commercialAuctions
     },
     fetchAuctions () {
       this.fetchActiveAuctions()
