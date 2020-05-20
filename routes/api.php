@@ -28,10 +28,15 @@ Route::prefix('auth')->group( function () {
         Route::post('userUpdate', 'UserController@update');
         Route::delete('userDelete', 'UserController@delete');
 
-        Route::post('offers', 'OfferController@getUserOffers');   
-        Route::post('addOffer', 'OfferController@store');
+        Route::prefix('offer')->group(function () {
+            Route::post('get', 'OfferController@getUserOffers');   
+            Route::post('add', 'OfferController@store');
+        });
 
-        Route::post('addParticipant', 'AuctionParticipantsController@store');
+        Route::prefix('auction')->group(function () {
+            Route::post('addParticipant', 'AuctionParticipantsController@store');
+            Route::post('checkBid', 'CommercialAuctionController@checkBid');
+        });
     });
 });
 

@@ -57,9 +57,9 @@ class AuctionParticipantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($auctionId, $userId)
     {
-        //
+        return (new AuctionParticipants)->where('auction_id', $auctionId)->where('user_id', $userId)->first();
     }
 
     /**

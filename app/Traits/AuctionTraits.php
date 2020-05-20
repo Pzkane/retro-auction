@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-// use App\Http\Controllers\AuctionParticipantsController;
+use App\Http\Controllers\AuctionParticipantsController;
 use App\Http\Controllers\CharityAuctionController;
 use App\Http\Controllers\CommercialAuctionController;
 use App\Http\Controllers\UserController;
@@ -26,6 +26,10 @@ trait AuctionTraits
         return AuctionObjectResources::collection($auctions_Model->whereIn('id', $objectIds));
     }
 
+    public function findAuctionParticipant($auctionId, $userId) {
+        return (new AuctionParticipantsController)->show($auctionId, $userId);
+    }
+
     public function getAuctionParticipants($auctionParticipants_Model, $auctionId) {
         $participantsInfo = $auctionParticipants_Model->where('auction_id', $auctionId);
 
@@ -36,12 +40,14 @@ trait AuctionTraits
         $usersInfo = (new UserController)->findByIDs($userIds);
 
         try {
-            $index = 0;
-            foreach ($participantsInfo as $participant) {
-                $participant->username = $usersInfo[$index]->username;
-                $participant->email = $usersInfo[$index]->email;
-                $participant->avatar_path = $usersInfo[$index]->avatar_path;
-                $index++;
+            foreach ($participantsInfo as $participant){
+                foreach ($usersInfo as $userChunk) {
+                    if (json_encode($userChunk->id) == $participant->user_id) {
+                        $participant->username = $userChunk->username;
+                        $participant->email = $userChunk->email;
+                        $participant->avatar_path = $userChunk->avatar_path;
+                    }
+                }
             }
         } catch (\Throwable $err) {
             $participantsInfo->username = $usersInfo[0]->username;
