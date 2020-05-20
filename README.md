@@ -35,7 +35,7 @@ Projektā tiek izmantots:
 –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 - [PayPal saprašana](https://developer.paypal.com/docs/checkout/reference/upgrade-integration/#1-understand-the-javascript-sdk-checkout-flow)
-- [PayPal skripts](https://developer.paypal.com/docs/checkout/reference/upgrade-integration/#1-understand-the-javascript-sdk-checkout-flow)
+- [PayPal skripts](https://developer.paypal.com/docs/checkout/reference/upgrade-integration/#4-set-up-the-transaction)
 
 # Uzstādīšanas instrukcijas
 1. Lai lietotu git lejupielādējam [Git for windows](https://git-scm.com/download/win)
