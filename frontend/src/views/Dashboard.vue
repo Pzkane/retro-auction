@@ -356,6 +356,26 @@
               </v-tabs>
             </v-card-text>
           </v-card>
+
+          <v-card
+            class="auction-card"
+          >
+            <v-card-title>
+              <v-container
+                class="offers-title"
+              >
+                <v-row>
+                  <h3 class="headline mb-0">
+                    Participated Auctions
+                  </h3>
+                </v-row>
+              </v-container>
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -363,9 +383,9 @@
 </template>
 
 <script>
-// import Offers from "./Offers.vue"
 import axios from 'axios'
 import external_rules from '@/plugins/rules/rules.js'
+import fetchAuctions from '@/plugins/fetchAuctions.js'
 
 export default {
   components: {
@@ -410,7 +430,13 @@ export default {
       avatarFile: null,
       showAvatarUpdateButton: false,
 
-      bookmarkedOffers: null
+      bookmarkedOffers: null,
+
+      activeCharityAuction: null,
+      activeCommercialAuction: null,
+
+      charityAuctions: null,
+      commercialAuctions: null
     }
   },
   computed: {
@@ -422,8 +448,33 @@ export default {
     this.fetchProfileOffers(this.userOffersPath)
     this.fetchOffers()
     this.fetchCategories()
+
+    this.fetchUserAuctions()
   },
   methods: {
+    async fetchUserAuctions() {
+      const userData = new FormData()
+      userData.append('user_id', this.$auth.user().id)
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+          'Content-Type': 'multipart/form-data' 
+        }
+      }
+      axios
+        .post(`http://127.0.0.1:8000/api/auth/auctions/`, userData, config)
+        .then(res => {
+          const {data:{data}} = res
+          
+          console.log(res);
+        })
+        .catch(err => {
+            console.log(`Error fetching user auctions: ${err}`)  
+        });
+      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions')
+      this.activeCharityAuction = response.charityAuctions
+      this.activeCommercialAuction = response.commercialAuctions
+    },
     submit () {
       if (this.$refs.form.validate()) {
         this.update();
@@ -578,6 +629,9 @@ export default {
 </script>
 
 <style scoped>
+  .auction-card {
+    margin-top: 30px;
+  }
   .offers-tabs {
     min-width: 100%;
   }

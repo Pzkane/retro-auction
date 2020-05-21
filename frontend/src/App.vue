@@ -179,7 +179,7 @@ export default {
       })
     },
     async fetchFavoriteOffers () {
-      const result = await fetchFavoriteOffers (this.$auth.user().id)
+      const result = await fetchFavoriteOffers(this.$auth.user().id)
       if (result) {
         this.$store.commit('setFavoriteOffers', result)
       }

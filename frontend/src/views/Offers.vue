@@ -217,7 +217,8 @@ export default {
           this.setPageCount(meta.last_page)
         })
         .catch(err => {
-          this.errorCode = err.response.status
+          console.log(err);
+          this.errorCode = err
           this.responseError()
         })
     },
@@ -227,21 +228,24 @@ export default {
       return true;
     },
     setOffers (data) {
-      this.offers = data;
-      this.offers.map(offer => {
-        offer.showOfferDialog = false
-        if (offer.author_id !== this.$auth.user().id) {
-          offer.canBeFavorited = true
-        } else {
-          offer.canBeFavorited = false
-        }
+      this.offers = data
 
-        if (this.favoriteOffers.find(record => record.offer_id === offer.id && record.user_id === this.$auth.user().id)) {
-          offer.isFavorite = true
-        } else {
-          offer.isFavorite = false
-        }
-      })
+      if (this.$auth.user().id) {
+        this.offers.map(offer => {
+          offer.showOfferDialog = false
+          if (offer.author_id !== this.$auth.user().id) {
+            offer.canBeFavorited = true
+          } else {
+            offer.canBeFavorited = false
+          }
+
+          if (this.favoriteOffers.find(record => record.offer_id === offer.id && record.user_id === this.$auth.user().id)) {
+            offer.isFavorite = true
+          } else {
+            offer.isFavorite = false
+          }
+        })
+      }
     },
     setPageCount (data) {
       this.page_count = data;
