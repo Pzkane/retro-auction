@@ -35,11 +35,11 @@ Route::prefix('auth')->group( function () {
         });
         Route::post('offers/setFavorite', 'OfferController@changeFavorite');
 
-
         Route::prefix('auction')->group(function () {
             Route::post('addParticipant', 'AuctionParticipantsController@store');
             Route::post('checkBid', 'CommercialAuctionController@checkBid');
         });
+        Route::post('auctions', 'AuctionController@getUserAuctions');
     });
 });
 

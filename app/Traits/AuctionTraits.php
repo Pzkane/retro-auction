@@ -8,11 +8,9 @@ use App\Http\Controllers\CommercialAuctionController;
 use App\Http\Controllers\UserController;
 use App\Http\Resources\Auction\AuctionParticipants as AuctionParticipantsResources;
 use App\Http\Resources\Auction\AuctionObject as AuctionObjectResources;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-/**
- * 
- */
 trait AuctionTraits
 {
     public function indexActive() {
@@ -22,8 +20,8 @@ trait AuctionTraits
         ];
     }
 
-    public function getAuctionObjects($auctions_Model, $objectIds) {
-        return AuctionObjectResources::collection($auctions_Model->whereIn('id', $objectIds));
+    public function getAuctionObjects($auctionsObject_Model, $objectIds) {
+        return AuctionObjectResources::collection($auctionsObject_Model->whereIn('id', $objectIds));
     }
 
     public function findAuctionParticipant($auctionId, $userId) {

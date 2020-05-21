@@ -52,6 +52,39 @@ class AuctionController extends Controller
         return new AuctionFullDataSetResources($filteredAuction);
     }
 
+    public function getUserAuctions(Request $request) {
+        $activeAuctions = $this->index();
+        $dismissedAuctions = $this->index('dismissed');
+        $newAuctions = [];
+        for ($i=0; $i < 2; $i++) {
+            $filteredAuctions = [];
+            Log::info($i);
+            if ($i == 0) {
+                $auctionBuffer = $activeAuctions;
+            } else {
+                Log::info('here');
+                $auctionBuffer = $dismissedAuctions;
+                Log::info(json_encode($auctionBuffer));
+            }
+
+            for ($i=0; $i < count((array) $auctionBuffer) - 1; $i++) {
+                $toAdd = false;
+                foreach ($auctionBuffer[$i]->participants as $participant) {
+                    if ($participant->user_id == $request->user_id) {
+                        $toAdd = true;
+                    }
+                }
+    
+                if ($toAdd) {
+                    $filteredAuctions[] = $auctionBuffer[$i];
+                }
+            }
+            $newAuctions[] = $filteredAuctions;
+        }
+
+        return $newAuctions;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
