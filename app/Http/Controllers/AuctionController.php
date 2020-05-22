@@ -58,25 +58,27 @@ class AuctionController extends Controller
         $newAuctions = [];
         for ($i=0; $i < 2; $i++) {
             $filteredAuctions = [];
-            Log::info($i);
             if ($i == 0) {
                 $auctionBuffer = $activeAuctions;
             } else {
-                Log::info('here');
                 $auctionBuffer = $dismissedAuctions;
-                Log::info(json_encode($auctionBuffer));
             }
 
-            for ($i=0; $i < count((array) $auctionBuffer) - 1; $i++) {
+            $count = count(json_decode(json_encode($auctionBuffer)));
+            for ($j=0; $j < $count; $j++) {
                 $toAdd = false;
-                foreach ($auctionBuffer[$i]->participants as $participant) {
-                    if ($participant->user_id == $request->user_id) {
-                        $toAdd = true;
+                if (isset($auctionBuffer[$j])) {
+                    foreach ($auctionBuffer[$j]->participants as $participant) {
+                        if ($participant->user_id == $request->user_id) {
+                            $toAdd = true;
+                        }
                     }
-                }
-    
-                if ($toAdd) {
-                    $filteredAuctions[] = $auctionBuffer[$i];
+        
+                    if ($toAdd) {
+                        $filteredAuctions[] = $auctionBuffer[$j];
+                    }
+                } else {
+                    $count++;
                 }
             }
             $newAuctions[] = $filteredAuctions;
