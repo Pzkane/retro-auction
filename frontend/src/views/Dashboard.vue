@@ -372,9 +372,41 @@
               </v-container>
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-text>
+            <v-card-subtitle>
+              Active
+            </v-card-subtitle>
+            <div
+              v-if="activeCharityAuction"
+            >
+              <AuctionHistory
+                :pAuctionArray="[activeCharityAuction]"
+                :pType="'charity'"
+              />
+            </div>
 
-            </v-card-text>
+            <div
+              v-if="activeCommercialAuction"
+            >
+              <AuctionHistory
+                :pAuctionArray="[activeCommercialAuction]"
+                :pType="'commercial'"
+              />
+            </div>
+
+            <v-card-subtitle>
+              Dismissed
+            </v-card-subtitle>
+            <AuctionHistory
+              v-if="charityAuctions.length"
+              :pAuctionArray="charityAuctions"
+              :pType="'charity'"
+            />
+
+            <AuctionHistory
+              v-if="commercialAuctions.length"
+              :pAuctionArray="commercialAuctions"
+              :pType="'commercial'"
+            />
           </v-card>
         </v-col>
       </v-row>
@@ -389,6 +421,7 @@ import fetchAuctions from '@/plugins/fetchAuctions.js'
 
 export default {
   components: {
+    AuctionHistory: () => import('../components/AuctionHistory'),
     ConnectionError: () => import('../components/helpers/ConnectionError'),
     OffersDisplay: () => import('../components/OffersDisplay')
   },
@@ -435,8 +468,8 @@ export default {
       activeCharityAuction: null,
       activeCommercialAuction: null,
 
-      charityAuctions: null,
-      commercialAuctions: null
+      charityAuctions: [],
+      commercialAuctions: []
     }
   },
   computed: {
@@ -464,16 +497,39 @@ export default {
       axios
         .post(`http://127.0.0.1:8000/api/auth/auctions/`, userData, config)
         .then(res => {
-          const {data:{data}} = res
-          
-          console.log(res);
+          const {data} = res
+          const activeAutcions = data[0]
+          const dismissedAuctions = data[1]
+          if (activeAutcions.length) {
+            for (const auction of activeAutcions) {
+              switch (auction.type) {
+                case 'charity':
+                  this.activeCharityAuction = auction
+                  break
+              
+                case 'commercial':
+                  this.activeCommercialAuction = auction
+                  break
+              }
+            }
+          }
+          if (dismissedAuctions.length) {
+            for (const auction of dismissedAuctions) {
+              switch (auction.type) {
+                case 'charity':
+                  this.charityAuctions.push(auction)
+                  break
+              
+                case 'commercial':
+                  this.commercialAuctions.push(auction)
+                  break
+              }
+            }
+          }
         })
         .catch(err => {
             console.log(`Error fetching user auctions: ${err}`)  
         });
-      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions')
-      this.activeCharityAuction = response.charityAuctions
-      this.activeCommercialAuction = response.commercialAuctions
     },
     submit () {
       if (this.$refs.form.validate()) {
@@ -617,7 +673,6 @@ export default {
       axios
         .post('http://127.0.0.1:8000/api/auth/userUpdateAvatar', avatarInfo, config)
         .then(res => {
-          console.log(res)
           this.$auth.fetch()
         })
         .catch(err => {
