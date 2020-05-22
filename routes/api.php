@@ -38,6 +38,8 @@ Route::prefix('auth')->group( function () {
         Route::prefix('auction')->group(function () {
             Route::post('addParticipant', 'AuctionParticipantsController@store');
             Route::post('checkBid', 'CommercialAuctionController@checkBid');
+            Route::post('add', 'AuctionController@store');
+            Route::post('finish', 'AuctionController@finishAuction');
         });
         Route::post('auctions', 'AuctionController@getUserAuctions');
     });

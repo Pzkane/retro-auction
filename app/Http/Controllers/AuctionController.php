@@ -87,14 +87,11 @@ class AuctionController extends Controller
         return $newAuctions;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function finishAuction(Request $request) {
+        $auctionToFinish = Auction::find($request->auction_id);
+        $auctionToFinish->finished_at = now();
+        $auctionToFinish->save();
+        return;
     }
 
     /**
@@ -105,7 +102,23 @@ class AuctionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $auctionObject = $this->createAuctionObject($request->object_name, $request->preview_image);
+        $auction = new Auction();
+        $auction->object_id = $auctionObject->id;
+        $auction->type = $request->type;
+        $auction->save();
+
+        switch ($request->type) {
+            case 'charity':
+                $this->createCharityAuction($auction->id, $request->goal);
+                break;
+            
+            case 'commercial':
+                $this->createCommercialAuction($auction->id, $request->start_bid, $request->end_date);
+                break;
+        }
+
+        return;
     }
 
     /**

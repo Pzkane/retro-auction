@@ -63,9 +63,13 @@ class CommercialAuctionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($auctionId, $startBid, $endDate)
     {
-        //
+        $commercialAuction = new CommercialAuction();
+        $commercialAuction->auction_id = $auctionId;
+        $commercialAuction->start_bid = $startBid;
+        $commercialAuction->end_date = $endDate;
+        $commercialAuction->save();
     }
 
     /**

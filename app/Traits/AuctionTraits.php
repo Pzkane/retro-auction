@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Http\Controllers\AuctionObjectController;
 use App\Http\Controllers\AuctionParticipantsController;
 use App\Http\Controllers\CharityAuctionController;
 use App\Http\Controllers\CommercialAuctionController;
@@ -64,5 +65,17 @@ trait AuctionTraits
             case 'commercial':
                 return (new CommercialAuctionController)->getDetailsByAuctionId($auctionId);
         }
+    }
+
+    public function createAuctionObject ($objectName, $previewImage) {
+        return (new AuctionObjectController)->create($objectName, $previewImage);
+    }
+
+    public function createCharityAuction ($auctionId, $goal) {
+        (new CharityAuctionController)->create($auctionId, $goal);
+    }
+    
+    public function createCommercialAuction ($auctionId, $startBid, $endDate) {
+        (new CommercialAuctionController)->create($auctionId, $startBid, $endDate);
     }
 }

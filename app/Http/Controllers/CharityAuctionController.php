@@ -28,9 +28,12 @@ class CharityAuctionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($auctionId, $goal)
     {
-        //
+        $charityAuction = new CharityAuction();
+        $charityAuction->auction_id = $auctionId;
+        $charityAuction->goal = $goal;
+        $charityAuction->save();
     }
 
     /**
