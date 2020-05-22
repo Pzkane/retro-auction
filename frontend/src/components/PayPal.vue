@@ -96,6 +96,7 @@ export default {
           label: 'checkout',
         },
         createOrder: (data, actions) => {
+          this.isLoaded = false
           return actions.order.create({
             purchase_units: [
               {
@@ -136,6 +137,7 @@ export default {
       this.response.status = insertStatus.response.status
       this.response.message = insertStatus.response.message
       this.isPaid = insertStatus.isPaid
+      this.isLoaded = true
     }
   }
 }

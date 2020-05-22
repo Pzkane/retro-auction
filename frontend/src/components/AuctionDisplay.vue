@@ -64,6 +64,7 @@
     >
       <v-row>
         <v-col
+          v-if="winner"
           cols="3"
           class="participant-col"
         >
@@ -77,6 +78,7 @@
           </div>
         </v-col>
         <v-col
+          v-if="winner"
           cols="4"
           class="participant-col"
         >
@@ -85,14 +87,18 @@
         <v-col
           class="participant-col"
         >
-          Starting bid
+          <span>Starting bid</span>
           <v-row>
             <v-chip>
               {{ pAuction.auction_data[0].start_bid }} EUR
             </v-chip>
           </v-row>
-          Won with
-          <v-row>
+          <span
+            v-if="winner"
+          >Leading bid</span>
+          <v-row
+            v-if="winner"
+          >
             <v-chip
               color="#9CCC65"
             >

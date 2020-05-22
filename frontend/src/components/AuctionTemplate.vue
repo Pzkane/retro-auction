@@ -88,7 +88,6 @@
         <modal-dialog
           v-if="showPayPalDialog"
           class="modal"
-          @closeModal="closePayPalDialog()"
         >
           <v-card>
             <v-container>
@@ -96,6 +95,7 @@
                 class="dialog"
                 :pAmount="Number(amount)"
                 :pProduct="auctionProduct"
+                @closeModal="closePayPalDialog()"
               />
             </v-container>
           </v-card>
@@ -160,9 +160,12 @@ export default {
     }
   },
   watch: {
-    pAuction: function () {
-      this.getTotalAmount()
-      this.setTotalAmount()
+    pAuction: {
+      deep: true,
+      handler: function () {
+        this.getTotalAmount()
+        this.setTotalAmount()
+      }
     }
   },
   created () {

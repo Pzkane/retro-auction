@@ -11,6 +11,18 @@
           :pAuction="activeCharityAuction"
           @updateAuction="fetchActiveAuctions()"
         />
+        <v-container
+          v-else
+          class="no-active-auction"
+        >
+          <v-divider></v-divider>
+          <h3
+            class="title font-weight-light"
+          >
+            No active charity auction at the moment
+          </h3>
+          <v-divider></v-divider>
+        </v-container>
       </v-col>
       <v-col
         md="6"
@@ -20,6 +32,18 @@
           :pAuction="activeCommercialAuction"
           @updateAuction="fetchActiveAuctions()"
         />
+        <v-container
+          v-else
+          class="no-active-auction"
+        >
+          <v-divider></v-divider>
+          <h3
+            class="title font-weight-light"
+          >
+            No active commercial auction at the moment
+          </h3>
+          <v-divider></v-divider>
+        </v-container>
       </v-col>
     </v-row>
     <v-container
@@ -147,6 +171,13 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+  }
+  .no-active-auction {
+    height: 70vh;
+    vertical-align: middle;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
   }
   .wrapper {
     margin-bottom: 100px;

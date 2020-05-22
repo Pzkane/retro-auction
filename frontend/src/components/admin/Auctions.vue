@@ -15,12 +15,27 @@
     <v-card-actions
       v-else
     >
-      <v-btn
-        depressed
-        color="primary"
+     <v-dialog
+        v-model="showCharityCreateDialog"
       >
-        Add Auction
-      </v-btn>
+        <template
+          #activator="{ on }"
+        >
+          <v-btn
+            depressed
+            block
+            color="primary"
+            v-on="on"
+          >
+            Add Auction
+          </v-btn>
+        </template>
+
+        <AddAuction
+          :pType="'charity'"
+          @closeDialog="showCharityCreateDialog = false"
+        />
+      </v-dialog>
     </v-card-actions>
 
     <v-card-subtitle>
@@ -31,6 +46,31 @@
       :pAuctions="[activeCommercialAuction]"
       :pIsActive="true"
     />
+    <v-card-actions
+      v-else
+    >
+      <v-dialog
+        v-model="showCommericalCreateDialog"
+      >
+        <template
+          #activator="{ on }"
+        >
+          <v-btn
+            depressed
+            block
+            color="primary"
+            v-on="on"
+          >
+            Add Auction
+          </v-btn>
+        </template>
+
+        <AddAuction
+          :pType="'commercial'"
+          @closeDialog="closeDialog()"
+        />
+      </v-dialog>
+    </v-card-actions>
 
     <v-divider />
     <v-card-title>Dismissed Auctions</v-card-title>
@@ -56,6 +96,7 @@ import fetchAuctions from '../../plugins/fetchAuctions'
 
 export default {
   components: {
+    AddAuction: () => import('./AddAuction'),
     AuctionList: () => import('./AuctionList')
   },
   data () {
@@ -65,6 +106,9 @@ export default {
 
       charityAuctions: [],
       commercialAuctions: [],
+
+      showCharityCreateDialog: false,
+      showCommericalCreateDialog: false
     }
   },
   created () {
@@ -72,6 +116,12 @@ export default {
     this.fetchDismissedAuctions()
   },
   methods: {
+    closeDialog() {
+      this.showCharityCreateDialog = false
+      this.showCommericalCreateDialog = false
+      this.fetchActiveAuctions()
+      this.fetchDismissedAuctions()
+    },
     async fetchActiveAuctions() {
       const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions')
       this.activeCharityAuction = response.charityAuctions
@@ -81,6 +131,12 @@ export default {
       const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions/dismissed', 'dismissed')
       this.charityAuctions = response.charityAuctions
       this.commercialAuctions = response.commercialAuctions
+      for (const auction of this.charityAuctions) {
+        auction['showDialog'] = false
+      }
+      for (const auction of this.commercialAuctions) {
+        auction['showDialog'] = false
+      }
     }
   }
 }
