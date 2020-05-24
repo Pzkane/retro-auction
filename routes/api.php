@@ -23,12 +23,14 @@ Route::prefix('auth')->group( function () {
     Route::get('refresh', 'AuthController@refresh');
 
     Route::group(['middleware' => 'auth:api'], function(){
+        // Auth
         Route::get('user', 'AuthController@user');
         Route::post('logout', 'AuthController@logout');
         Route::post('userUpdate', 'UserController@update');
         Route::post('userUpdateAvatar', 'UserController@updateAvatar');
         Route::delete('userDelete', 'UserController@delete');
 
+        // Offers
         Route::prefix('offer')->group(function () {
             Route::post('get', 'OfferController@getUserOffers');   
             Route::post('add', 'OfferController@store');
@@ -39,6 +41,7 @@ Route::prefix('auth')->group( function () {
             Route::post('setFavorite', 'OfferController@changeFavorite');
         });
 
+        // Auction
         Route::prefix('auction')->group(function () {
             Route::post('addParticipant', 'AuctionParticipantsController@store');
             Route::post('checkBid', 'CommercialAuctionController@checkBid');
@@ -46,13 +49,13 @@ Route::prefix('auth')->group( function () {
             Route::post('finish', 'AuctionController@finishAuction');
         });
         Route::post('auctions', 'AuctionController@getUserAuctions');
-    });
-});
 
-Route::group(['middleware' => 'auth:api'], function () {
-    //Users
-    Route::get('users', 'UserController@index')->middleware('isAdmin');
-    Route::get('users/{id}', 'UserController@show')->middleware('isAdminOrSelf');
+        // Users
+        Route::prefix('users')->group(function () {
+            Route::get('/', 'UserController@index')->middleware('isAdmin');
+            Route::get('/{id}', 'UserController@show')->middleware('isAdminOrSelf');
+        });
+    });
 });
 
 Route::prefix('offers')->group(function () {

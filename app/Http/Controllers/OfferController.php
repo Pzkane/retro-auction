@@ -229,7 +229,6 @@ class OfferController extends Controller
     }
 
     public function softDelete(Request $request) {
-        Log::info($request->id);
         $offer = Offer::find($request->id);
         $offer->status = 'archived';
         $offer->save();
