@@ -23,6 +23,7 @@ class Offer extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'preview_image' => $this->preview_image,
+            'status' => $this->status
         ];
 
         if ($this->author_info) {

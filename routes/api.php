@@ -32,8 +32,12 @@ Route::prefix('auth')->group( function () {
         Route::prefix('offer')->group(function () {
             Route::post('get', 'OfferController@getUserOffers');   
             Route::post('add', 'OfferController@store');
+            Route::post('delete_soft', 'OfferController@softDelete');
         });
-        Route::post('offers/setFavorite', 'OfferController@changeFavorite');
+        Route::prefix('offers')->group(function () {
+            Route::get('/', 'OfferController@getServiceOffers');
+            Route::post('setFavorite', 'OfferController@changeFavorite');
+        });
 
         Route::prefix('auction')->group(function () {
             Route::post('addParticipant', 'AuctionParticipantsController@store');

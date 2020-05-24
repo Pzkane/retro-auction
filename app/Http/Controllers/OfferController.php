@@ -50,7 +50,7 @@ class OfferController extends Controller
             $offersQuery->where('body', 'like', '%'.$request->description.'%');
         }
 
-        $offers = Offer::all();
+        $offers = Offer::where('status', 'active');
         if(!is_null($request->parts)) {
             $offerIds = DB::table('offers_parts')
                 ->where('part', 'like', '%'.$request->parts.'%')
@@ -88,6 +88,14 @@ class OfferController extends Controller
     }
 
     public function getAll () {
+        $offers = Offer::where('status', 'active')->get();
+        foreach ($offers as $offer) {
+            $offer->author_info = $this->getOfferAuthor($offer->author_id);
+        }
+        return OfferResources::collection($offers);
+    }
+
+    public function getServiceOffers () {
         $offers = Offer::all();
         foreach ($offers as $offer) {
             $offer->author_info = $this->getOfferAuthor($offer->author_id);
@@ -115,7 +123,7 @@ class OfferController extends Controller
     }
 
     public function getUserOffers (Request $request) {
-        $offers = Offer::where('author_id', '=', $request->author_id)->get();
+        $offers = Offer::where('author_id', '=', $request->author_id)->where('status', 'active')->get();
         if (sizeof($offers) < 1) {
             return [];
         }
@@ -218,6 +226,14 @@ class OfferController extends Controller
             'status' => 'success',
             'photo_path' => $mediaCollection->toArray()
         ], 200);
+    }
+
+    public function softDelete(Request $request) {
+        Log::info($request->id);
+        $offer = Offer::find($request->id);
+        $offer->status = 'archived';
+        $offer->save();
+        return;
     }
 
     /**
