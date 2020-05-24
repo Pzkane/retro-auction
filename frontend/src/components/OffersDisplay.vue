@@ -32,7 +32,7 @@
             <ShowOffer
               :pCategories="pCategories"
               :pOffer="pOffer"
-              @closeShowDialog="showOfferDialog = false"
+              @closeShowDialog="closeShowOfferDialog"
             />
           </v-dialog>
         </v-card-title>
@@ -107,7 +107,7 @@
           <ShowOffer
             :pCategories="pCategories"
             :pOffer="pOffer"
-            @closeShowDialog="showOfferDialog = false"
+            @closeShowDialog="closeShowOfferDialog"
           />
         </v-dialog>                                      
       </v-row>
@@ -130,6 +130,7 @@ export default {
     pCategories: { type: Array, default: null },
     pOffer: {type: Object, default: null},
     pIsTiled: {type: Boolean, default: false},
+    pIsAdmin: {type: Boolean, default: false},
   },
   data () {
     return {
@@ -137,6 +138,12 @@ export default {
     }
   },
   methods: {
+    closeShowOfferDialog () {
+      this.showOfferDialog = false
+      if (this.pIsAdmin) {
+        this.$emit('reloadOffers')
+      }
+    },
     favoriteOffer () {
       const config = { 
         headers: { 

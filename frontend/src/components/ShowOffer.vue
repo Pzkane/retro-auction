@@ -10,6 +10,11 @@
           </h4>
         </div>
         <v-spacer />
+        <DeleteOfferDialog
+          v-if="pOffer.status === 'active'"
+          :pOffer="pOffer"
+          @delete="deleteOffer()"
+        />
         <v-btn
           icon
           @click="closeDialog()"
@@ -126,6 +131,7 @@ import axios from 'axios'
 
 export default {
   components: {
+    DeleteOfferDialog: () => import('./essentials/DeleteOfferDialog'),
     ImageLightbox: () => import('./helpers/ImageLightbox')
   },
   props: {
@@ -159,6 +165,21 @@ export default {
   methods: {
     closeDialog () {
       this.$emit('closeShowDialog')
+    },
+    deleteOffer () {
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token()
+        }
+      }
+      axios
+        .post('http://127.0.0.1:8000/api/auth/offer/delete_soft', { id : this.pOffer.id }, config)
+        .then(res => {
+          this.$emit('closeShowDialog')
+        })
+        .catch(err => {
+
+        })
     },
     getCategoryName (categoryId) {
       const category = this.pCategories.find(category => { return category.id === categoryId })

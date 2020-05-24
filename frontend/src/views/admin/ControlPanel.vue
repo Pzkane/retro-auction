@@ -47,7 +47,13 @@
       <v-col
         v-if="menuSection === 0"
       >
-        <Auctions />
+        <Auctions/>
+      </v-col>
+
+      <v-col
+        v-if="menuSection === 1"
+      >
+        <Offers />
       </v-col>
     </v-row>
   </v-container>
@@ -56,7 +62,8 @@
 <script>
 export default {
   components: {
-    Auctions: () => import('../../components/admin/Auctions')
+    Auctions: () => import('../../components/admin/Auctions'),
+    Offers: () => import('../../components/admin/Offers')
   },
   data () {
     return {
