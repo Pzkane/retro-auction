@@ -91,4 +91,26 @@ class UserController extends Controller
     public function findByIDs ($userIds) {
         return UserBasicResources::collection(User::whereIn('id', $userIds)->get());
     }
+
+    public function setRole (Request $request) {
+        $userToChange = User::find($request->user_id);
+        $userToChange->role = $request->role;
+        $userToChange->save();
+        return;
+    }
+
+    public function setStatus (Request $request) {
+        $userToChange = User::find($request->user_id);
+        $userToChange->status = $request->status;
+        $userToChange->save();
+        return;
+    }
+
+    public function showAll () {
+        $users = User::all();
+        return response()->json([
+            'status' => 'success',
+            'users' => $users->toArray()
+        ], 200);
+    }
 }

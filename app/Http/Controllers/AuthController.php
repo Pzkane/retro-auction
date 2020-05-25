@@ -57,16 +57,20 @@ class AuthController extends Controller
                         'error' => 'login_error'
                     ], 401);
                 }
-            } 
+            }
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
         $user = Auth::user();
-        return response([
-            'data' => $user
-        ])
-        ->header('Authorization', 'Bearer '.$token);
+        if ($user->status == 'active') {
+            return response([
+                'data' => $user
+            ])
+            ->header('Authorization', 'Bearer '.$token);
+        } else {
+            return response()->json(['error' => 'account_suspended'], 401);
+        }
     }
 
     public function logout () {
@@ -80,30 +84,31 @@ class AuthController extends Controller
 
     public function user (Request $request) {
         $user = User::find(Auth::user()->id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $user
-        ]);
+        if ($user->status == 'active') {
+            return response()->json([
+                'status' => 'success',
+                'data' => $user
+            ]);
+        } else {
+            return response()->json(['error' => 'account_suspended'], 401);
+        }
     }
 
     public function refresh (Request $request) {
         try {
             $user = auth()->userOrFail();
             if ($user) {
-                $newToken = auth()->refresh();
-                return response()->json(['status' => 'success'], 200)->header('Authorization', $newToken);
+                if ($user->status == 'active') {
+                    $newToken = auth()->refresh();
+                    return response()->json(['status' => 'success'], 200)->header('Authorization', $newToken);
+                } else {
+                    return response()->json(['error' => 'account_suspended'], 401);
+                }
             }
             return response()->json(['error' => 'user_error'], 401);
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'refresh_token_error'], 401);
         }
-
-        // $token = $request->header('Authorization');
-        // if ($token = $this->guard()->refresh()) {
-        //     return response()->json(['status' => 'success'], 200)->header('Authorization', $token);
-        // }
-
-        // return response()->json(['error' => 'refresh_token_error'], 401);
     }
 
     private function guard() {

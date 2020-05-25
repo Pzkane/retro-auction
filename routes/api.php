@@ -53,7 +53,12 @@ Route::prefix('auth')->group( function () {
         // Users
         Route::prefix('users')->group(function () {
             Route::get('/', 'UserController@index')->middleware('isAdmin');
+            Route::get('service', 'UserController@showAll')->middleware('isAdmin');
             Route::get('/{id}', 'UserController@show')->middleware('isAdminOrSelf');
+        });
+        Route::prefix('user')->group(function () {
+            Route::post('setStatus', 'UserController@setStatus');
+            Route::post('setRole', 'UserController@setRole');
         });
     });
 });
