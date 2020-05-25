@@ -61,6 +61,12 @@
       >
         <Users />
       </v-col>
+
+      <v-col
+        v-if="menuSection === 3"
+      >
+        <Admins />
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -68,6 +74,7 @@
 <script>
 export default {
   components: {
+    Admins: () => import('../../components/admin/Admins'),
     Auctions: () => import('../../components/admin/Auctions'),
     Offers: () => import('../../components/admin/Offers'),
     Users: () => import('../../components/admin/Users')
@@ -91,6 +98,9 @@ export default {
       menuSection: null
     }
   },
+  created () {
+    this.checkIfSA()
+  },
   methods: {
     getTranslatedRole () {
       switch (this.$auth.user().role) {
@@ -99,6 +109,16 @@ export default {
       
         case 'super_admin':
           return 'Super User'
+      }
+    },
+    checkIfSA () {
+      if (this.$auth.user().role === 'super_admin') {
+        this.menuItems.push(
+          {
+            label: 'Admins',
+            icon: 'mdi-account-box-multiple'
+          }
+        )
       }
     }
   }

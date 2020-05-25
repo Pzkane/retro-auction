@@ -28,7 +28,8 @@
             class="pr-0 pb-1"
           >
             mdi-alert
-          </v-icon> Wrong username/email or password
+          </v-icon> <span v-if="!isUserSuspended">Wrong username/email or password</span>
+          <span v-else>Your account has been suspended</span>
         </p>
       </v-expand-transition>
       <v-card-actions>
@@ -62,7 +63,7 @@ export default {
 
       rules: external_rules,
 
-      errors: {},
+      isUserSuspended: true,
       isError: false
     }
   },
@@ -72,6 +73,7 @@ export default {
       'changeAuthState'
     ]),
     login() {
+      this.isUserSuspended = false
       if (this.$refs.lForm.validate()){
         this.isError = false
         this.isLoading = true
@@ -86,11 +88,15 @@ export default {
             this.isLoading = false
             this.fadeLogin()
             this.changeAuthState()
-            const redirectTo = this.redirect ? this.redirect.from.name : this.$auth.user().role === 'super_admin' ? 'sadmin.dashboard' : this.$auth.user().role === 'admin' ? 'admin.dashboard' : 'dashboard'
+            const redirectTo = this.redirect ? this.redirect.from.name : this.$auth.user().role === 'super_admin' ? 'admin.dashboard' : this.$auth.user().role === 'admin' ? 'admin.dashboard' : 'dashboard'
             this.$router.push({name: redirectTo})
             this.fetchFavoriteOffers()
           },
-          error : function() {
+          error : function(err) {
+            console.log(err.response.data);
+            if (err.response.data.error === 'account_suspended') {
+              this.isUserSuspended = true
+            }
             this.isLoading = false
             this.isError = true
           },

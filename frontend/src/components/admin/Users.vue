@@ -3,14 +3,23 @@
     <v-card-title>
       Users
     </v-card-title>
+    <v-card-subtitle>
+      Active
+    </v-card-subtitle>
     <v-card-text>
-      <v-container>
-        <v-row
-          v-for="user in users" :key="user.id"
-        >
-          {{ user.email }}
-        </v-row>
-      </v-container>
+      <UserList
+        :pUsersArray="users"
+        @update="fetchUsers()"
+      />
+    </v-card-text>
+    <v-card-subtitle>
+      Suspended
+    </v-card-subtitle>
+    <v-card-text>
+      <UserList
+        :pUsersArray="suspendedUsers"
+        @update="fetchUsers()"
+      />
     </v-card-text>
   </v-card>
 </template>
@@ -19,9 +28,14 @@
 import axios from 'axios'
 
 export default {
+  components: {
+    UserList: () => import('./UserList')
+  },
   data () {
     return {
-      users: []
+      users: [],
+      suspendedUsers: [],
+      suspendDialog: false
     }
   },
   created () {
@@ -32,11 +46,29 @@ export default {
       axios
         .get('http://127.0.0.1:8000/api/auth/users')
         .then(res => {
+          let incomingUsers
           if (res.data.users.length) {
-            this.users = res.data.users
+            incomingUsers = res.data.users
           } else {
-            this.users = [res.data.users]
+            incomingUsers = [res.data.users]
           }
+
+          this.users = []
+          this.suspendedUsers= []
+
+          for (const user of incomingUsers) {
+            user.suspendDialog = false
+            switch (user.status) {
+              case 'active':
+                this.users.push(user)
+                break
+            
+              case 'suspended':
+                this.suspendedUsers.push(user)
+                break
+            }
+          }
+
         })
         .catch(err => {
           console.log(err)
@@ -46,6 +78,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .users-container {
+    max-height: 70vh;
+    overflow: auto;
+  }
 </style>

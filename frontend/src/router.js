@@ -6,7 +6,6 @@ import Auction from './views/Auction.vue'
 import Registration from './views/Registration.vue'
 import Dashboard from './views/Dashboard.vue'
 import AdminDashboard from './views/admin/ControlPanel.vue'
-import SADashboard from './views/admin/su/Dashboard.vue'
 
 const routes = [
   {
@@ -54,16 +53,6 @@ const routes = [
       auth: {roles: ['super_admin', 'admin'], redirect: {name: 'offers'}, forbiddenRedirect: '/403'}
     },
   },
-
-  //super admin
-  {
-    path: '/sadmin',
-    name: 'sadmin.dashboard',
-    component: SADashboard,
-    meta: {
-      auth: {roles: 'super_admin', redirect: {name: 'offers'}, forbiddenRedirect: '/403'}
-    },
-  }
 ]
 const router = new VueRouter({
   history: true,

@@ -31,12 +31,6 @@
       >
         Control Panel
       </v-tab>
-      <v-tab
-        v-if="$auth.user().role === 'super_admin'"
-        to="/sadmin"
-      >
-        System Managment
-      </v-tab>
       <v-divider :vertical="true" />
       <v-menu
         v-if="!getAuthState()"
@@ -111,10 +105,6 @@
       <v-tab-item id="/admin">
         <v-divider />
         <router-view v-if="activeTab === '/admin'" />
-      </v-tab-item>
-      <v-tab-item id="/sadmin">
-        <v-divider />
-        <router-view v-if="activeTab === '/sadmin'" />
       </v-tab-item>
     </v-tabs>
   </v-app>
