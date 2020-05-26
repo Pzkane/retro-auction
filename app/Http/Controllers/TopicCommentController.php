@@ -20,7 +20,7 @@ class TopicCommentController extends Controller
         if ($request->topic) {
             $comments = TopicComment::where('topic_id', $request->topic)->orderByDesc('created_at')->get();
         } else {
-            $comments = TopicComment::all()->orderByDesc('created_at');
+            $comments = TopicComment::all()->sortByDesc('created_at');
         }
 
         foreach ($comments as $comment) {
