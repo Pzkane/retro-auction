@@ -6,6 +6,7 @@ import Auction from './views/Auction.vue'
 import Registration from './views/Registration.vue'
 import Dashboard from './views/Dashboard.vue'
 import AdminDashboard from './views/admin/ControlPanel.vue'
+import Forum from './views/Forum.vue'
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     path: '/auction',
     name: 'auction',
     component: Auction
+  },
+  {
+    path: '/forum',
+    name: 'forum',
+    component: Forum
   },
   
   //auth forms

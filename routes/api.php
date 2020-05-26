@@ -50,6 +50,12 @@ Route::prefix('auth')->group( function () {
         });
         Route::post('auctions', 'AuctionController@getUserAuctions');
 
+        // Forum
+        Route::prefix('forum')->group(function () {
+            Route::post('topic/add', 'TopicController@store');
+            Route::post('comment/add', 'TopicCommentController@store');
+        });
+
         // Users
         Route::prefix('users')->group(function () {
             Route::get('/', 'UserController@index')->middleware('isAdmin');
@@ -73,3 +79,9 @@ Route::get('/offer_media/{id}', 'OfferController@media');
 Route::get('/offer_categories', 'OfferCategoryController@index');
 
 Route::get('/auctions/{status?}', 'AuctionController@index');
+
+Route::prefix('forum')->group(function () {
+    Route::get('/categories', 'TopicCategoryController@index');
+    Route::get('/comments/{topic?}', 'TopicCommentController@index');
+    Route::get('/topics/{category?}', 'TopicController@index');
+});

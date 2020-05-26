@@ -39,9 +39,6 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     public $timestamps = false;
-    
-    // public $keyType = 'string';
-    // protected $primaryKey = 'email';
 
     public function getJWTIdentifier() {
         return $this->getKey();

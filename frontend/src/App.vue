@@ -19,6 +19,9 @@
       >
         Sign Up
       </v-tab>
+      <v-tab to="/forum">
+        Forum
+      </v-tab>
       <v-tab
         v-if="$auth.check()"
         to="/dashboard"
@@ -97,6 +100,10 @@
       <v-tab-item id="/signup">
         <v-divider />
         <router-view v-if="activeTab === '/signup'" />
+      </v-tab-item>
+      <v-tab-item id="/forum">
+        <v-divider />
+        <router-view v-if="activeTab === '/forum'" />
       </v-tab-item>
       <v-tab-item id="/dashboard">
         <v-divider />
