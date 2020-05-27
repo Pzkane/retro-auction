@@ -28,6 +28,7 @@
         Started At: {{ new Date(pAuction.started_at).toLocaleDateString() }}
       </v-row>
       <v-row
+        v-if="pAuction.finished_at"
         justify="center"
       >
         Finished At: {{ new Date(pAuction.finished_at).toLocaleDateString() }}

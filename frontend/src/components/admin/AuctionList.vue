@@ -120,7 +120,7 @@ export default {
             return false
         
           case 'commercial':
-            if (new Date().toLocaleDateString() > new Date(this.activeAuction.auction_data[0].end_date).toLocaleDateString()) {
+            if (new Date().getTime() > new Date(this.activeAuction.auction_data[0].end_date).getTime()) {
               return true
             }
             return false

@@ -165,8 +165,8 @@ export default {
   },
   computed: {
     checkUserParticipation: function (params) {
-      const now = new Date().toLocaleDateString()
-      const endDate = new Date(this.pAuction.auction_data[0].end_date).toLocaleDateString()
+      const now = new Date().getTime()
+      const endDate = new Date(this.pAuction.auction_data[0].end_date).getTime()
       
       if (now > endDate) {
         return false

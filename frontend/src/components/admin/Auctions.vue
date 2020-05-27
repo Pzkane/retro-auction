@@ -122,21 +122,25 @@ export default {
       this.fetchActiveAuctions()
       this.fetchDismissedAuctions()
     },
-    async fetchActiveAuctions() {
-      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions')
-      this.activeCharityAuction = response.charityAuctions
-      this.activeCommercialAuction = response.commercialAuctions
+    fetchActiveAuctions() {
+      fetchAuctions('http://127.0.0.1:8000/api/auctions')
+        .then(res => {
+          this.activeCharityAuction = res.charityAuctions
+          this.activeCommercialAuction = res.commercialAuctions
+        })
     },
-    async fetchDismissedAuctions() {
-      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions/dismissed', 'dismissed')
-      this.charityAuctions = response.charityAuctions
-      this.commercialAuctions = response.commercialAuctions
-      for (const auction of this.charityAuctions) {
-        auction['showDialog'] = false
-      }
-      for (const auction of this.commercialAuctions) {
-        auction['showDialog'] = false
-      }
+    fetchDismissedAuctions() {
+      fetchAuctions('http://127.0.0.1:8000/api/auctions/dismissed', 'dismissed')
+      .then(res => {
+        this.charityAuctions = res.charityAuctions
+        this.commercialAuctions = res.commercialAuctions
+        for (const auction of this.charityAuctions) {
+          auction['showDialog'] = false
+        }
+        for (const auction of this.commercialAuctions) {
+          auction['showDialog'] = false
+        }
+      })
     }
   }
 }

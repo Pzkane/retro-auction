@@ -16,6 +16,7 @@
                   v-model="objectName"
                   label="Auction object name"
                   placeholder="Auction object name"
+                  :counter="24"
                   :rules="[rules.required]"
                 />
               </v-col>

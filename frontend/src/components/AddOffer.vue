@@ -117,7 +117,7 @@
               <v-text-field
                 v-model="contactPhone"
                 :rules="[scoped_rules.contactPhone]"
-                :counter="40"
+                :counter="12"
                 label="Contact Phone"
                 outlined
               />
