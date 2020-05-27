@@ -55,6 +55,12 @@ class TopicCommentController extends Controller
         $comment->save();
     }
 
+    public function delete(Request $request) {
+        $commentToDelete = TopicComment::find($request->comment);
+        $commentToDelete->delete();
+        return;
+    }
+
     /**
      * Display the specified resource.
      *

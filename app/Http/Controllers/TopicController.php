@@ -57,6 +57,12 @@ class TopicController extends Controller
         return;
     }
 
+    public function delete(Request $request) {
+        $topicToDelete = Topic::find($request->topic);
+        $topicToDelete->delete();
+        return;
+    }
+
     /**
      * Display the specified resource.
      *

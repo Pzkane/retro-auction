@@ -52,8 +52,14 @@ Route::prefix('auth')->group( function () {
 
         // Forum
         Route::prefix('forum')->group(function () {
-            Route::post('topic/add', 'TopicController@store');
-            Route::post('comment/add', 'TopicCommentController@store');
+            Route::prefix('topic')->group(function () {
+                Route::post('add', 'TopicController@store');
+                Route::post('delete', 'TopicController@delete');
+            });
+            Route::prefix('comment')->group(function () {
+                Route::post('add', 'TopicCommentController@store');
+                Route::post('delete', 'TopicCommentController@delete');
+            });
         });
 
         // Users
