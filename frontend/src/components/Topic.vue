@@ -5,6 +5,51 @@
     <v-card-title>
       {{ pTopic.title }}
       <v-spacer></v-spacer>
+      <v-dialog
+        v-if="$auth.user().id && ($auth.user().id === pTopic.author_data.id || $auth.user().role !== 'user')"
+        v-model="showDeleteDialog"
+      >
+        <template
+          #activator="{ on }"
+        >
+          <v-btn
+            icon
+            v-on="on"
+            color="error"
+            @click="showDeleteDialog = true"
+          >
+            <v-icon>mdi-delete-forever-outline</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title>
+            Attention!
+          </v-card-title>
+          <v-card-text>
+            Would You really like to delete this topic with all its comments?
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              width="50%"
+              text
+              color="primary"
+              @click="deleteTopic()"
+            >
+              Confirm
+            </v-btn>
+            <v-btn
+              width="50%"
+              text
+              color="error"
+              @click="showDeleteDialog = false"
+            >
+              Cancel
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <v-btn
         icon
         @click="fetchComments()"
@@ -96,6 +141,50 @@
                 <v-row>
                   Added on: {{ comment.created_at }}
                 </v-row>
+                <v-dialog
+                  v-if="$auth.user().id && ($auth.user().id === comment.author_id || $auth.user().role !== 'user')"
+                  v-model="comment.dialog"
+                >
+                  <template
+                    #activator="{ on }"
+                  >
+                    <v-btn
+                      icon
+                      v-on="on"
+                      color="error"
+                      @click="comment.dialog = true"
+                    >
+                      <v-icon>mdi-delete-forever-outline</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-card>
+                    <v-card-title>
+                      Attention!
+                    </v-card-title>
+                    <v-card-text>
+                      Would You really like to delete this comment?
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn
+                        width="50%"
+                        text
+                        color="primary"
+                        @click="deleteComment(comment.id)"
+                      >
+                        Confirm
+                      </v-btn>
+                      <v-btn
+                        width="50%"
+                        text
+                        color="error"
+                        @click="comment.dialog = false"
+                      >
+                        Cancel
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-row>
             </v-container>
           </v-card-text>
@@ -117,7 +206,8 @@ export default {
     return {
       comments: [],
       rules: external_rules,
-      body: null
+      body: null,
+      showDeleteDialog: false
     }
   },
   created () {
@@ -126,6 +216,37 @@ export default {
   methods: {
     closeTopic () {
       this.$emit('closeDialog')
+    },
+    deleteComment (commentId) {
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+        }
+      }
+      axios
+        .post('http://127.0.0.1:8000/api/auth/forum/comment/delete', { comment: commentId}, config)
+        .then (res => {
+          this.showDeleteCommentDialog = false
+          this.fetchComments()
+        })
+        .catch ((err) => {
+          console.log(err)
+        })
+    },
+    deleteTopic () {
+      const config = { 
+        headers: { 
+          'Authorization': 'Bearer '+this.$auth.token(),
+        }
+      }
+      axios
+        .post('http://127.0.0.1:8000/api/auth/forum/topic/delete', { topic: this.pTopic.id}, config)
+        .then (res => {
+          this.closeTopic()
+        })
+        .catch ((err) => {
+          console.log(err)
+        })
     },
     fetchComments () {
       this.comments = []
@@ -136,6 +257,9 @@ export default {
           const {data:{data}} = res
           if (data){
             this.comments = data
+          }
+          for (const comment of this.comments) {
+            comment.dialog = false
           }
         })
         .catch(err => {
