@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>
       User Offers
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         icon
         @click="fetchAll()"
@@ -17,7 +17,8 @@
       class="offers-container"
     >
       <v-row
-        v-for="offer in activeOffers" :key="offer.id"
+        v-for="offer in activeOffers"
+        :key="offer.id"
       >
         <OffersDisplay
           class="offer"
@@ -37,7 +38,8 @@
       class="offers-container"
     >
       <v-row
-        v-for="offer in archivedOffers" :key="offer.id"
+        v-for="offer in archivedOffers"
+        :key="offer.id"
       >
         <OffersDisplay
           class="offer"

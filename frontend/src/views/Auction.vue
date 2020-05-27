@@ -15,13 +15,13 @@
           v-else
           class="no-active-auction"
         >
-          <v-divider></v-divider>
+          <v-divider />
           <h3
             class="title font-weight-light"
           >
             No active charity auction at the moment
           </h3>
-          <v-divider></v-divider>
+          <v-divider />
         </v-container>
       </v-col>
       <v-col
@@ -36,13 +36,13 @@
           v-else
           class="no-active-auction"
         >
-          <v-divider></v-divider>
+          <v-divider />
           <h3
             class="title font-weight-light"
           >
             No active commercial auction at the moment
           </h3>
-          <v-divider></v-divider>
+          <v-divider />
         </v-container>
       </v-col>
     </v-row>
@@ -102,7 +102,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import fetchAuctions from '../plugins/fetchAuctions'
 
 export default {
@@ -122,19 +121,32 @@ export default {
       showHistoryDialog: false
     }
   },
+  watch: {
+    charityAuctions: {
+      deep: true,
+      handler: function () {
+        this.fetchActiveAuctions()
+      }
+    }
+  },
   created () {
     this.fetchAuctions()
   },
   methods: {
     async fetchActiveAuctions() {
-      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions')
-      this.activeCharityAuction = response.charityAuctions
-      this.activeCommercialAuction = response.commercialAuctions
+      fetchAuctions('http://127.0.0.1:8000/api/auctions')
+        .then(res => {
+          this.activeCharityAuction = res.charityAuctions
+          this.activeCommercialAuction = res.commercialAuctions
+        })
     },
     async fetchDismissedAuctions() {
-      const response = await fetchAuctions('http://127.0.0.1:8000/api/auctions/dismissed', 'dismissed')
-      this.charityAuctions = response.charityAuctions
-      this.commercialAuctions = response.commercialAuctions
+      fetchAuctions('http://127.0.0.1:8000/api/auctions/dismissed', 'dismissed')
+        .then(res => {
+          this.charityAuctions = res.charityAuctions
+          this.commercialAuctions = res.commercialAuctions
+        })
+
     },
     fetchAuctions () {
       this.fetchActiveAuctions()

@@ -4,7 +4,7 @@
   >
     <v-card-title>
       {{ pTopic.title }}
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-dialog
         v-if="$auth.user().id && ($auth.user().id === pTopic.author_data.id || $auth.user().role !== 'user')"
         v-model="showDeleteDialog"
@@ -65,7 +65,7 @@
     </v-card-title>
     <v-card-subtitle>
       Added by: {{ pTopic.author_data.username }}
-      <v-spacer></v-spacer>
+      <v-spacer />
       Added on: {{ pTopic.created_at }}
     </v-card-subtitle>
     <v-card-text
@@ -97,7 +97,6 @@
             Submit
           </v-btn>
         </v-form>
-
       </v-container>
       <v-container
         style="max-height: 700px; overflow: auto;"
@@ -124,7 +123,7 @@
                         width="32"
                         height="32"
                         :src="comment.author_data.avatar_path"
-                      ></v-img>
+                      />
                     </v-row>
                     <v-row
                       class="profile-col"

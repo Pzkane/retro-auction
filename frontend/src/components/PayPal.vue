@@ -45,6 +45,14 @@
         class="paypal-container"
         ref="paypal"
       />
+      <div
+        v-if="isError"
+      >
+        <span
+          class="caption"
+          style="color: red;"
+        >{{ response.message }}!</span>
+      </div>
     </div>
   </div>
 </template>
@@ -70,7 +78,8 @@ export default {
       response: {
         status: null,
         message: ''
-      }
+      },
+      isError: false
     };
   },
   created () {
@@ -117,7 +126,9 @@ export default {
           }
         },
         onError: err => {
-          console.log(err);
+          this.response.status = 'Error'
+          this.response.message = 'Error occured on this transaction'
+          this.isError = true
         }
       })
       .render(this.$refs.paypal)

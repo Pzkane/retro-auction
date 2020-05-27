@@ -131,8 +131,11 @@ export default {
     }
   },
   computed: {
+    auctionParticipants: function () {
+      return this.pAuction.participants
+    },
     canUserParticipate: function () {
-      if (this.pAuction.participants.find(participant => participant.id === this.$auth.user().id)) {
+      if (this.auctionParticipants.find(participant => participant.id === this.$auth.user().id)) {
         return false
       }
       return true
@@ -186,7 +189,7 @@ export default {
     },
     getTotalAmount () {
       this.total_amount = 0
-      this.pAuction.participants.map(participant => {
+      this.auctionParticipants.map(participant => {
         this.total_amount += participant.amount
       })
     },
@@ -209,8 +212,8 @@ export default {
       }
       this.$store.commit(operation, this.total_amount)
     },
-    sortParticipants: function () {
-      this.sortedParticipants = this.pAuction.participants.sort((a, b) => (b.amount - a.amount))
+    sortParticipants () {
+      this.sortedParticipants = this.auctionParticipants.sort((a, b) => (b.amount - a.amount))
     }
   }
 }

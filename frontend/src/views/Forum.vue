@@ -118,7 +118,7 @@
             </v-card>
           </v-dialog>
         </v-row>
-        <v-divider></v-divider>
+        <v-divider />
         <v-row
           style="width: 100%; background-color: white;"
         >

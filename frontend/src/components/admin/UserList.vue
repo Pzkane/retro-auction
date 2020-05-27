@@ -3,13 +3,13 @@
     class="users-container"
   >
     <v-row
-      v-for="user in pUsersArray" :key="user.id"
+      v-for="user in pUsersArray"
+      :key="user.id"
     >
       <v-col>
         <span class="font-weight-bold">{{ user.email }}</span> ({{ user.username }})
       </v-col>
       <v-col>
-        
         <v-dialog
           v-model="user.suspendDialog"
         >
@@ -49,7 +49,7 @@
               >
                 {{ isUserSuspended(user.status) ? 'activate' : 'suspend' }}
               </span>
-               user
+              user
               <span class="font-weight-bold">{{ user.email }}</span> ({{ user.username }}) ?
             </v-card-text>
             <v-card-actions>

@@ -371,7 +371,7 @@
                 </v-row>
               </v-container>
             </v-card-title>
-            <v-divider></v-divider>
+            <v-divider />
             <v-card-subtitle>
               Active
             </v-card-subtitle>

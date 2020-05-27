@@ -8,7 +8,7 @@
       :key="topic.id"
     >
       {{ topic.title }}
-      <v-spacer></v-spacer>
+      <v-spacer />
       <span
         v-if="topic.author_data.username"
         class="subtitle-1"
@@ -60,6 +60,11 @@ export default {
       topics: []
     }
   },
+  watch: {
+    pCategory: function () {
+      this.fetchTopics()
+    }
+  },
   methods: {
     closeDialog () {
       this.topics.map(topic => {
@@ -85,11 +90,6 @@ export default {
           console.log(err)
         })
     },
-  },
-  watch: {
-    pCategory: function () {
-      this.fetchTopics()
-    }
   }
 }
 </script>

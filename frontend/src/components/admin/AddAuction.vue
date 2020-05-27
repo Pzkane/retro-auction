@@ -17,8 +17,7 @@
                   label="Auction object name"
                   placeholder="Auction object name"
                   :rules="[rules.required]"
-                >
-                </v-text-field>
+                />
               </v-col>
               <v-col>
                 <v-file-input
@@ -26,7 +25,7 @@
                   label="Auction Image"
                   prepend-icon="mdi-camera"
                   :rules="[rules.required]"
-                ></v-file-input>
+                />
               </v-col>
             </v-row>
 
@@ -35,12 +34,12 @@
               v-if="pType === 'charity'"
             >
               <v-row>
-                 <v-col>
+                <v-col>
                   <v-text-field
                     v-model="amount"
                     label="Goal (EUR)"
                     :rules="[rules.required, scoped_rules.numbersOnly, scoped_rules.amount]"
-                  ></v-text-field>
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -56,7 +55,7 @@
                     v-model="amount"
                     label="Starting bid (EUR)"
                     :rules="[rules.required, scoped_rules.numbersOnly, scoped_rules.amount]"
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col>
                   <v-menu
@@ -64,19 +63,19 @@
                     v-model="dateMenu"
                     offset-y
                   >
-                    <template v-slot:activator="{ on }">
+                    <template #activator="{ on }">
                       <v-text-field
                         v-model="date"
                         label="End date"
                         prepend-icon="mdi-event"
                         readonly
                         v-on="on"
-                      ></v-text-field>
+                      />
                     </template>
                     <v-date-picker
                       v-model="date"
                       :min="new Date(new Date().getTime()+(1*24*60*60*1000)).toISOString().substr(0, 10)"
-                    ></v-date-picker>
+                    />
                   </v-menu>
                   <span
                     v-if="!date"
@@ -119,12 +118,12 @@
       </v-card-text>
       <v-card-actions>
         <v-btn
-            text
-            block
-            @click="closeDialog()"
-          >
-            Ok
-          </v-btn>
+          text
+          block
+          @click="closeDialog()"
+        >
+          Ok
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>

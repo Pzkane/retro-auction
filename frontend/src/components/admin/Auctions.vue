@@ -15,7 +15,7 @@
     <v-card-actions
       v-else
     >
-     <v-dialog
+      <v-dialog
         v-model="showCharityCreateDialog"
       >
         <template

@@ -11,7 +11,7 @@
         color="error"
         v-on="on"
       >
-        {{ $auth.user().role === "user" ? 'Delete' : 'Archive'}}
+        {{ $auth.user().role === "user" ? 'Delete' : 'Archive' }}
       </v-btn>
     </template>
 
@@ -31,7 +31,7 @@
           color="error"
           @click="deleteOffer()"
         >
-          {{ $auth.user().role === "user" ? 'Delete' : 'Archive'}}
+          {{ $auth.user().role === "user" ? 'Delete' : 'Archive' }}
         </v-btn>
         <v-btn
           text
