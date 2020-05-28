@@ -59,6 +59,13 @@ const routes = [
       auth: {roles: ['super_admin', 'admin'], redirect: {name: 'offers'}, forbiddenRedirect: '/403'}
     },
   },
+
+  // everything else
+  {
+    path: '*',
+    name: 'any',
+    component: Home
+  },
 ]
 const router = new VueRouter({
   history: true,

@@ -2,6 +2,16 @@
   <div>
     <div v-if="!isPaid">
       <div
+        style="float: right;"
+      >
+        <v-btn
+          icon
+          @click="closePayPal()"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
+      <div
         class="description"
       >
         <h1>Auction participation amount</h1>
@@ -128,7 +138,11 @@ export default {
         onError: err => {
           this.response.status = 'Error'
           this.response.message = 'Error occured on this transaction'
+          this.isLoaded = true
           this.isError = true
+        },
+        onCancel: (data, actions) => {
+          this.isLoaded = true
         }
       })
       .render(this.$refs.paypal)

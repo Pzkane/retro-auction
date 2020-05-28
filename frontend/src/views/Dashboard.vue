@@ -334,7 +334,7 @@
                   </v-tab-item>
                   <v-tab-item>
                     <v-card
-                      v-if="offers"
+                      v-if="bookmarkedOffers"
                     >
                       <ConnectionError
                         v-if="errorCode"

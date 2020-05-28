@@ -71,6 +71,7 @@ class OfferController extends Controller
             Log::info($offerIds);
             $offersQuery->whereIn('id', $offerIds);
         }
+        $offersQuery->where('status', 'active');
 
         $offers = $offersQuery;
 
