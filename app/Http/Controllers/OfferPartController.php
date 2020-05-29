@@ -23,16 +23,6 @@ class OfferPartController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -63,39 +53,5 @@ class OfferPartController extends Controller
     public static function show($offerId)
     {
         return OfferPartResources::collection(OfferPart::where('offer_id', $offerId)->get());
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\OfferPart  $offerPart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(OfferPart $offerPart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\OfferPart  $offerPart
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, OfferPart $offerPart)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\OfferPart  $offerPart
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(OfferPart $offerPart)
-    {
-        //
     }
 }
