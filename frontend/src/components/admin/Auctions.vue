@@ -11,6 +11,7 @@
       v-if="activeCharityAuction"
       :pAuctions="[activeCharityAuction]"
       :pIsActive="true"
+      @updateAuctions="closeDialog()"
     />
     <v-card-actions
       v-else
@@ -45,6 +46,7 @@
       v-if="activeCommercialAuction"
       :pAuctions="[activeCommercialAuction]"
       :pIsActive="true"
+      @updateAuctions="closeDialog()"
     />
     <v-card-actions
       v-else
@@ -123,6 +125,8 @@ export default {
       this.fetchDismissedAuctions()
     },
     fetchActiveAuctions() {
+      this.activeCharityAuction = null
+      this.activeCommercialAuction = null
       fetchAuctions('http://127.0.0.1:8000/api/auctions')
         .then(res => {
           this.activeCharityAuction = res.charityAuctions

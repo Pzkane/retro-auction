@@ -40,6 +40,7 @@
                 </template>
 
                 <div
+                  v-if="!showFinishDialog"
                   style="background-color: white;"
                 >
                   <AuctionDisplay
@@ -59,6 +60,21 @@
                     </v-btn>
                   </div>
                 </div>
+                <v-card
+                  v-if="showFinishDialog"
+                >
+                  <v-card-title>
+                    Auction finished!
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-btn
+                      text
+                      @click="closeFisnishDialog()"
+                    >
+                      Ok
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
               </v-dialog>
             </v-list-item-title>
           </v-list-item-content>
@@ -81,7 +97,8 @@ export default {
   },
   data () {
     return {
-      activeAuction: null
+      activeAuction: null,
+      showFinishDialog: false
     }
   },
   created () {
@@ -90,6 +107,9 @@ export default {
     }
   },
   methods: {
+    closeFisnishDialog() {
+      this.$emit('updateAuctions')
+    },
     finishAuction (auction) {
       const config = { 
         headers: { 
@@ -102,7 +122,7 @@ export default {
       axios
         .post('http://127.0.0.1:8000/api/auth/auction/finish', finishingAuctionData, config)
           .then (res => {
-            console.log(res)
+            this.showFinishDialog = true
           })
           .catch ((err) => {
             console.log(err)

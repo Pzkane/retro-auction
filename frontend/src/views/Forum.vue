@@ -128,6 +128,17 @@
           />
         </v-row>
       </v-col>
+
+      <v-col
+        v-if="!selectedCategory"
+      >
+        <h1
+          class="display-3 font-weight-light"
+        >
+          Retro Forum
+        </h1>
+        <v-divider />
+      </v-col>
     </v-row>
   </v-container>
 </template>
