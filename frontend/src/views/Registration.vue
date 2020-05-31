@@ -114,12 +114,6 @@
                 Submit
               </v-btn>
               <v-spacer />
-              <v-btn
-                v-if="!isLoading"
-                @click="autofill()"
-              >
-                FILL
-              </v-btn>
             </v-card-actions>
             <v-card-text v-if="isLoading">
               <v-container class="mx-auto loading">

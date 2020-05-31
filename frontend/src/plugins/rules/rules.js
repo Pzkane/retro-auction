@@ -1,10 +1,3 @@
-// let password = null;
-// let that = this
-
-// function setPasswordConfirm(password) {
-//     that.password = password
-// }
-
 const external_rules = {
     required: v => !!v || 'This field is required',
     requiredItem: v => ((v && v=='male') || (v && v=='female')) || 'This item is required',
