@@ -130,7 +130,6 @@ export default {
         },
         onApprove: async (data, actions) => {
           const order = await actions.order.capture();
-          console.log(order);
           if (order.status === "COMPLETED") {
             this.insertAuctionParticipant(this.product.price)
           }

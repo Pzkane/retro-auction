@@ -211,7 +211,6 @@ export default {
         axios
           .post('http://127.0.0.1:8000/api/auth/forum/topic/add', topicData, config)
           .then (res => {
-            console.log(res)
             this.response = 'Your topic will be created!'
             this.fetchCategories()
           })

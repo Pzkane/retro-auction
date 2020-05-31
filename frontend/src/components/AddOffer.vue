@@ -355,7 +355,6 @@ export default {
     submit () {
       if (this.$refs.ofForm.validate() && this.areCategoriesFilled) {
         const offerData = new FormData()
-        console.log(this.$auth.user().id)
         offerData.append('user_id', this.$auth.user().id)
         offerData.append('title', this.title)
         offerData.append('body', this.body)
@@ -368,10 +367,6 @@ export default {
           offerData.append('images[]', this.files[i], this.files[i].name)                    
         }
 
-        // debug //
-        for (var key of offerData.entries()) {
-          console.log(key[0] + ', ' + key[1])
-        }
         const config = { 
           headers: { 
             'Authorization': 'Bearer '+this.$auth.token(),
@@ -381,7 +376,6 @@ export default {
         axios
           .post('http://127.0.0.1:8000/api/auth/offer/add', offerData, config)
           .then (res => {
-            console.log(res)
             switch (res.status) {
               case 200:
                 this.response.status = 'Success'

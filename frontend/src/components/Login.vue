@@ -93,7 +93,6 @@ export default {
             this.fetchFavoriteOffers()
           },
           error : function(err) {
-            console.log(err.response.data);
             if (err.response.data.error === 'account_suspended') {
               this.isUserSuspended = true
             }

@@ -176,10 +176,7 @@ export default {
       const buffer = this.offers
       buffer.map(offer => {
         if (offer.id === offerId) {
-          console.log(offer.showOfferDialog);
-          
           offer.showOfferDialog = false
-          console.log(offer.showOfferDialog);
         }
       })
       this.offers = buffer
@@ -261,15 +258,11 @@ export default {
     },
     offers_update () {
       this.offersFilters = this.$store.getters['offersFilters']
-      console.log(JSON.stringify(this.offersFilters));
-      
       this.isPaginationDisabled = true;
       this.isLoading = true;
       this.isError = false;
       const pagePath = 
         `http://127.0.0.1:8000/api/offers?page=${this.page_number}&title=${this.offersFilters.title || ''}&description=${this.offersFilters.description || ''}&parts=${this.offersFilters.parts || ''}&category=${this.offersFilters.category || ''}&date=${this.offersFilters.date || ''}`
-      console.log(pagePath);
-      
       this.fetchOffers(pagePath);
     },
     closeAddOfferDialog () {
