@@ -10,7 +10,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Resources\Auction\AuctionParticipants as AuctionParticipantsResources;
 use App\Http\Resources\Auction\AuctionObject as AuctionObjectResources;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 trait AuctionTraits
 {

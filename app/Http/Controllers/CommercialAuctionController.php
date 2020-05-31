@@ -6,7 +6,6 @@ use App\CommercialAuction;
 use App\Http\Resources\Auction\CommercialAuction as CommercialAuctionResources;
 use App\Traits\AuctionTraits;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CommercialAuctionController extends Controller
 {
@@ -41,7 +40,6 @@ class CommercialAuctionController extends Controller
         }
 
         $currentBiggestBidUser = $this->findAuctionParticipant($request->auction_id, $auction->highest_bid_user_id);
-        Log::info(json_encode($currentBiggestBidUser));
         if ($request->amount > $currentBiggestBidUser->amount) {
             $auction->highest_bid_user_id = $request->user_id;
             $auction->save();

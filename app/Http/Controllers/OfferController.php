@@ -12,7 +12,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
-use Illuminate\Support\Facades\Log;
 
 class OfferController extends Controller
 {
@@ -57,7 +56,6 @@ class OfferController extends Controller
                 ->groupBy('offer_id')
                 ->pluck('offer_id')
                 ->toArray();
-            Log::info($offerIds);
 
             $offersQuery->whereIn('id', $offerIds);
         }
@@ -68,7 +66,6 @@ class OfferController extends Controller
                 ->whereIn('category', (array) $request->category)
                 ->groupBy('offer_id')
                 ->pluck('offer_id');
-            Log::info($offerIds);
             $offersQuery->whereIn('id', $offerIds);
         }
         $offersQuery->where('status', 'active');

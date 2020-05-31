@@ -9,7 +9,6 @@ use App\Http\Resources\Auction\AuctionFullDataSet as AuctionFullDataSetResources
 use App\Traits\AuctionTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class AuctionController extends Controller
 {

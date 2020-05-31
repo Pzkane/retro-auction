@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Auction;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Log;
 
 class AuctionFullDataSet extends JsonResource
 {

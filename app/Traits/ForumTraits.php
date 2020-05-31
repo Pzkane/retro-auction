@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Log;
 
 trait ForumTraits
 {
